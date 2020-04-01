@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 ## SCARLETT
 
-> Strongly Typed Rest Client library based on Fetch API.
+> A strongly typed, Typescript powered, rest client library based on Fetch API.
 
 <!-- omit in toc -->
 ## Summary

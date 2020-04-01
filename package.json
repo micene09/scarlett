@@ -1,7 +1,7 @@
 {
 	"name": "scarlett",
 	"version": "1.0.0",
-	"description": "Strongly Typed Rest Client library",
+	"description": "A strongly typed, Typescript powered, rest client library based on Fetch API.",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"scripts": {
