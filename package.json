@@ -7,8 +7,7 @@
 	"scripts": {
 		"test": "jest",
 		"build": "rollup --config",
-		"build:declarations": "tsc -p src/tsconfig.d.json",
-		"auth": "vsts-npm-auth -config .npmrc"
+		"build:declarations": "tsc -p src/tsconfig.d.json"
 	},
 	"author": "Micene09 <giovanni.contino09@gmail.com>",
 	"license": "MIT",
@@ -26,7 +25,6 @@
 		"@types/lodash": "^4.14.149",
 		"@types/node": "^13.9.1",
 		"@types/node-fetch": "^2.5.5",
-		"auto-changelog": "^1.16.3",
 		"babel-jest": "^25.1.0",
 		"fastify": "^2.12.1",
 		"jest": "^25.1.0",
@@ -36,7 +34,6 @@
 		"rollup-plugin-typescript2": "^0.26.0",
 		"ts-jest": "^25.2.1",
 		"tslib": "^1.11.1",
-		"typescript": "^3.8.3",
-		"yargs": "^15.3.0"
+		"typescript": "^3.8.3"
 	}
 }
