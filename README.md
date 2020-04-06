@@ -17,6 +17,8 @@
 	- [Extending](#extending)
 	- [Importing extras](#importing-extras)
 - [Testing](#testing)
+- [Why](#why)
+- [Why this name?](#why-this-name)
 
 ## Installation
 
@@ -43,7 +45,7 @@ Scarlett is using the following Standard API:
 ```typescript
 import RestClient from `scarlett`
 ```
-2. Create a rest client instance providing an object of interface: `IRequestOptions`.
+1. Create a rest client instance providing an object of interface `IRequestOptions`.
 ```typescript
 const client = new RestClient({
 	host: `https://server.com`,
@@ -84,10 +86,6 @@ Optional request body content, aving one of the following instances: `ArrayBuffe
 
 If the method is `GET`, this value will be set to undefined.
 
-**cacheKey (string)**
-
-An optional alias reference to the current request, *required if you are using useCache* parameter as true.
-
 **abortController ([AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController))**
 
 Optional abort controller to perform a fetch abort.
@@ -126,7 +124,11 @@ Defaults to false.
 
 If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based, cache system.
 
-Every entry for this cache, will use a compound-key containing the *serviceKey* provided.
+Every entry for this cache, will use a compound-key containing the *cacheKey*, if provided.
+
+**cacheKey (string)**
+
+An optional alias reference to the current request, *usefull if you are using useCache* parameter as true.
 
 **throw (boolean)**
 
@@ -242,7 +244,7 @@ const client = new RestClient({
 const response = await client.get<IMyObject>(`/action`);
 ```
 
-The property `response.data` will infer the `IMyObject`;
+The property `response.data` will infer the `IMyObject` interface.
 
 **throwFilter (IResponseFilter`<T>`)**
 
@@ -318,6 +320,8 @@ Set the `response` object for the current error instance.
 
 Check if `response` object match with the `filter` provided.
 
+This method is used internally by `RestClient`.
+
 ## Advanced usage
 
 ### Extending
@@ -343,7 +347,7 @@ class MyRestFactory1 extends RestClient {
 }
 ```
 
-You can even import types exported from the module itself:
+You can even import types/interfaces exported from the module itself:
 
 ```typescript
 import RestClient, { IRequestOptions } from `scarlett`
@@ -388,3 +392,9 @@ To develop or testing purposes:
 To execute tests, just execute on project root:
 
 `npm run test` or `npm run test`
+
+## Why
+
+## Why this name?
+
+Maybe I'm a huge fan of that beautiful American actress...
