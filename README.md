@@ -17,7 +17,7 @@
 	- [Extending](#extending)
 	- [Importing extras](#importing-extras)
 - [Testing](#testing)
-- [Why](#why)
+- [Inspired by...](#inspired-by)
 - [Why this name?](#why-this-name)
 
 ## Installation
@@ -405,7 +405,10 @@ To execute tests, just execute on project root:
 
 `npm run test` or `npm run test`
 
-## Why
+## Inspired by...
+
+ * [axios](https://github.com/axios/axios)
+ * DotNet Core's [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests#typed-clients)
 
 ## Why this name?
 
