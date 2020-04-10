@@ -48,9 +48,15 @@ export function transformResponseBody(body: | ArrayBuffer | Blob | File | FormDa
 		: JSON.stringify(body)
 	);
 }
-export function resolveAny<TData = any, TError = any>(prom: Promise<any>): Promise<[TData | null, TError | null]> {
-	return new Promise(resolve => {
-		prom.then(response => resolve([response, null]))
-			.catch(err => resolve([null, err]));
-	});
+interface IResponseAny {
+	<TData = any, TError = any>(prom: Promise<any>): Promise<[TData | null, TError | null]>
 }
+interface IResponseAny {
+	<T>(prom: Promise<T>): Promise<[T | null, Error | RestError<any> | null]>
+}
+export const resolveAny: IResponseAny = (prom: Promise<any>) => {
+	return new Promise<any>(resolve => {
+		prom.then((response: any) => resolve([response, null]))
+			.catch((err: any) => resolve([null, err]));
+	});
+};
