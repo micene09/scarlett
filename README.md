@@ -30,9 +30,9 @@ or
 
 ### Required Polyfills
 
-As `tsconfig.json`, sources are compiled compiles to: `ES2019`.
+As `tsconfig.json`, sources are compiled to: `ES2019`.
 
-Scarlett is using the following Standard API:
+Scarlett will require the following polyfills:
 
  * [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
  * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
@@ -64,7 +64,17 @@ See the `tests/features.test.ts` to have a complete view on available features.
 
 To create a new rest client instance, you need to use the `IRequestOptions` interface.
 
-At every request, you can override any property provided via constructor.
+You can override any property provided at every request method:
+
+```typescript
+const client = new RestClient({
+	host: `https://server.com`,
+	responseType: `text`
+})
+const response = await client.get<any>(`/my-json-path`, { responseType: `json` })
+```
+
+Here is the list of properties:
 
 **host (string)**
 
@@ -78,7 +88,7 @@ The base path to use on every request, defaults to `/`.
 
 One of the following: `json` (default), `text`, `blob`, `arrayBuffer`, `formData`.
 
-This property will translate the response body, using the proper type, so you don't need (for example) to do JSON.parse(*response-body*).
+This property will translate the response body, using the proper type. For example, when you set `json` as responseType you don't need to `JSON.parse(response.data)`.
 
 **body**
 
@@ -136,7 +146,7 @@ Defaults to false.
 
 As standard behaviour of fetch, every request will never throw error. But sometimes, in very large applications, you need a centralized API error handler.
 
-If true, when the standard [fetch -> Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is false the API will throw a global error.
+If true, when the standard [fetch -> Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is false the API will throw an error.
 
 The error object will be an instance of `RestError` class.
 
@@ -228,7 +238,7 @@ Properties:
 
 **data (T | null)**
 
-Response body, leaded by `IRequestOptions.responseType` (for runtime type) and `T` (for Typescript intellisense).
+The response body, leaded by `IRequestOptions.responseType` (for runtime type) and `T` (for Typescript intellisense).
 
 Example:
 
@@ -251,6 +261,8 @@ The property `response.data` will infer the `IMyObject` interface.
 When a `IResponseFilter` match the response, this property will expose it.
 
 ### Request (sent) Object
+
+This simple interface is used to qualify the Response Object, here you will find details about the request executed to get the response.
 
 **options (IRequestOptions)**
 
@@ -359,7 +371,7 @@ class MyRestFactory2 extends RestClient {
 		options.throw = true;
 		super(options);
 	}
-	...
+	// your methods here...
 }
 ```
 
@@ -369,7 +381,7 @@ class MyRestFactory2 extends RestClient {
 import {
 	RestError, // Rest error utility class
 
-	// Custom types:
+	// Utility types:
 	HttpMethod,
 	HTTPStatusCode,
 
