@@ -11,6 +11,9 @@
 		"release": true,
 		"releaseName": "v${version}"
 	},
+	"npm": {
+		"publish": false
+	},
 	"hooks": {
 		"before:init": [ "yarn run build", "yarn run build --es3", "yarn run build:declarations" ],
 		"after:bump": "npm run test",
