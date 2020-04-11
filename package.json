@@ -1,16 +1,25 @@
 {
 	"name": "scarlett",
-	"version": "1.0.0",
+	"version": "0.0.0",
 	"description": "A strongly typed, Typescript powered, rest client library based on Fetch API.",
-	"main": "lib/index.js",
+	"browser": "lib/index.umd.js",
+	"module": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"scripts": {
 		"test": "jest",
 		"build": "rollup --config",
-		"build:declarations": "tsc -p src/tsconfig.d.json"
+		"build:declarations": "tsc -p src/tsconfig.d.json",
+		"release": "release-it"
 	},
+	"files": [
+		"lib/*.*"
+	],
 	"author": "Micene09 <giovanni.contino09@gmail.com>",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/Micene09/scarlett.git"
+	},
 	"dependencies": {
 		"lodash": "^4.17.15"
 	},
@@ -30,10 +39,25 @@
 		"jest": "^25.1.0",
 		"jest-junit": "^10.0.0",
 		"node-fetch": "^2.6.0",
+		"release-it": "^13.5.2",
 		"rollup": "^2.2.0",
 		"rollup-plugin-typescript2": "^0.26.0",
 		"ts-jest": "^25.2.1",
 		"tslib": "^1.11.1",
 		"typescript": "^3.8.3"
-	}
+	},
+	"keywords": [
+		"rest",
+		"typed",
+		"client",
+		"xhr",
+		"http",
+		"ajax",
+		"promise",
+		"node",
+		"fetch",
+		"typescript",
+		"class",
+		"library"
+	]
 }
