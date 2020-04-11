@@ -6,7 +6,10 @@
 		"tagName": "${version}"
 	},
 	"github": {
-		"assets": [ "lib/*.*" ],
+		"assets": [
+			"lib/*.*",
+			"README.md"
+		],
 		"draft": true,
 		"release": true,
 		"releaseName": "v${version}"
