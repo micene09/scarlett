@@ -57,19 +57,19 @@ In the `lib/` folder of the package you will find different build files:
 
 1. Import the library:
 
-   ```typescript
-   import RestClient from `scarlett`
-   ```
+	```typescript
+	import RestClient from `scarlett`
+	```
 
 2. Create a rest client instance providing an object of interface `IRequestOptions`.
 
-   ```typescript
-   const client = new RestClient({
-    host: `https://server.com`,
-    responseType: `text`
-   } /* >> IRequestOptions  */)
-   const response = await client.get<string>(`path`)
-   ```
+	```typescript
+	const client = new RestClient({
+	host: `https://server.com`,
+	responseType: `text`
+	} /* >> IRequestOptions  */)
+	const response = await client.get<string>(`path`)
+	```
 
 Every request method will return a `Promise<IResponse<T>>`.
 
@@ -85,8 +85,8 @@ You can override any property provided at every request method:
 
 ```typescript
 const client = new RestClient({
-    host: `https://server.com`,
-    responseType: `text`
+	host: `https://server.com`,
+	responseType: `text`
 })
 const response = await client.get<any>(`/my-json-path`, { responseType: `json` })
 ```
@@ -133,7 +133,7 @@ A callback having the following definition:
 
 ```typescript
 interface IQueryParamTransformer {
-    (key: string, value: any, query: any): string
+	(key: string, value: any, query: any): string
 }
 ```
 
@@ -179,12 +179,12 @@ You can do this providing an array of `IResponseFilter`:
 
 ```typescript
 interface IResponseFilter {
-    path?: string;
-    method?: HttpMethod;
-    statusCode?: HTTPStatusCode;
-    cback?: {
-        (error: RestError): void
-    };
+	path?: string;
+	method?: HttpMethod;
+	statusCode?: HTTPStatusCode;
+	cback?: {
+		(error: RestError): void
+	};
 }
 ```
 
@@ -209,9 +209,9 @@ See `tests/features.test.ts`.
 
 ```typescript
 const client = new RestClient({
-    host: `https://server.com`,
-    basePath: "/controller",
-    responseType: `text`
+	host: `https://server.com`,
+	basePath: "/controller",
+	responseType: `text`
 })
 const response = await client.request<string>(`GET`, `/action`);
 console.log(response.request.url.href); // -> "https://server.com/controller/action"
@@ -238,9 +238,9 @@ Usage:
 
 ```typescript
 const client = new RestClient({
-    host: `https://server.com`,
-    basePath: "/controller",
-    responseType: `text`
+	host: `https://server.com`,
+	basePath: "/controller",
+	responseType: `text`
 })
 const response = await client.get<string>(`/action`);
 console.log(response.request.url.href); // -> "https://server.com/controller/action"
@@ -268,12 +268,12 @@ Example:
 
 ```typescript
 interface IMyObject {
-    test: string
+	test: string
 }
 const client = new RestClient({
-    host: `https://server.com`,
-    basePath: "/controller",
-    responseType: `json`
+	host: `https://server.com`,
+	basePath: "/controller",
+	responseType: `json`
 })
 const response = await client.get<IMyObject>(`/action`);
 ```
@@ -369,18 +369,18 @@ You can extend the base class for your specific needs as follows:
 import RestClient from `scarlett`
 
 class MyRestFactory1 extends RestClient {
-    constructor() {
-        super({
-            host: "https://mybackend.com",
-            basePath: "/my-controller"
-        });
-    }
-    items() {
-        return this.get("/action");
-    }
-    item(id: number) {
-        return this.get(`/action/${id}`);
-    }
+	constructor() {
+		super({
+			host: "https://mybackend.com",
+			basePath: "/my-controller"
+		});
+	}
+	items() {
+		return this.get("/action");
+	}
+	item(id: number) {
+		return this.get(`/action/${id}`);
+	}
 }
 ```
 
@@ -390,13 +390,13 @@ You can even import types/interfaces exported from the module itself:
 import RestClient, { IRequestOptions } from `scarlett`
 
 class MyRestFactory2 extends RestClient {
-    constructor(options: IRequestOptions) {
-        options.host = "https://mybackend.com";
-        options.basePath = "/my-controller";
-        options.throw = true;
-        super(options);
-    }
-    // your methods here...
+	constructor(options: IRequestOptions) {
+		options.host = "https://mybackend.com";
+		options.basePath = "/my-controller";
+		options.throw = true;
+		super(options);
+	}
+	// your methods here...
 }
 ```
 
@@ -404,18 +404,18 @@ class MyRestFactory2 extends RestClient {
 
 ```typescript
 import {
-    RestError, // Rest error utility class
+	RestError, // Rest error utility class
 
-    // Utility types:
-    HttpMethod,
-    HTTPStatusCode,
+	// Utility types:
+	HttpMethod,
+	HTTPStatusCode,
 
-    // Extra/Internal interfaces
-    IRequestOptions,
-    IRequestQueryOptions,
-    IResponse,
-    IRequest,
-    IResponseFilter
+	// Extra/Internal interfaces
+	IRequestOptions,
+	IRequestQueryOptions,
+	IResponse,
+	IRequest,
+	IResponseFilter
 } from `scarlett`;
 ```
 
