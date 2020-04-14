@@ -34,10 +34,11 @@ or
 
 As `tsconfig.json`, sources are compiled to`ES2019`, keep in mind that **polyfills are not included**.
 
-Scarlett will require the following polyfills:
+Scarlett will require the following APIs:
 
 * [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-* [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+* [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+* [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers)
 * [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
 * [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 
