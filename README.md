@@ -5,8 +5,10 @@
 
 <!-- omit in toc -->
 ## Summary
+
 - [Installation](#installation)
 	- [Required Polyfills](#required-polyfills)
+	- [Different builds](#different-builds)
 - [Basic Usage](#basic-usage)
 - [RestClient](#restclient)
 	- [Instance Options](#instance-options)
@@ -30,29 +32,43 @@ or
 
 ### Required Polyfills
 
-As `tsconfig.json`, sources are compiled to: `ES2019`.
+As `tsconfig.json`, sources are compiled to`ES2019`, keep in mind that **polyfills are not included**.
 
 Scarlett will require the following polyfills:
 
- * [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
- * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
- * [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
- * [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+* [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+* [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+* [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
+* [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+
+### Different builds
+
+In the `lib/` folder of the package you will find different build files:
+
+| Format                    | Filename              |
+| ------------------------- | --------------------- |
+| **ES Module** *(default)* | `index.js`            |
+| **UMD**                   | `index.umd.js`        |
+| **CommonJs**              | `index.common.js`     |
+| **CommonJs ES3**          | `index.es3.common.js` |
 
 ## Basic Usage
 
 1. Import the library:
-```typescript
-import RestClient from `scarlett`
-```
-1. Create a rest client instance providing an object of interface `IRequestOptions`.
-```typescript
-const client = new RestClient({
-	host: `https://server.com`,
-	responseType: `text`
-} /* >> IRequestOptions  */)
-const response = await client.get<string>(`path`)
-```
+
+   ```typescript
+   import RestClient from `scarlett`
+   ```
+
+2. Create a rest client instance providing an object of interface `IRequestOptions`.
+
+   ```typescript
+   const client = new RestClient({
+    host: `https://server.com`,
+    responseType: `text`
+   } /* >> IRequestOptions  */)
+   const response = await client.get<string>(`path`)
+   ```
 
 Every request method will return a `Promise<IResponse<T>>`.
 
@@ -68,8 +84,8 @@ You can override any property provided at every request method:
 
 ```typescript
 const client = new RestClient({
-	host: `https://server.com`,
-	responseType: `text`
+    host: `https://server.com`,
+    responseType: `text`
 })
 const response = await client.get<any>(`/my-json-path`, { responseType: `json` })
 ```
@@ -113,11 +129,13 @@ The value should be a `string`, otherwise use `queryParamsTransformer` callback.
 **queryParamsTransormer (IQueryParamTransformer)**
 
 A callback having the following definition:
+
 ```typescript
 interface IQueryParamTransformer {
-	(key: string, value: any, query: any): string
+    (key: string, value: any, query: any): string
 }
 ```
+
 ...it need to have back the `string` version of your custom type parameter.
 
 See `tests/features.test.ts`.
@@ -125,9 +143,11 @@ See `tests/features.test.ts`.
 **queryParamsIncludeEmpty (boolean)**
 
 If true, it will include falsy values as empty, example:
+
 ```
 /example/?a&b
 ```
+
 Defaults to false.
 
 **useCache (boolean)**
@@ -158,65 +178,68 @@ You can do this providing an array of `IResponseFilter`:
 
 ```typescript
 interface IResponseFilter {
-	path?: string;
-	method?: HttpMethod;
-	statusCode?: HTTPStatusCode;
-	cback?: {
-		(error: RestError): void
-	};
+    path?: string;
+    method?: HttpMethod;
+    statusCode?: HTTPStatusCode;
+    cback?: {
+        (error: RestError): void
+    };
 }
 ```
+
 If a failed request match one of the objects provided, the API will not throw.
 
 Setting throwExcluding will also set `throw` option to `true`.
 
 See `tests/features.test.ts`.
 
-
 <!-- omit in toc -->
 ### request`<T>`()
 
 *Parameters*:
- * HttpMethod (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
- * path *(string)*, this will be appended to *host* and *basePath* option
- * requestOptions *(IRequestOptions | undefined)*, local request options that will override the global options provided via constructor.
+
+* HttpMethod (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
+* path *(string)*, this will be appended to *host* and *basePath* option
+* requestOptions *(IRequestOptions | undefined)*, local request options that will override the global options provided via constructor.
 
 *Returns* `Promise<IResponse<T>>`, where `T` is the `response.data` type (typescript intellisense).
 
 *Usage*:
+
 ```typescript
 const client = new RestClient({
-	host: `https://server.com`,
-	basePath: "/controller",
-	responseType: `text`
+    host: `https://server.com`,
+    basePath: "/controller",
+    responseType: `text`
 })
 const response = await client.request<string>(`GET`, `/action`);
 console.log(response.request.url.href); // -> "https://server.com/controller/action"
 console.log(response.data); // -> "sample text"
 ```
 
-
 <!-- omit in toc -->
 ### HttpMethod shortcut methods
 
 For every HttpMethod string type, there will be a lower case version as method:
- * *get`<T>`()*
- * *post`<T>`()*
- * *put`<T>`()*
- * etc...
+
+* *get`<T>`()*
+* *post`<T>`()*
+* *put`<T>`()*
+* etc...
 
 ...having the following, simplified, parameters:
 
- * path *(string)*
- * requestOptions *(IRequestOptions | undefined)*
+* path *(string)*
+* requestOptions *(IRequestOptions | undefined)*
 
 Every shortcut method will internally call `request()` itself.
 Usage:
+
 ```typescript
 const client = new RestClient({
-	host: `https://server.com`,
-	basePath: "/controller",
-	responseType: `text`
+    host: `https://server.com`,
+    basePath: "/controller",
+    responseType: `text`
 })
 const response = await client.get<string>(`/action`);
 console.log(response.request.url.href); // -> "https://server.com/controller/action"
@@ -244,12 +267,12 @@ Example:
 
 ```typescript
 interface IMyObject {
-	test: string
+    test: string
 }
 const client = new RestClient({
-	host: `https://server.com`,
-	basePath: "/controller",
-	responseType: `json`
+    host: `https://server.com`,
+    basePath: "/controller",
+    responseType: `json`
 })
 const response = await client.get<IMyObject>(`/action`);
 ```
@@ -307,6 +330,7 @@ It can be the HTTPStatusCode or an internal identifier error string.
 **Console Methods:**
 
 Some methods overrides using errorCode as prefix for messages, example:
+
 ```typescript
 errorInstance.consoleWarn("Test Message");
 // -> [errorCode] Test Message
@@ -344,18 +368,18 @@ You can extend the base class for your specific needs as follows:
 import RestClient from `scarlett`
 
 class MyRestFactory1 extends RestClient {
-	constructor() {
-		super({
-			host: "https://mybackend.com",
-			basePath: "/my-controller"
-		});
-	}
-	items() {
-		return this.get("/action");
-	}
-	item(id: number) {
-		return this.get(`/action/${id}`);
-	}
+    constructor() {
+        super({
+            host: "https://mybackend.com",
+            basePath: "/my-controller"
+        });
+    }
+    items() {
+        return this.get("/action");
+    }
+    item(id: number) {
+        return this.get(`/action/${id}`);
+    }
 }
 ```
 
@@ -365,13 +389,13 @@ You can even import types/interfaces exported from the module itself:
 import RestClient, { IRequestOptions } from `scarlett`
 
 class MyRestFactory2 extends RestClient {
-	constructor(options: IRequestOptions) {
-		options.host = "https://mybackend.com";
-		options.basePath = "/my-controller";
-		options.throw = true;
-		super(options);
-	}
-	// your methods here...
+    constructor(options: IRequestOptions) {
+        options.host = "https://mybackend.com";
+        options.basePath = "/my-controller";
+        options.throw = true;
+        super(options);
+    }
+    // your methods here...
 }
 ```
 
@@ -379,24 +403,25 @@ class MyRestFactory2 extends RestClient {
 
 ```typescript
 import {
-	RestError, // Rest error utility class
+    RestError, // Rest error utility class
 
-	// Utility types:
-	HttpMethod,
-	HTTPStatusCode,
+    // Utility types:
+    HttpMethod,
+    HTTPStatusCode,
 
-	// Extra/Internal interfaces
-	IRequestOptions,
-	IRequestQueryOptions,
-	IResponse,
-	IRequest,
-	IResponseFilter
+    // Extra/Internal interfaces
+    IRequestOptions,
+    IRequestQueryOptions,
+    IResponse,
+    IRequest,
+    IResponseFilter
 } from `scarlett`;
 ```
 
 ## Testing
 
 To develop or testing purposes:
+
 1. `git clone [repo_url]`
 2. `cd` to the root project folder (`package.json`)
 3. `npm i` or `yarn` to install packages
@@ -407,8 +432,8 @@ To execute tests, just execute on project root:
 
 ## Inspired by...
 
- * [axios](https://github.com/axios/axios)
- * DotNet Core's [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests#typed-clients)
+* [axios](https://github.com/axios/axios)
+* DotNet Core's [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests#typed-clients)
 
 ## Why this name?
 
