@@ -324,17 +324,17 @@ Always true, it's a simple utility prop that can be used by every kind of Two-Wa
 
 Where `T` will be the model type of response body.
 
-**errorCode (string | number)**
+**code (string | number)**
 
 It can be the HTTPStatusCode or an internal identifier error string.
 
 **Console Methods:**
 
-Some methods overrides using errorCode as prefix for messages, example:
+Some methods overrides using error code as prefix for messages, example:
 
 ```typescript
 errorInstance.consoleWarn("Test Message");
-// -> [errorCode] Test Message
+// -> [error code] Test Message
 ```
 
 **consoleTable(...tabularData: any[])**
