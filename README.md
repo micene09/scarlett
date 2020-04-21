@@ -146,7 +146,7 @@ See `tests/features.test.ts`.
 If true, it will include falsy values as empty, example:
 
 ```
-/example/?a&b
+/example/?a=&b=
 ```
 
 Defaults to false.
