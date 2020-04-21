@@ -4,14 +4,14 @@ export default class RestError<T> extends Error {
 	isRestError = true;
 	request?: IRequest = undefined;
 	response?: IResponse<T> = undefined;
-	errorCode: string | number = "";
+	code: string | number = "";
 	constructor(errorCode: string | number, message: string) {
 		super(message);
-		this.errorCode = errorCode;
+		this.code = errorCode;
 		this.message = this.decorateErrorMessage(message);
 	}
 	private decorateErrorMessage(message: string) {
-		return `[${this.errorCode}] ${message}`;
+		return `[${this.code}] ${message}`;
 	}
 	consoleTable(...tabularData: any[]) {
 		console.table(...tabularData);

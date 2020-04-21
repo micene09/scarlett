@@ -1,5 +1,6 @@
 
 import RestClient from "../src/rest-client";
+import { HTTPStatusCode } from "../src/interfaces";
 import RestError from "../src/rest-error";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { ok } from "assert";
@@ -106,4 +107,13 @@ describe('Features', () => {
 		expect(t2).toBeLessThan(t1);
 		done();
 	});
+	test("Support for timeout requests", async done => {
+		const ms = 2000;
+		const response = await restClient.get<string>(`/reply-in/${ms}/milliseconds`, {
+			responseType: "text",
+			timeout: 1000
+		});
+		expect(response.error?.code).toEqual(HTTPStatusCode.RequestTimeout);
+		done();
+	})
 });

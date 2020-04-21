@@ -8,7 +8,6 @@ export default class RestClient {
 	constructor(options?: IRequestOptions) {
 		this._options = cloneDeep(options) ?? {};
 	}
-
 	protected cacheKey(options: IRequestOptions, url: URL) {
 		const cacheKey = options.cacheKey ?? '';
 		function formDataToObj(formData: FormData) {
@@ -73,17 +72,41 @@ export default class RestClient {
 			if (cachedResponse) return cachedResponse;
 		}
 
+		if (!options.timeout)
+			options.timeout = 30;
+
 		const [fetchResponse, fetchError] = await resolveAny<Response, Error>(new Promise((resolve, reject) => {
+
+			let timeoutTrigger = false;
+			let fetchResolved = false;
+
+			const abortController = options.abortController ?? new AbortController();
+			const id = setTimeout(function requestTimeout() {
+				if (fetchResolved)
+					return;
+				timeoutTrigger = true;
+				abortController.abort();
+				const timeoutError = new Error();
+				timeoutError.name = "timeout";
+				timeoutError.message = `Request timeout after ${options.timeout!/60} seconds.`;
+				reject(timeoutError);
+			}, options.timeout);
+
 			fetch(url.href, {
 				method,
 				headers,
 				body: method === "GET" ? undefined : transformResponseBody(options.body),
 				cache: "no-cache",
 				credentials: "same-origin",
-				signal: options.abortController?.signal,
+				signal: abortController.signal,
 			})
-			.then((response) => resolve(response))
-			.catch((error) => reject(error));
+			.then((response) => {
+				if (timeoutTrigger) return;
+				clearTimeout(id);
+				resolve(response);
+			})
+			.catch((error) => reject(error))
+			.finally(() => (fetchResolved = true));
 		}));
 
 		const request: IRequest = {
@@ -100,8 +123,10 @@ export default class RestClient {
 		};
 
 		if (fetchError) {
-			const ser = new RestError<T>(fetchError.name, fetchError.message);
+			let ser: RestError<any> = new RestError<T>(fetchError.name, fetchError.message);
 			ser.stack = fetchError.stack;
+			if (ser.name === "timeout")
+				ser.code = HTTPStatusCode.RequestTimeout;
 			ser.setRequest(request);
 			ser.setResponse(response);
 			response.error = ser;

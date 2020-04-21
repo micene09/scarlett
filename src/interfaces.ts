@@ -12,6 +12,7 @@ export interface IRequestOptions extends IRequestQueryOptions {
 	body?: | ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | { [key: string]: any };
 	abortController?: AbortController;
 	keepalive?: boolean;
+	timeout?: number;
 	headers?: Headers;
 	useCache?: boolean;
 	cacheKey?: string;
