@@ -1,8 +1,10 @@
 import fetch from 'node-fetch';
+import AbortController from "abort-controller"
 import fastify from "fastify";
 
 (global as any).fetch = fetch;
 (global as any).Headers = (fetch as any).Headers;
+(global as any).AbortController = AbortController;
 
 let testServer = fastify({ logger: false });
 export interface ITestJsonResponse {
