@@ -86,9 +86,10 @@ export default class RestClient {
 					return;
 				timeoutTrigger = true;
 				abortController.abort();
-				const timeoutError = new Error();
+				let timeoutError = new Error();
 				timeoutError.name = "timeout";
-				timeoutError.message = `Request timeout after ${options.timeout!/60} seconds.`;
+				const seconds = (options.timeout!/1000).toFixed(1).replace(".0", "");
+				timeoutError.message = `Request timeout after ${seconds} second${seconds == "1" ? "" : "s"}.`;
 				reject(timeoutError);
 			}, options.timeout);
 
@@ -125,8 +126,8 @@ export default class RestClient {
 		if (fetchError) {
 			let ser: RestError<any> = new RestError<T>(fetchError.name, fetchError.message);
 			ser.stack = fetchError.stack;
-			if (ser.name === "timeout")
-				ser.code = HTTPStatusCode.RequestTimeout;
+			if (ser.code === "timeout")
+				response.status = HTTPStatusCode.RequestTimeout;
 			ser.setRequest(request);
 			ser.setResponse(response);
 			response.error = ser;
