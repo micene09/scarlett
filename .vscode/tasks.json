@@ -3,25 +3,13 @@
 	"tasks": [
 		{
 			"label": "build",
-			"type": "typescript",
-			"tsconfig": "src/tsconfig.json",
-			"problemMatcher": [
-				"$tsc"
-			],
+			"type": "shell",
+			"command": "yarn run build",
+			"problemMatcher": [ "$tsc" ],
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			}
-		},
-		{
-			"label": "watch",
-			"type": "typescript",
-			"tsconfig": "src/tsconfig.json",
-			"option": "watch",
-			"problemMatcher": [
-				"$tsc-watch"
-			],
-			"group": "build"
 		}
 	]
 }
