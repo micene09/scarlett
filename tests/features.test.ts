@@ -113,7 +113,8 @@ describe('Features', () => {
 			responseType: "text",
 			timeout: 1000
 		});
-		expect(response.error?.code).toEqual(HTTPStatusCode.RequestTimeout);
+		expect(response.error?.code).toEqual("timeout");
+		expect(response.status).toEqual(HTTPStatusCode.RequestTimeout);
 		done();
 	})
 });
