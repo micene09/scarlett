@@ -33,6 +33,13 @@ export interface IResponse<T> {
 	headers?: Headers;
 	data: T | null;
 	throwFilter?: IResponseFilter<T>;
+	repeat: IRepeat<T>;
+}
+export interface IRepeat<T> {
+	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<T>>
+}
+export interface IRepeat<T> {
+	(requestOptions?: IRequestOptions): Promise<IResponse<T>>
 }
 export interface IResponseFilter<T> {
 	path?: string;

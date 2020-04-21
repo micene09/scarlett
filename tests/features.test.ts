@@ -117,4 +117,24 @@ describe('Features', () => {
 		expect(response.status).toEqual(HTTPStatusCode.RequestTimeout);
 		done();
 	})
+	test("Repeat the same request using the response object", async done => {
+		const expected = "a=1&b=2&c=3";
+
+		const firstR = await restClient.get<any>("/mirror", {
+			responseType: "json",
+			query: { a: "1", b: "2", c: 3 }
+		});
+		expect(firstR.data.queryString).toEqual(expected);
+
+		const secondR = await firstR.repeat();
+		expect(secondR.data.queryString).toEqual(expected);
+
+		const thirdR = await secondR.repeat({
+			queryParamsIncludeEmpty: true,
+			query: { a: "1", b: "2", c: 3, d: "" }
+		});
+		expect(thirdR.data.queryString).toEqual(expected + "&d=");
+
+		done();
+	})
 });

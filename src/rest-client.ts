@@ -58,6 +58,7 @@ export default class RestClient {
 	}
 	//#endregion
 	public async request<T>(method: HttpMethod, path: string, requestOptions?: IRequestOptions) {
+		const that = this;
 		const options: IRequestOptions = requestOptions ? assign({}, cloneDeep(this._options), requestOptions) : cloneDeep(this._options);
 		const url = getRequestUrl(options.host, options.basePath, path);
 
@@ -73,7 +74,7 @@ export default class RestClient {
 		}
 
 		if (!options.timeout)
-			options.timeout = 30;
+			options.timeout = 30000;
 
 		const [fetchResponse, fetchError] = await resolveAny<Response, Error>(new Promise((resolve, reject) => {
 
@@ -120,7 +121,23 @@ export default class RestClient {
 			request,
 			headers: await fetchResponse?.trailer,
 			data,
-			status: fetchResponse?.status as HTTPStatusCode
+			status: fetchResponse?.status as HTTPStatusCode,
+			repeat: function (m?: HttpMethod | IRequestOptions, o?: IRequestOptions) {
+				if (arguments.length == 2) {
+					m = (m ? m : method);
+					o = (o ? o : {});
+				}
+				else if (arguments.length == 1) {
+					o = (m ? m : {}) as IRequestOptions;
+					m = method;
+				}
+				else if (!arguments.length) {
+					m = method;
+					o = {};
+				}
+				let repeatOptions = assign(cloneDeep(options), o);
+				return that.request<T>(m as HttpMethod, path, repeatOptions);
+			}
 		};
 
 		if (fetchError) {
