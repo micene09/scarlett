@@ -61,12 +61,12 @@ In the `lib/` folder of the package you will find different build files:
 	import RestClient from `scarlett`
 	```
 
-2. Create a rest client instance providing an object of interface `IRequestOptions`.
+2. Create a rest client in stance providing an object of interface `IRequestOptions`.
 
 	```typescript
 	const client = new RestClient({
-	host: `https://server.com`,
-	responseType: `text`
+		host: `https://server.com`,
+		responseType: `text`
 	} /* >> IRequestOptions  */)
 	const response = await client.get<string>(`path`)
 	```
@@ -283,6 +283,24 @@ The property `response.data` will infer the `IMyObject` interface.
 **throwFilter (IResponseFilter`<T>`)**
 
 When a `IResponseFilter` match the response, this property will expose it.
+
+**repeat() (IResponse`<T>`)**
+
+A usefull shortcut to repeat the request sent.
+
+This method has the following interface:
+
+```typescript
+interface IRepeat<T> {
+	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<T>>
+}
+interface IRepeat<T> {
+	(requestOptions?: IRequestOptions): Promise<IResponse<T>>
+}
+```
+Every parameter is optional, you can override every option as usual.
+
+See the `tests/features.test.ts`.
 
 ### Request (sent) Object
 
