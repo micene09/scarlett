@@ -33,13 +33,13 @@ export interface IResponse<TResponse, TError = any> {
 	headers?: Headers;
 	data: TResponse | null;
 	throwFilter?: IResponseFilter<TResponse>;
-	repeat: IRepeat<TResponse>;
+	repeat: IRepeat<TResponse, TError>;
 }
-export interface IRepeat<T> {
-	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<T>>
+export interface IRepeat<TResponse, TError = any> {
+	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
 }
-export interface IRepeat<T> {
-	(requestOptions?: IRequestOptions): Promise<IResponse<T>>
+export interface IRepeat<TResponse, TError = any> {
+	(requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
 }
 export interface IResponseFilter<T> {
 	path?: string;

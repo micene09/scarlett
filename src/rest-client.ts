@@ -136,7 +136,7 @@ export default class RestClient {
 					o = {};
 				}
 				let repeatOptions = assign(cloneDeep(options), o);
-				return that.request<TResponse>(m as HttpMethod, path, repeatOptions);
+				return that.request<TResponse, TError>(m as HttpMethod, path, repeatOptions);
 			}
 		};
 
