@@ -4,6 +4,21 @@
 > A strongly typed, Typescript powered, rest client library based on Fetch API.
 
 <!-- omit in toc -->
+## Features
+
+* [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) based rest client
+* Class based
+* Strongly-typed (...thank you Typescript)
+* Centralized config (constructor)...with optional local overrides on http methods
+* Response body auto-translation, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
+* Query-string utilities
+* Optional Error object's intellisense
+* Optional throw errors on request failures
+* Optional catch/filter to handle expected errors even when throw error is enabled
+* Support for timeout
+* Easy request repeater
+
+<!-- omit in toc -->
 ## Summary
 
 - [Installation](#installation)
@@ -21,6 +36,7 @@
 - [Testing](#testing)
 - [Inspired by...](#inspired-by)
 - [Why this name?](#why-this-name)
+
 
 ## Installation
 
@@ -73,7 +89,7 @@ In the `lib/` folder of the package you will find different build files:
 
 Every request method will return a `Promise<IResponse<T>>`.
 
-See the `tests/features.test.ts` to have a complete view on available features.
+See the `tests/features.test.ts` to see it in action!
 
 ## RestClient
 
@@ -139,7 +155,7 @@ interface IQueryParamTransformer {
 
 ...it need to have back the `string` version of your custom type parameter.
 
-See `tests/features.test.ts`.
+Have a look at `tests/features.test.ts` to see it in action!
 
 **queryParamsIncludeEmpty (boolean)**
 
@@ -192,10 +208,10 @@ If a failed request match one of the objects provided, the API will not throw.
 
 Setting throwExcluding will also set `throw` option to `true`.
 
-See `tests/features.test.ts`.
+Have a look at `tests/features.test.ts` to see it in action!
 
 <!-- omit in toc -->
-### request`<T>`()
+### request`<TResponse, TError = any>`()
 
 *Parameters*:
 
@@ -203,7 +219,9 @@ See `tests/features.test.ts`.
 * path *(string)*, this will be appended to *host* and *basePath* option
 * requestOptions *(IRequestOptions | undefined)*, local request options that will override the global options provided via constructor.
 
-*Returns* `Promise<IResponse<T>>`, where `T` is the `response.data` type (typescript intellisense).
+*Returns* `Promise<IResponse<TResponse, TError>>`, where:
+ * `TResponse` is the `response.data` type (typescript intellisense)
+ * `TError` is the **optional** `error.response.data` type
 
 *Usage*:
 
@@ -216,6 +234,14 @@ const client = new RestClient({
 const response = await client.request<string>(`GET`, `/action`);
 console.log(response.request.url.href); // -> "https://server.com/controller/action"
 console.log(response.data); // -> "sample text"
+```
+
+*Usage with error type*:
+
+```typescript
+const response = await client.request<string, IBackendError>(`GET`, `/action-with-error`);
+const error = response.error;
+console.log(error.response?.data?); // -> your error object, with intellisense on your editor
 ```
 
 <!-- omit in toc -->
@@ -254,15 +280,15 @@ Properties:
 
 **request ([Request (sent) Object](#request-sent-object))**
 
-**error ([RestError](#resterror)`<T>`)**
+**error ([RestError](#resterror)`<TError>`)**
 
 **status (HTTPStatusCode)**
 
 **headers ([Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers))**
 
-**data (T | null)**
+**data (TResponse | null)**
 
-The response body, leaded by `IRequestOptions.responseType` (for runtime type) and `T` (for Typescript intellisense).
+The response body, leaded by `IRequestOptions.responseType` (for runtime type) and `TResponse` (for Typescript intellisense).
 
 Example:
 
@@ -280,27 +306,27 @@ const response = await client.get<IMyObject>(`/action`);
 
 The property `response.data` will infer the `IMyObject` interface.
 
-**throwFilter (IResponseFilter`<T>`)**
+**throwFilter (IResponseFilter)**
 
 When a `IResponseFilter` match the response, this property will expose it.
 
-**repeat() (IResponse`<T>`)**
+**repeat() (IResponse`<TResponse, TError = any>`)**
 
 A usefull shortcut to repeat the request sent.
 
 This method has the following interface:
 
 ```typescript
-interface IRepeat<T> {
-	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<T>>
+export interface IRepeat<TResponse, TError = any> {
+	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
 }
-interface IRepeat<T> {
-	(requestOptions?: IRequestOptions): Promise<IResponse<T>>
+export interface IRepeat<TResponse, TError = any> {
+	(requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
 }
 ```
 Every parameter is optional, you can override every option as usual.
 
-See the `tests/features.test.ts`.
+Have a look at `tests/features.test.ts` to see it in action!
 
 ### Request (sent) Object
 
@@ -327,6 +353,12 @@ The optional body used, tipically when HttpMethod is `PUT` or `POST`.
 This class extends the default Javascript Error, it require a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
 
 ```typescript
+const response = await restClient.get<any, IBackendError>("/status-code/412");
+// intellisense here should work data prop:
+const error = response.error?.data;
+
+// ...or just import and create it manually
+import { RestError } from "scarlett";
 const err = new RestError<IBackendError>();
 ```
 
@@ -338,9 +370,9 @@ Always true, it's a simple utility prop that can be used by every kind of Two-Wa
 
 **request (IRequest)**
 
-**response (IResponse`<T>`)**
+**response (IResponse`<TError>`)**
 
-Where `T` will be the model type of response body.
+Where `TError` will be the model type of response body.
 
 **code (string | number)**
 
