@@ -4,7 +4,7 @@
 > A strongly typed, Typescript powered, rest client library based on Fetch API.
 
 <!-- omit in toc -->
-## Features
+## Key features
 
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) based rest client
 * Class based
