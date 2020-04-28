@@ -9,9 +9,10 @@
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) based rest client
 * Class based
 * Strongly-typed (...thank you Typescript)
-* Centralized config (constructor)...with optional local overrides on http methods
+* Centralized config (via constructor)...with optional local overrides on http methods
 * Response body auto-translation, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
-* Query-string utilities
+* Built-in cache
+* Query-string generator utilities
 * Optional Error object's intellisense
 * Optional throw errors on request failures
 * Optional catch/filter to handle expected errors even when throw error is enabled
@@ -310,7 +311,7 @@ The property `response.data` will infer the `IMyObject` interface.
 
 When a `IResponseFilter` match the response, this property will expose it.
 
-**repeat() (IResponse`<TResponse, TError = any>`)**
+**repeat()**
 
 A usefull shortcut to repeat the request sent.
 
@@ -326,7 +327,11 @@ export interface IRepeat<TResponse, TError = any> {
 ```
 Every parameter is optional, you can override every option as usual.
 
-Have a look at `tests/features.test.ts` to see it in action!
+*Usage*
+```typescript
+const first = await restClient.get<any>("/action");
+const second = first.repeat();
+```
 
 ### Request (sent) Object
 
@@ -399,11 +404,11 @@ errorInstance.consoleWarn("Test Message");
 
 Set the `request` object for the current error instance.
 
-**setResponse(response: IResponse`<T>`)**
+**setResponse(response: IResponse)**
 
 Set the `response` object for the current error instance.
 
-**throwFilterMatch(filter: IResponseFilter`<T>`) => boolean**
+**throwFilterMatch(filter: IResponseFilter) => boolean**
 
 Check if `response` object match with the `filter` provided.
 
