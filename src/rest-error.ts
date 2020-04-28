@@ -29,7 +29,7 @@ export default class RestError<T> extends Error {
 		this.request = request;
 		return this;
 	}
-	setResponse(response: IResponse<T>) {
+	setResponse(response: IResponse<any>) {
 		this.response = response;
 		return this;
 	}

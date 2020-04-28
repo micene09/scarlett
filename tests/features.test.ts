@@ -67,6 +67,15 @@ describe('Features', () => {
 			done();
 		}
 	});
+	test("Custom Error Object Interfaces", async done => {
+
+		const response = await restClient.get<any, ITestStatusCodeResponse>("/status-code/412");
+		const error = response.error!;
+		// intellisense here should work data prop:
+		expect(error.response?.data?.statusText).toEqual("CustomStatusCode");
+		expect(error.response?.data?.statusCode).toEqual(412);
+		done();
+	});
 	test("Custom Error Object handled as usual", async done => {
 		try {
 			await restClient.get("/status-code/412", { throw: true });

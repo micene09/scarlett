@@ -25,15 +25,15 @@ export interface IRequest {
 	method: HttpMethod
 	body: any
 }
-export interface IResponse<T> {
+export interface IResponse<TResponse, TError = any> {
 	fetchResponse?: Response;
 	request: IRequest;
-	error?: RestError<T>;
+	error?: RestError<TError>;
 	status: HTTPStatusCode;
 	headers?: Headers;
-	data: T | null;
-	throwFilter?: IResponseFilter<T>;
-	repeat: IRepeat<T>;
+	data: TResponse | null;
+	throwFilter?: IResponseFilter<TResponse>;
+	repeat: IRepeat<TResponse>;
 }
 export interface IRepeat<T> {
 	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<T>>

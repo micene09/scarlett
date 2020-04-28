@@ -36,28 +36,28 @@ export default class RestClient {
 		const key = this.cacheKey(options, response.request.url);
 		this._cache.set(key, response);
 	}
-	protected cacheGet<T>(options: IRequestOptions, url: URL) {
+	protected cacheGet<TResponse>(options: IRequestOptions, url: URL) {
 		const key = this.cacheKey(options, url);
-		return this._cache.get(key) as IResponse<T> | undefined | null;
+		return this._cache.get(key) as IResponse<TResponse> | undefined | null;
 	}
 	//#region request shortcut
-	public get<T>(path: string, overrides?: IRequestOptions) {
-		return this.request<T>("GET", path, overrides);
+	public get<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+		return this.request<TResponse, TError>("GET", path, overrides);
 	}
-	public delete<T>(path: string, overrides?: IRequestOptions) {
-		return this.request<T>("DELETE", path, overrides);
+	public delete<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+		return this.request<TResponse, TError>("DELETE", path, overrides);
 	}
-	public post<T>(path: string, overrides?: IRequestOptions) {
-		return this.request<T>("POST", path, overrides);
+	public post<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+		return this.request<TResponse, TError>("POST", path, overrides);
 	}
-	public put<T>(path: string, overrides?: IRequestOptions) {
-		return this.request<T>("GET", path, overrides);
+	public put<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+		return this.request<TResponse, TError>("GET", path, overrides);
 	}
-	public patch<T>(path: string, overrides?: IRequestOptions) {
-		return this.request<T>("GET", path, overrides);
+	public patch<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+		return this.request<TResponse, TError>("GET", path, overrides);
 	}
 	//#endregion
-	public async request<T>(method: HttpMethod, path: string, requestOptions?: IRequestOptions) {
+	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: IRequestOptions) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
 		const options: IRequestOptions = requestOptions ? assign({}, cloneDeep(this._options), requestOptions) : cloneDeep(this._options);
 		const url = getRequestUrl(options.host, options.basePath, path);
@@ -69,7 +69,7 @@ export default class RestClient {
 		options.cacheKey = options.cacheKey?.trim();
 
 		if (options.useCache) {
-			const cachedResponse = this.cacheGet<T>(options, url);
+			const cachedResponse = this.cacheGet<TResponse>(options, url);
 			if (cachedResponse) return cachedResponse;
 		}
 
@@ -115,8 +115,8 @@ export default class RestClient {
 			method, options, url,
 			body: method === "GET" ? undefined : options.body
 		};
-		const data = fetchResponse ? await transformResponse<T>(fetchResponse, options.responseType) : null;
-		const response: IResponse<T> = {
+		const data = fetchResponse ? await transformResponse<TResponse>(fetchResponse, options.responseType) : null;
+		const response: IResponse<TResponse, TError> = {
 			fetchResponse: fetchResponse ?? undefined,
 			request,
 			headers: await fetchResponse?.trailer,
@@ -136,12 +136,12 @@ export default class RestClient {
 					o = {};
 				}
 				let repeatOptions = assign(cloneDeep(options), o);
-				return that.request<T>(m as HttpMethod, path, repeatOptions);
+				return that.request<TResponse>(m as HttpMethod, path, repeatOptions);
 			}
 		};
 
 		if (fetchError) {
-			let ser: RestError<any> = new RestError<T>(fetchError.name, fetchError.message);
+			let ser: RestError<TError> = new RestError<TError>(fetchError.name, fetchError.message);
 			ser.stack = fetchError.stack;
 			if (ser.code === "timeout")
 				response.status = HTTPStatusCode.RequestTimeout;
@@ -150,7 +150,7 @@ export default class RestClient {
 			response.error = ser;
 		}
 		else if (fetchResponse?.ok === false) {
-			const ser = new RestError<T>(fetchResponse.status, fetchResponse.statusText);
+			const ser = new RestError<TResponse>(fetchResponse.status, fetchResponse.statusText);
 			ser.setRequest(request);
 			ser.setResponse(response);
 			response.error = ser;
