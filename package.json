@@ -21,17 +21,17 @@
 		"url": "git://github.com/Micene09/scarlett.git"
 	},
 	"dependencies": {
-		"lodash": "^4.17.15"
+		"lodash-es": "^4.17.15"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.8.7",
-		"@babel/preset-env": "^7.8.7",
-		"@babel/preset-typescript": "^7.8.3",
+		"@babel/core": "^7.9.6",
+		"@babel/preset-env": "^7.9.6",
+		"@babel/preset-typescript": "^7.9.0",
 		"@rollup/plugin-multi-entry": "^3.0.0",
 		"@rollup/plugin-node-resolve": "^7.1.1",
 		"@rollup/plugin-typescript": "^4.0.0",
 		"@types/jest": "^25.1.4",
-		"@types/lodash": "^4.14.149",
+		"@types/lodash-es": "^4.17.3",
 		"@types/node": "^13.9.1",
 		"@types/node-fetch": "^2.5.5",
 		"abort-controller": "^3.0.0",
