@@ -25,7 +25,6 @@ const options = {
 			sourcemap: true
 		}
 	],
-	external: ["lodash"],
 	plugins: [
 		typescript({
 			tsconfig: "src/tsconfig.json"
