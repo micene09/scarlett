@@ -1,4 +1,5 @@
-import { cloneDeep, assign } from 'lodash';
+import assign from "lodash-es/assign";
+import cloneDeep from "lodash-es/cloneDeep";
 import { IRequestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode } from './interfaces';
 import RestError from "./rest-error";
 import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponse, transformResponseBody } from './utilities';

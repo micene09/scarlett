@@ -1,4 +1,4 @@
-import { forEach } from "lodash";
+import forEach from "lodash-es/forEach";
 import { IRequestOptions, HttpMethod, HttpResponseFormat, IRequestQueryOptions } from "./interfaces";
 import RestError from "./rest-error";
 
