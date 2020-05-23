@@ -9,6 +9,7 @@
 		"esModuleInterop": true,
 		"strict": true,
 		"resolveJsonModule": true,
+		"removeComments": true,
 		"lib": [ "ES2020" ]
 	},
 	"paths": {
