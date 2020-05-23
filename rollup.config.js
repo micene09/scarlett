@@ -1,6 +1,7 @@
 
-const typescript = require("@rollup/plugin-typescript");
-const resolve = require("@rollup/plugin-node-resolve");
+import typescript from "@rollup/plugin-typescript";
+import resolve from "@rollup/plugin-node-resolve";
+import { terser } from "rollup-plugin-terser";
 const input = "src/index.ts";
 const output = "./lib/index";
 
@@ -9,9 +10,15 @@ const options = {
 	input,
 	output: [
 		{
-			file: output + ".js",
-			format: 'es',
+			file: output + ".esm.js",
+			format: 'esm',
 			sourcemap: true
+		},
+		{
+			file: output + ".esm.min.js",
+			format: 'esm',
+			sourcemap: true,
+			plugins: [terser()]
 		},
 		{
 			file: output + ".common.js",
@@ -23,6 +30,13 @@ const options = {
 			file: output + ".umd.js",
 			format: 'umd',
 			sourcemap: true
+		},
+		{
+			name: "scarlett",
+			file: output + ".umd.min.js",
+			format: 'umd',
+			sourcemap: true,
+			plugins: [terser()]
 		}
 	],
 	plugins: [
@@ -40,6 +54,12 @@ const es3Options = {
 			file: output + ".es3.common.js",
 			format: 'cjs',
 			sourcemap: true
+		},
+		{
+			file: output + ".es3.common.min.js",
+			format: 'cjs',
+			sourcemap: true,
+			plugins: [terser()]
 		}
 	],
 	plugins: [
