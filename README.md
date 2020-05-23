@@ -15,7 +15,7 @@
 * Query-string utilities
 * Optional Error object's intellisense
 * Optional throw errors on request failures
-* Optional catch/filter to handle expected errors even when throw error is enabled
+* Optional catch-filters to handle expected errors even when throw error is enabled
 * Support for timeout
 * Easy request repeater
 
