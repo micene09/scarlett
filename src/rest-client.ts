@@ -62,8 +62,7 @@ export default class RestClient {
 	//#endregion
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: IRequestOptions) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
-		this._options.overrideWith(requestOptions);
-		const options = this._options;
+		const options = this._options.localOverride(requestOptions);
 		const url = getRequestUrl(options.host, options.basePath, path);
 
 		if (method === "GET" && options.query)
@@ -83,11 +82,11 @@ export default class RestClient {
 		const [fetchResponse, fetchError] = await resolveAny<Response, Error>(new Promise((resolve, reject) => {
 
 			let timeoutTrigger = false;
-			let fetchResolved = false;
+			let fetchFullFilled = false;
 
 			const abortController = options.abortController ?? new AbortController();
 			const id = setTimeout(function requestTimeout() {
-				if (fetchResolved)
+				if (fetchFullFilled)
 					return;
 				timeoutTrigger = true;
 				abortController.abort();
@@ -108,11 +107,13 @@ export default class RestClient {
 			})
 			.then((response) => {
 				if (timeoutTrigger) return;
-				clearTimeout(id);
 				resolve(response);
 			})
 			.catch((error) => reject(error))
-			.finally(() => (fetchResolved = true));
+			.finally(() => {
+				fetchFullFilled = true;
+				clearTimeout(id);
+			});
 		}));
 
 		const request: IRequest = {
@@ -130,21 +131,20 @@ export default class RestClient {
 			headers: await fetchResponse?.trailer,
 			data,
 			status: fetchResponse?.status as HTTPStatusCode,
-			repeat: function (m?: HttpMethod | IRequestOptions, o?: IRequestOptions) {
+			repeat: function (m?: HttpMethod | IRequestOptions, repeatOptions?: IRequestOptions) {
 				if (arguments.length == 2) {
 					m = (m ? m : method);
-					o = (o ? o : {});
+					repeatOptions = (repeatOptions ? repeatOptions : {});
 				}
 				else if (arguments.length == 1) {
-					o = (m ? m : {}) as IRequestOptions;
+					repeatOptions = (m ? m : {}) as IRequestOptions;
 					m = method;
 				}
 				else if (!arguments.length) {
 					m = method;
-					o = {};
+					repeatOptions = {};
 				}
-				const newOpts = new RestOptions(options);
-				newOpts.overrideWith(o);
+				const newOpts = Object.assign({}, options, repeatOptions ?? {});
 				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};
