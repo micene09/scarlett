@@ -65,7 +65,7 @@ In the `lib/` folder of the package you will find different build files:
 
 | Format                    | Filename              |
 | ------------------------- | --------------------- |
-| **ES Module** *(default)* | `index.esm.js`        |
+| **ES Module** *(default)* | `index.js`        |
 | **UMD**                   | `index.umd.js`        |
 | **CommonJs**              | `index.common.js`     |
 | **CommonJs ES3**          | `index.es3.common.js` |

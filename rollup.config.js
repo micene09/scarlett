@@ -10,12 +10,12 @@ const options = {
 	input,
 	output: [
 		{
-			file: output + ".esm.js",
+			file: output + ".js",
 			format: 'esm',
 			sourcemap: true
 		},
 		{
-			file: output + ".esm.min.js",
+			file: output + ".min.js",
 			format: 'esm',
 			sourcemap: true,
 			plugins: [terser()]
