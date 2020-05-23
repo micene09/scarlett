@@ -1,4 +1,3 @@
-import forEach from "lodash-es/forEach";
 import { IRequestOptions, HttpMethod, HttpResponseFormat, IRequestQueryOptions } from "./interfaces";
 import RestError from "./rest-error";
 
@@ -17,8 +16,10 @@ export function setUrlParameters(url: URL, options: IRequestQueryOptions) {
 	const query = options.query;
 	if (!query) return;
 	const transf = options.queryParamsTransormer;
+	const keys = Object.keys(query);
 	if (typeof transf === "function")
-		forEach(query, (value, key) => {
+		keys.forEach(key => {
+			const value = query[key];
 			const newval = transf(key, value, query);
 			const t = typeof newval;
 			if (t !== "string" && t !== "undefined" && newval !== null)
@@ -33,7 +34,10 @@ export function setUrlParameters(url: URL, options: IRequestQueryOptions) {
 				url.searchParams.append(key, "");
 		});
 	else
-		forEach(query, (value, key) => url.searchParams.append(key, value));
+		keys.forEach(key => {
+			const value = query[key];
+			url.searchParams.append(key, value)
+		});
 }
 export function transformResponse<T>(response: Response, responseType: HttpResponseFormat = "json") {
 	return response[responseType]() as Promise<T>;

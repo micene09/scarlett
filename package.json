@@ -3,11 +3,12 @@
 	"version": "0.0.0",
 	"description": "A strongly typed, Typescript powered, rest client library based on Fetch API.",
 	"browser": "lib/index.umd.js",
-	"module": "lib/index.js",
+	"module": "lib/index.esm.js",
 	"types": "lib/index.d.ts",
 	"scripts": {
 		"test": "jest",
 		"build": "rollup --config",
+		"build:es3": "rollup --config --es3",
 		"build:declarations": "tsc -p src/tsconfig.d.json",
 		"release": "dotenv release-it"
 	},
@@ -20,9 +21,7 @@
 		"type": "git",
 		"url": "git://github.com/Micene09/scarlett.git"
 	},
-	"dependencies": {
-		"lodash-es": "^4.17.15"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@babel/core": "^7.9.6",
 		"@babel/preset-env": "^7.9.6",
@@ -31,7 +30,6 @@
 		"@rollup/plugin-node-resolve": "^7.1.1",
 		"@rollup/plugin-typescript": "^4.0.0",
 		"@types/jest": "^25.1.4",
-		"@types/lodash-es": "^4.17.3",
 		"@types/node": "^13.9.1",
 		"@types/node-fetch": "^2.5.5",
 		"abort-controller": "^3.0.0",
@@ -43,6 +41,7 @@
 		"node-fetch": "^2.6.0",
 		"release-it": "^13.5.2",
 		"rollup": "^2.2.0",
+		"rollup-plugin-terser": "^6.0.1",
 		"rollup-plugin-typescript2": "^0.26.0",
 		"ts-jest": "^25.2.1",
 		"tslib": "^1.11.1",

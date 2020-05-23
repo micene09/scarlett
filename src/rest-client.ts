@@ -1,14 +1,15 @@
-import assign from "lodash-es/assign";
-import cloneDeep from "lodash-es/cloneDeep";
 import { IRequestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode } from './interfaces';
 import RestError from "./rest-error";
 import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponse, transformResponseBody } from './utilities';
+import { RestOptions } from "./rest-options";
+
 export default class RestClient {
-	private _options: IRequestOptions;
+	private _options: RestOptions;
 	private _cache = new Map<string, IResponse<any>>();
 	constructor(options?: IRequestOptions) {
-		this._options = cloneDeep(options) ?? {};
+		this._options = new RestOptions(options ?? {});
 	}
+	//#region cache
 	protected cacheKey(options: IRequestOptions, url: URL) {
 		const cacheKey = options.cacheKey ?? '';
 		function formDataToObj(formData: FormData) {
@@ -41,6 +42,7 @@ export default class RestClient {
 		const key = this.cacheKey(options, url);
 		return this._cache.get(key) as IResponse<TResponse> | undefined | null;
 	}
+	//#endregion
 	//#region request shortcut
 	public get<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
 		return this.request<TResponse, TError>("GET", path, overrides);
@@ -60,7 +62,8 @@ export default class RestClient {
 	//#endregion
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: IRequestOptions) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
-		const options: IRequestOptions = requestOptions ? assign({}, cloneDeep(this._options), requestOptions) : cloneDeep(this._options);
+		this._options.overrideWith(requestOptions);
+		const options = this._options;
 		const url = getRequestUrl(options.host, options.basePath, path);
 
 		if (method === "GET" && options.query)
@@ -136,8 +139,9 @@ export default class RestClient {
 					m = method;
 					o = {};
 				}
-				let repeatOptions = assign(cloneDeep(options), o);
-				return that.request<TResponse, TError>(m as HttpMethod, path, repeatOptions);
+				const newOpts = new RestOptions(options);
+				newOpts.overrideWith(o);
+				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};
 
