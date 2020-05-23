@@ -12,7 +12,7 @@
 * Centralized config (via constructor)...with optional local overrides on http methods
 * Response body auto-translation, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
 * Built-in cache
-* Query-string generator utilities
+* Query-string utilities
 * Optional Error object's intellisense
 * Optional throw errors on request failures
 * Optional catch/filter to handle expected errors even when throw error is enabled
