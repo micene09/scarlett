@@ -11,8 +11,8 @@ module.exports = {
 		'tsx'
 	],
 	transform: {
-		'^.+\\.tsx?$': 'ts-jest',
-		"^.+\\.jsx?$": "babel-jest",
+		'^.+\\.ts?$': 'ts-jest',
+		"^.+\\.js?$": "babel-jest",
 	},
 	transformIgnorePatterns: [
 		'/node_modules/'
