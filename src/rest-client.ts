@@ -119,7 +119,11 @@ export default class RestClient {
 			method, options, url,
 			body: method === "GET" ? undefined : options.body
 		};
-		const data = fetchResponse ? await transformResponse<TResponse>(fetchResponse, options.responseType) : null;
+
+		let data: TResponse | null = null;
+		if (fetchResponse)
+			data = await transformResponse<TResponse>(fetchResponse, options.responseType);
+
 		const response: IResponse<TResponse, TError> = {
 			fetchResponse: fetchResponse ?? undefined,
 			request,
