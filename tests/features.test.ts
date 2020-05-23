@@ -1,11 +1,7 @@
 
-import RestClientClass from "../src/rest-client";
-import RestErrorClass from "../src/rest-error";
+/** @type {import('../lib/index.d.ts')} */
 
 import RestClient, { RestError } from "../lib/index";
-const RestClient: typeof RestClientClass = require("../lib/index").default;
-const RestError: typeof RestErrorClass = require("../lib/index").RestError;
-
 import { HTTPStatusCode } from "../src/interfaces";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { ok } from "assert";
