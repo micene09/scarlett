@@ -1,6 +1,5 @@
 <!-- omit in toc -->
-![Scarlett Logo](./logo.svg)
-<img src="./logo.svg">
+<img src="./logo.jpg">
 
 > A strongly typed, Typescript powered, rest client library based on Fetch API.
 
@@ -11,7 +10,7 @@
 * Class based
 * Strongly-typed (...thank you Typescript)
 * Centralized config (via constructor)...with optional local overrides on http methods
-* Response body auto-translation, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
+* Response body auto-parser, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
 * Built-in cache
 * Query-string utilities
 * Optional Error object's intellisense
@@ -123,7 +122,7 @@ The base path to use on every request, defaults to `/`.
 
 One of the following: `json` (default), `text`, `blob`, `arrayBuffer`, `formData`.
 
-This property will translate the response body, using the proper type. For example, when you set `json` as responseType you don't need to `JSON.parse(response.data)`.
+This property will convert the response body, using the proper type. For example, when you set `json` as responseType you don't need to `JSON.parse(response.data)`.
 
 **body**
 
