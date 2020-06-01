@@ -8,6 +8,7 @@
 	"github": {
 		"assets": [
 			"lib/*.*",
+			"logo.jpg",
 			"README.md"
 		],
 		"draft": true,
