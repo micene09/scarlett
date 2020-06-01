@@ -122,7 +122,7 @@ The base path to use on every request, defaults to `/`.
 
 One of the following: `json` (default), `text`, `blob`, `arrayBuffer`, `formData`.
 
-This property will convert the response body, using the proper type. For example, when you set `json` as responseType you don't need to `JSON.parse(response.data)`.
+This property will lead the response body parsing, to get the proper type output. For example, with `json` as responseType you don't need to `JSON.parse()` on `response.data`.
 
 **body**
 
