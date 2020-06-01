@@ -484,7 +484,7 @@ To develop or testing purposes:
 
 To execute tests, just execute on project root:
 
-`npm run test` or `npm run test`
+`npm run test` or `yarn run test`
 
 ## Inspired by...
 
