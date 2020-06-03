@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-<img src="./logo.jpg">
+<img src="https://github.com/Micene09/scarlett/blob/master/logo.jpg?raw=true">
 
 > A strongly typed, Typescript powered, rest client library based on Fetch API.
 
