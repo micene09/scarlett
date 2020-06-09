@@ -20,8 +20,13 @@ export function setUrlParameters(url: URL, options: IRequestQueryOptions) {
 	if (typeof transf === "function")
 		keys.forEach(key => {
 			const value = query[key];
-			const newval = transf(key, value, query);
+			let newval = transf(key, value, query);
+
+			if (typeof newval == "number")
+				newval = (newval as number).toString();
+
 			const t = typeof newval;
+
 			if (t !== "string" && t !== "undefined" && newval !== null)
 				throw new RestError(
 					"ArgumentException",
