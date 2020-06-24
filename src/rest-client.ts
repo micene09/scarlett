@@ -156,6 +156,12 @@ export default class RestClient {
 			ser.setResponse(response);
 			response.error = ser;
 		}
+		else if (!parseOk) {
+			let ser: RestError<TError> = new RestError<any>("BodyParseError", `An error occurred while parsing the response body as ${options.responseType}`);
+			ser.setRequest(request);
+			ser.setResponse(response);
+			response.error = ser;
+		}
 		else if (fetchResponse?.ok === false) {
 			const ser = new RestError<TResponse>(fetchResponse.status, fetchResponse.statusText);
 			ser.setRequest(request);
