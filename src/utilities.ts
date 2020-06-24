@@ -47,7 +47,7 @@ export function setUrlParameters(url: URL, options: IRequestQueryOptions) {
 export function transformResponse<T>(response: Response, responseType: HttpResponseFormat = "json") {
 	return response[responseType]() as Promise<T>;
 }
-export function transformResponseBody(body: | ArrayBuffer | Blob | File | FormData | string | any) {
+export function transformRequestBody(body: | ArrayBuffer | Blob | File | FormData | string | any) {
 	return (
 		globalThis.ArrayBuffer && body instanceof ArrayBuffer && body.byteLength !== undefined ? body
 		: globalThis.Blob && body instanceof Blob ? body

@@ -1,6 +1,6 @@
 import { IRequestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode } from './interfaces';
 import RestError from "./rest-error";
-import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponse, transformResponseBody } from './utilities';
+import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponse, transformRequestBody } from './utilities';
 import { RestOptions } from "./rest-options";
 
 export default class RestClient {
@@ -100,7 +100,7 @@ export default class RestClient {
 			fetch(url.href, {
 				method,
 				headers,
-				body: method === "GET" ? undefined : transformResponseBody(options.body),
+				body: method === "GET" ? undefined : transformRequestBody(options.body),
 				cache: "no-cache",
 				credentials: "same-origin",
 				signal: abortController.signal,
