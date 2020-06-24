@@ -1,6 +1,6 @@
 import { IRequestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode } from './interfaces';
 import RestError from "./rest-error";
-import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponse, transformRequestBody } from './utilities';
+import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponseBody, transformRequestBody } from './utilities';
 import { RestOptions } from "./rest-options";
 
 export default class RestClient {
@@ -121,9 +121,7 @@ export default class RestClient {
 			body: method === "GET" ? undefined : options.body
 		};
 
-		let data: TResponse | null = null;
-		if (fetchResponse)
-			data = await transformResponse<TResponse>(fetchResponse, options.responseType);
+		let [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, options.responseType);
 
 		const response: IResponse<TResponse, TError> = {
 			fetchResponse: fetchResponse ?? undefined,

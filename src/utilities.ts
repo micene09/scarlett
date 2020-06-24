@@ -44,8 +44,14 @@ export function setUrlParameters(url: URL, options: IRequestQueryOptions) {
 			url.searchParams.append(key, value)
 		});
 }
-export function transformResponse<T>(response: Response, responseType: HttpResponseFormat = "json") {
-	return response[responseType]() as Promise<T>;
+export async function transformResponseBody<T>(response: Response | null = null, responseType: HttpResponseFormat = "json"): Promise<[boolean, T | null]> {
+	if (!response)
+		return [false, null];
+	else try {
+		return [true, await response[responseType]() as T];
+	} catch (error) {
+		return [false, null];
+	}
 }
 export function transformRequestBody(body: | ArrayBuffer | Blob | File | FormData | string | any) {
 	return (
