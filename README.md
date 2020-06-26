@@ -379,7 +379,7 @@ Always true, it's a simple utility prop that can be usefull when using any kind 
 
 Where `TError` will be the model type of error object.
 
-**data (`<TError>`)**
+**data (TError)**
 
 Where error object.
 
