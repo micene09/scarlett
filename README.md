@@ -88,7 +88,7 @@ In the `lib/` folder of the package you will find different build files:
 	const response = await client.get<string>(`path`)
 	```
 
-Every request method will return a `Promise<IResponse<T>>`.
+Every request method will return a `Promise<IResponse<TResponse>>`.
 
 See the `tests/features.test.ts` to see it in action!
 
@@ -199,7 +199,7 @@ interface IResponseFilter {
 	path?: string;
 	method?: HttpMethod;
 	statusCode?: HTTPStatusCode;
-	cback?: {
+	onFilterMatch?: {
 		(error: RestError): void
 	};
 }
@@ -222,7 +222,7 @@ Have a look at `tests/features.test.ts` to see it in action!
 
 *Returns* `Promise<IResponse<TResponse, TError>>`, where:
  * `TResponse` is the `response.data` type (typescript intellisense)
- * `TError` is the **optional** `error.response.data` type
+ * `TError` is the **optional** `response.error.data` type
 
 *Usage*:
 
@@ -364,20 +364,24 @@ const error = response.error?.data;
 
 // ...or just import and create it manually
 import { RestError } from "scarlett";
-const err = new RestError<IBackendError>();
+const err = new RestError<any, IBackendError>();
 ```
 
 Preoperties:
 
 **isRestError (boolean)**
 
-Always true, it's a simple utility prop that can be used by every kind of Two-Way Binding framework.
+Always true, it's a simple utility prop that can be usefull when using any kind of Two-Way Binding framework.
 
 **request (IRequest)**
 
-**response (IResponse`<TError>`)**
+**response (IResponse`<TResponse, TError>`)**
 
-Where `TError` will be the model type of response body.
+Where `TError` will be the model type of error object.
+
+**data (`<TError>`)**
+
+Where error object.
 
 **code (string | number)**
 
