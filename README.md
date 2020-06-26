@@ -381,7 +381,7 @@ Where `TError` will be the model type of error object.
 
 **data (TError)**
 
-Where error object.
+The error object parsed from response body content.
 
 **code (string | number)**
 
