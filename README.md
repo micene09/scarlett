@@ -196,12 +196,12 @@ You can do this providing an array of `IResponseFilter`:
 
 ```typescript
 interface IResponseFilter {
-	path?: string;
-	method?: HttpMethod;
-	statusCode?: HTTPStatusCode;
+	path?: string
+	method?: HttpMethod
+	statusCode?: HTTPStatusCode
 	onFilterMatch?: {
 		(error: RestError): void
-	};
+	}
 }
 ```
 
