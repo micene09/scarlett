@@ -148,7 +148,7 @@ export default class RestClient {
 		};
 
 		if (fetchError) {
-			let ser: RestError<TError> = new RestError<TError>(fetchError.name, fetchError.message);
+			const ser = new RestError<TResponse, TError>(fetchError.name, fetchError.message);
 			ser.stack = fetchError.stack;
 			if (ser.code === "timeout")
 				response.status = HTTPStatusCode.RequestTimeout;
@@ -157,13 +157,13 @@ export default class RestClient {
 			response.error = ser;
 		}
 		else if (!parseOk) {
-			let ser: RestError<TError> = new RestError<any>("BodyParseError", `An error occurred while parsing the response body as ${options.responseType}`);
+			const ser = new RestError<TResponse, TError>("BodyParseError", `An error occurred while parsing the response body as ${options.responseType}`);
 			ser.setRequest(request);
 			ser.setResponse(response);
 			response.error = ser;
 		}
 		else if (fetchResponse?.ok === false) {
-			const ser = new RestError<TResponse>(fetchResponse.status, fetchResponse.statusText);
+			const ser = new RestError<TResponse, TError>(fetchResponse.status, fetchResponse.statusText);
 			ser.setRequest(request);
 			ser.setResponse(response);
 			response.error = ser;

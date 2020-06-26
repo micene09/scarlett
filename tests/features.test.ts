@@ -71,10 +71,10 @@ describe('Features', () => {
 	test("Custom Error Object Interfaces", async done => {
 
 		const response = await restClient.get<any, ITestStatusCodeResponse>("/status-code/412");
-		const error = response.error!;
+		const errorData = response?.error?.data;
 		// intellisense here should work data prop:
-		expect(error.response?.data?.statusText).toEqual("CustomStatusCode");
-		expect(error.response?.data?.statusCode).toEqual(412);
+		expect(errorData?.statusText).toEqual("CustomStatusCode");
+		expect(errorData?.statusCode).toEqual(412);
 		done();
 	});
 	test("Custom Error Object handled as usual", async done => {
@@ -83,18 +83,19 @@ describe('Features', () => {
 			fail();
 		}
 		catch(err) {
-			const error = err as RestError<ITestStatusCodeResponse>;
-			expect(error.response?.data?.statusText).toEqual("CustomStatusCode");
-			expect(error.response?.data?.statusCode).toEqual(412);
+			const error = err as RestError<any, ITestStatusCodeResponse>;
+			expect(error.data?.statusText).toEqual("CustomStatusCode");
+			expect(error.data?.statusCode).toEqual(412);
 			done();
 		}
 	});
 	test("Errors can be filtered to react properly", async done => {
 		try {
-			await restClient.get("/status-code/412", {
+			const response = await restClient.get<ITestStatusCodeResponse>("/status-code/412", {
 				throw: true,
 				throwExcluding: [{ method: "GET", statusCode: 412 }]
 			});
+			expect(response.data?.statusCode).toEqual(412);
 			ok("Error filtered successfully.");
 			done();
 		}

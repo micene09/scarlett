@@ -1,10 +1,11 @@
 import { IResponse, IRequest, IResponseFilter } from "./interfaces";
 
-export default class RestError<T> extends Error {
+export default class RestError<TResponse, TError> extends Error {
 	isRestError = true;
-	request?: IRequest = undefined;
-	response?: IResponse<T> = undefined;
+	request?: IRequest;
+	response?: IResponse<TResponse>;
 	code: string | number = "";
+	data?: TError;
 	constructor(errorCode: string | number, message: string) {
 		super(message);
 		this.code = errorCode;
@@ -31,9 +32,10 @@ export default class RestError<T> extends Error {
 	}
 	setResponse(response: IResponse<any>) {
 		this.response = response;
+		this.data = response.data;
 		return this;
 	}
-	throwFilterMatch(flt: IResponseFilter<T>): boolean {
+	throwFilterMatch(flt: IResponseFilter<any, TError>): boolean {
 		if (!this.request || !this.response) return false;
 		return (!flt.path || this.request.url.href.indexOf(flt.path) > -1)
 			&& (!flt.method || flt.method.toLowerCase() === this.request.method.toLowerCase())

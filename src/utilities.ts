@@ -67,7 +67,7 @@ interface IResponseAny {
 	<TData = any, TError = any>(prom: Promise<any>): Promise<[TData | null, TError | null]>
 }
 interface IResponseAny {
-	<T>(prom: Promise<T>): Promise<[T | null, Error | RestError<any> | null]>
+	<TResponse>(prom: Promise<TResponse>): Promise<[TResponse | null, Error | RestError<TResponse, any> | null]>
 }
 export const resolveAny: IResponseAny = (prom: Promise<any>) => {
 	return new Promise<any>(resolve => {

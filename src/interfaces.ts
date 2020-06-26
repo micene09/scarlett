@@ -17,7 +17,7 @@ export interface IRequestOptions extends IRequestQueryOptions {
 	useCache?: boolean;
 	cacheKey?: string;
 	throw?: boolean;
-	throwExcluding?: IResponseFilter<any>[];
+	throwExcluding?: IResponseFilter<any, any>[];
 }
 export interface IRequest {
 	options: IRequestOptions;
@@ -28,11 +28,11 @@ export interface IRequest {
 export interface IResponse<TResponse, TError = any> {
 	fetchResponse?: Response;
 	request: IRequest;
-	error?: RestError<TError>;
+	error?: RestError<TResponse, TError>;
 	status: HTTPStatusCode;
 	headers?: Headers;
 	data: TResponse | null;
-	throwFilter?: IResponseFilter<TResponse>;
+	throwFilter?: IResponseFilter<TResponse, TError>;
 	repeat: IRepeat<TResponse, TError>;
 }
 export interface IRepeat<TResponse, TError = any> {
@@ -41,12 +41,12 @@ export interface IRepeat<TResponse, TError = any> {
 export interface IRepeat<TResponse, TError = any> {
 	(requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
 }
-export interface IResponseFilter<T> {
+export interface IResponseFilter<TResponse, TError> {
 	path?: string;
 	method?: HttpMethod;
 	statusCode?: HTTPStatusCode;
 	cback?: {
-		(error: RestError<T>): void
+		(error: RestError<TResponse, TError>): void
 	};
 }
 export interface IQueryParamTransformer {
