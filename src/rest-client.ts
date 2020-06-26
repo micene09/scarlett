@@ -168,6 +168,7 @@ export default class RestClient {
 			ser.setResponse(response);
 			response.error = ser;
 		}
+
 		if (!options.throw && options.throwExcluding && options.throwExcluding.length)
 			options.throw = true;
 		if (response.error && Boolean(options.throw)) {
@@ -176,8 +177,8 @@ export default class RestClient {
 			if (!throwFilterFound)
 				throw response.error;
 			else {
-				if (typeof throwFilterFound.cback === "function")
-					throwFilterFound.cback(response.error);
+				if (typeof throwFilterFound.onFilterMatch === "function")
+					throwFilterFound.onFilterMatch(response.error);
 				response.throwFilter = throwFilterFound;
 			}
 		}

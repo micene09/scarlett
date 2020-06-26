@@ -45,8 +45,8 @@ export interface IResponseFilter<TResponse, TError> {
 	path?: string;
 	method?: HttpMethod;
 	statusCode?: HTTPStatusCode;
-	cback?: {
-		(error: RestError<TResponse, TError>): void
+	onFilterMatch?: {
+		(restError: RestError<TResponse, TError>): void
 	};
 }
 export interface IQueryParamTransformer {
