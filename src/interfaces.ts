@@ -1,11 +1,15 @@
 import RestError from "./rest-error";
+import { RestOptions } from "./rest-options";
 
+export interface IKeyValue {
+	[key: string]: any
+}
 export interface IRequestQueryOptions {
-	query?: { [key: string]: any };
+	query?: IKeyValue;
 	queryParamsTransormer?: IQueryParamTransformer;
 	queryParamsIncludeEmpty?: boolean;
 }
-export interface IRequestOptions extends IRequestQueryOptions {
+export interface IRequestOptions extends  IRequestQueryOptions {
 	host?: string;
 	basePath?: string;
 	responseType?: HttpResponseFormat;
@@ -32,6 +36,7 @@ export interface IResponse<TResponse, TError = any> {
 	status: HTTPStatusCode;
 	headers?: Headers;
 	data: TResponse | null;
+	options: RestOptions;
 	throwFilter?: IResponseFilter<TResponse, TError>;
 	repeat: IRepeat<TResponse, TError>;
 }
