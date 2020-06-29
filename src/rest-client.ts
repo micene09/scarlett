@@ -4,10 +4,10 @@ import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transfo
 import { RestOptions } from "./rest-options";
 
 export default class RestClient {
-	private _options: RestOptions;
 	private _cache = new Map<string, IResponse<any>>();
+	public options: RestOptions;
 	constructor(options?: IRequestOptions) {
-		this._options = new RestOptions(options ?? {});
+		this.options = new RestOptions(options ?? {});
 	}
 	//#region cache
 	protected cacheKey(options: IRequestOptions, url: URL) {
@@ -62,29 +62,27 @@ export default class RestClient {
 	//#endregion
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: IRequestOptions) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
-		const options = this._options.localOverride(requestOptions);
-		const url = getRequestUrl(options.host, options.basePath, path);
+		this.options.assign(requestOptions);
+		const currOptions = this.options.current();
+		const url = getRequestUrl(currOptions.host, currOptions.basePath, path);
 
-		if (method === "GET" && options.query)
-			setUrlParameters(url, options);
+		if (method === "GET" && currOptions.query)
+			setUrlParameters(url, currOptions.query);
 
-		const headers = getRequestHeaders(method, options);
-		options.cacheKey = options.cacheKey?.trim();
+		const headers = getRequestHeaders(method, currOptions);
+		currOptions.cacheKey = currOptions.cacheKey?.trim();
 
-		if (options.useCache) {
-			const cachedResponse = this.cacheGet<TResponse>(options, url);
+		if (currOptions.useCache) {
+			const cachedResponse = this.cacheGet<TResponse>(currOptions, url);
 			if (cachedResponse) return cachedResponse;
 		}
-
-		if (!options.timeout)
-			options.timeout = 30000;
 
 		const [fetchResponse, fetchError] = await resolveAny<Response, Error>(new Promise((resolve, reject) => {
 
 			let timeoutTrigger = false;
 			let fetchFullFilled = false;
 
-			const abortController = options.abortController ?? new AbortController();
+			const abortController = currOptions.abortController ?? new AbortController();
 			const id = setTimeout(function requestTimeout() {
 				if (fetchFullFilled)
 					return;
@@ -92,15 +90,15 @@ export default class RestClient {
 				abortController.abort();
 				let timeoutError = new Error();
 				timeoutError.name = "timeout";
-				const seconds = (options.timeout!/1000).toFixed(1).replace(".0", "");
+				const seconds = (currOptions.timeout!/1000).toFixed(1).replace(".0", "");
 				timeoutError.message = `Request timeout after ${seconds} second${seconds == "1" ? "" : "s"}.`;
 				reject(timeoutError);
-			}, options.timeout);
+			}, currOptions.timeout);
 
 			fetch(url.href, {
 				method,
 				headers,
-				body: method === "GET" ? undefined : transformRequestBody(options.body),
+				body: method === "GET" ? undefined : transformRequestBody(currOptions.body),
 				cache: "no-cache",
 				credentials: "same-origin",
 				signal: abortController.signal,
@@ -117,17 +115,17 @@ export default class RestClient {
 		}));
 
 		const request: IRequest = {
-			method, options, url,
-			body: method === "GET" ? undefined : options.body
+			method, options: currOptions, url,
+			body: currOptions.body
 		};
 
-		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, options.responseType);
+		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, currOptions.responseType);
 
 		const response: IResponse<TResponse, TError> = {
 			fetchResponse: fetchResponse ?? undefined,
-			request,
 			headers: await fetchResponse?.trailer,
-			data,
+			options: this.options,
+			request, data,
 			status: fetchResponse?.status as HTTPStatusCode,
 			repeat: function (m?: HttpMethod | IRequestOptions, repeatOptions?: IRequestOptions) {
 				if (arguments.length == 2) {
@@ -142,7 +140,7 @@ export default class RestClient {
 					m = method;
 					repeatOptions = {};
 				}
-				const newOpts = Object.assign({}, options, repeatOptions ?? {});
+				const newOpts = this.options.clone().assign(repeatOptions ?? {}).current();
 				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};
@@ -157,7 +155,7 @@ export default class RestClient {
 			response.error = ser;
 		}
 		else if (!parseOk) {
-			const ser = new RestError<TResponse, TError>("BodyParseError", `An error occurred while parsing the response body as ${options.responseType}`);
+			const ser = new RestError<TResponse, TError>("BodyParseError", `An error occurred while parsing the response body as ${currOptions.responseType}`);
 			ser.setRequest(request);
 			ser.setResponse(response);
 			response.error = ser;
@@ -169,10 +167,8 @@ export default class RestClient {
 			response.error = ser;
 		}
 
-		if (!options.throw && options.throwExcluding && options.throwExcluding.length)
-			options.throw = true;
-		if (response.error && Boolean(options.throw)) {
-			const throwFilterFound = options.throwExcluding?.find((f: any) => response!.error!.throwFilterMatch(f))
+		if (response.error && Boolean(currOptions.throw)) {
+			const throwFilterFound = currOptions.throwExcluding?.find((f: any) => response!.error!.throwFilterMatch(f))
 				?? false;
 			if (!throwFilterFound)
 				throw response.error;
@@ -183,8 +179,8 @@ export default class RestClient {
 			}
 		}
 
-		if (options.useCache && method !== "POST" && method !== "PUT" && method !== "DELETE")
-			this.cacheSet(options, response);
+		if (currOptions.useCache && method !== "POST" && method !== "PUT" && method !== "DELETE")
+			this.cacheSet(currOptions, response);
 
 		return response;
 	}
