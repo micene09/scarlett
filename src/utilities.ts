@@ -1,10 +1,10 @@
-import { IRequestOptions, HttpMethod, HttpResponseFormat, IRequestQueryOptions } from "./interfaces";
+import { IRestOptions, HttpMethod, HttpResponseFormat, IRestOptionsQuery } from "./interfaces";
 import RestError from "./rest-error";
 
-export function getRequestUrl(host: string = location.href, basePath: string = "/", path: string = "/") {
+export function getRequestUrl(host: string = location.origin, basePath: string = "/", path: string = "/") {
 	return new URL(`${basePath ?? "/"}/${path}`.replace(/\/+/g, "/"), host);
 }
-export function getRequestHeaders(method: HttpMethod, overrides?: IRequestOptions) {
+export function getRequestHeaders(method: HttpMethod, overrides?: Partial<IRestOptions>) {
 	const headers = overrides?.headers ?? new Headers();
 	if (overrides?.headers)
 		overrides.headers.forEach((value, key) => headers.append(key, value));
@@ -12,7 +12,7 @@ export function getRequestHeaders(method: HttpMethod, overrides?: IRequestOption
 		headers.append("Pragma", "no-cache");
 	return headers;
 }
-export function setUrlParameters(url: URL, options: IRequestQueryOptions) {
+export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) {
 	const query = options.query;
 	if (!query) return;
 	const transf = options.queryParamsTransormer;

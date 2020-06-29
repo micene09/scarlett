@@ -4,4 +4,4 @@ import { RestOptions } from './rest-options';
 
 export default RestClient;
 export { RestOptions, RestError };
-export { IRequestOptions, IRequestQueryOptions, IResponse, IRequest, IResponseFilter, HttpMethod, HTTPStatusCode } from './interfaces';
+export { IRestOptions as IRequestOptions, IRestOptionsQuery as IRequestQueryOptions, IResponse, IRequest, IResponseFilter, HttpMethod, HTTPStatusCode } from './interfaces';

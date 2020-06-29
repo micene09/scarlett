@@ -4,27 +4,27 @@ import { RestOptions } from "./rest-options";
 export interface IKeyValue {
 	[key: string]: any
 }
-export interface IRequestQueryOptions {
-	query?: IKeyValue;
-	queryParamsTransormer?: IQueryParamTransformer;
-	queryParamsIncludeEmpty?: boolean;
+export interface IRestOptionsQuery {
+	query: IKeyValue;
+	queryParamsTransormer: IQueryParamTransformer;
+	queryParamsIncludeEmpty: boolean;
 }
-export interface IRequestOptions extends  IRequestQueryOptions {
-	host?: string;
-	basePath?: string;
-	responseType?: HttpResponseFormat;
-	body?: | ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | { [key: string]: any };
-	abortController?: AbortController;
-	keepalive?: boolean;
-	timeout?: number;
-	headers?: Headers;
-	useCache?: boolean;
-	cacheKey?: string;
-	throw?: boolean;
-	throwExcluding?: IResponseFilter<any, any>[];
+export interface IRestOptions extends IRestOptionsQuery {
+	host: string;
+	basePath: string;
+	responseType: HttpResponseFormat;
+	body: | ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | IKeyValue;
+	abortController: AbortController;
+	keepalive: boolean;
+	timeout: number;
+	headers: Headers;
+	useCache: boolean;
+	cacheKey: string;
+	throw: boolean;
+	throwExcluding: IResponseFilter<any, any>[];
 }
 export interface IRequest {
-	options: IRequestOptions;
+	options: Partial<IRestOptions>;
 	url: URL
 	method: HttpMethod
 	body: any
@@ -41,10 +41,10 @@ export interface IResponse<TResponse, TError = any> {
 	repeat: IRepeat<TResponse, TError>;
 }
 export interface IRepeat<TResponse, TError = any> {
-	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
+	(method?: HttpMethod, requestOptions?: IRestOptions): Promise<IResponse<TResponse, TError>>
 }
 export interface IRepeat<TResponse, TError = any> {
-	(requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
+	(requestOptions?: IRestOptions): Promise<IResponse<TResponse, TError>>
 }
 export interface IResponseFilter<TResponse, TError> {
 	path?: string;

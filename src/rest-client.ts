@@ -1,4 +1,4 @@
-import { IRequestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode } from './interfaces';
+import { IRestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode } from './interfaces';
 import RestError from "./rest-error";
 import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponseBody, transformRequestBody } from './utilities';
 import { RestOptions } from "./rest-options";
@@ -6,11 +6,11 @@ import { RestOptions } from "./rest-options";
 export default class RestClient {
 	private _cache = new Map<string, IResponse<any>>();
 	public options: RestOptions;
-	constructor(options?: IRequestOptions) {
+	constructor(options?: Partial<IRestOptions>) {
 		this.options = new RestOptions(options ?? {});
 	}
 	//#region cache
-	protected cacheKey(options: IRequestOptions, url: URL) {
+	protected cacheKey(options: Partial<IRestOptions>, url: URL) {
 		const cacheKey = options.cacheKey ?? '';
 		function formDataToObj(formData: FormData) {
 			let o: any = {};
@@ -34,33 +34,33 @@ export default class RestClient {
 			result = keysIterator.next();
 		}
 	}
-	protected cacheSet(options: IRequestOptions, response: IResponse<any>) {
+	protected cacheSet(options: Partial<IRestOptions>, response: IResponse<any>) {
 		const key = this.cacheKey(options, response.request.url);
 		this._cache.set(key, response);
 	}
-	protected cacheGet<TResponse>(options: IRequestOptions, url: URL) {
+	protected cacheGet<TResponse>(options: Partial<IRestOptions>, url: URL) {
 		const key = this.cacheKey(options, url);
 		return this._cache.get(key) as IResponse<TResponse> | undefined | null;
 	}
 	//#endregion
 	//#region request shortcut
-	public get<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+	public get<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
 		return this.request<TResponse, TError>("GET", path, overrides);
 	}
-	public delete<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+	public delete<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
 		return this.request<TResponse, TError>("DELETE", path, overrides);
 	}
-	public post<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+	public post<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
 		return this.request<TResponse, TError>("POST", path, overrides);
 	}
-	public put<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+	public put<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
 		return this.request<TResponse, TError>("GET", path, overrides);
 	}
-	public patch<TResponse, TError = any>(path: string, overrides?: IRequestOptions) {
+	public patch<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
 		return this.request<TResponse, TError>("GET", path, overrides);
 	}
 	//#endregion
-	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: IRequestOptions) : Promise<IResponse<TResponse, TError>> {
+	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
 		this.options.assign(requestOptions);
 		const currOptions = this.options.current();
@@ -127,13 +127,13 @@ export default class RestClient {
 			options: this.options,
 			request, data,
 			status: fetchResponse?.status as HTTPStatusCode,
-			repeat: function (m?: HttpMethod | IRequestOptions, repeatOptions?: IRequestOptions) {
+			repeat: function (m?: HttpMethod | IRestOptions, repeatOptions?: Partial<IRestOptions>) {
 				if (arguments.length == 2) {
 					m = (m ? m : method);
 					repeatOptions = (repeatOptions ? repeatOptions : {});
 				}
 				else if (arguments.length == 1) {
-					repeatOptions = (m ? m : {}) as IRequestOptions;
+					repeatOptions = (m ? m : {}) as IRestOptions;
 					m = method;
 				}
 				else if (!arguments.length) {
