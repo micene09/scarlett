@@ -38,8 +38,8 @@ export class RestOptions {
 		const cloned = cloneObject(this._options);
 		return new RestOptions(cloned);
 	}
-	public merge(obj: Partial<IRestOptions>) {
-		mergeObject(this._options, obj);
+	public merge(obj?: Partial<IRestOptions>) {
+		mergeObject(this._options, obj ?? {});
 		return this;
 	}
 	public assign(obj?: Partial<IRestOptions>) {
