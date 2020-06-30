@@ -62,8 +62,7 @@ export default class RestClient {
 	//#endregion
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
-		this.options.assign(requestOptions);
-		const currOptions = this.options.current();
+		const currOptions = this.options.localAssign(requestOptions);
 		const url = getRequestUrl(currOptions.host, currOptions.basePath, path);
 
 		if (method === "GET" && currOptions.query)
@@ -140,7 +139,7 @@ export default class RestClient {
 					m = method;
 					repeatOptions = {};
 				}
-				const newOpts = this.options.clone().assign(repeatOptions ?? {}).current();
+				const newOpts = this.options.localAssign(repeatOptions);
 				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};

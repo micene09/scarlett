@@ -46,4 +46,14 @@ export class RestOptions {
 		Object.assign(this._options, obj ?? {});
 		return this;
 	}
+	public localMerge(obj?: Partial<IRestOptions>) {
+		let copy = cloneObject(this._options);
+		mergeObject(copy, obj ?? {});
+		return copy as Partial<IRestOptions>;
+	}
+	public localAssign(obj?: Partial<IRestOptions>) {
+		let copy = cloneObject(this._options);
+		Object.assign(copy, obj ?? {});
+		return copy as Partial<IRestOptions>;
+	}
 }
