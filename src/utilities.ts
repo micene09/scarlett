@@ -1,4 +1,4 @@
-import { IRestOptions, HttpMethod, HttpResponseFormat, IRestOptionsQuery } from "./interfaces";
+import { IRestOptions, HttpMethod, HttpResponseFormat, IRestOptionsQuery, IKeyValue } from "./interfaces";
 import RestError from "./rest-error";
 
 export function getRequestUrl(host: string = location.origin, basePath: string = "/", path: string = "/") {
@@ -75,3 +75,49 @@ export const resolveAny: IResponseAny = (prom: Promise<any>) => {
 			.catch((err: any) => resolve([null, err]));
 	});
 };
+
+export const cloneObject = (obj: IKeyValue) => {
+	let cloned: IKeyValue = {};
+	for (let [key, val] of Object.entries(obj)) {
+		const clonedVal  = cloneValue(obj, key);
+		cloned[key] = clonedVal;
+	}
+	return cloned;
+}
+export const cloneValue = (original: IKeyValue, propName: string | number): any => {
+	const oldval = original[propName];
+	const type = typeof oldval;
+	if (!oldval) return;
+	else if (type === "string") return String(oldval);
+	else if (type === "number") return Number(oldval);
+	else if (type === "boolean") return Boolean(oldval);
+	else if (oldval instanceof Headers) return new Headers(oldval);
+	else if (oldval instanceof AbortController) return new AbortController();
+	else if (typeof oldval === 'object') return cloneObject(oldval);
+	else if (Array.isArray(oldval)) return oldval.map((v, i) => cloneValue(oldval, i));
+	return oldval;
+}
+export const mergeObject = (original: IKeyValue, mergeWith: IKeyValue) => {
+	for (let [key, val] of Object.entries(mergeWith)) {
+		const mergedVal = mergeValue(original, mergeWith, key);
+		original[key] = mergedVal;
+	}
+	return original;
+}
+export const mergeValue = (original: IKeyValue, mergeWith: IKeyValue, propName: string) => {
+	const oldval = original[propName];
+	const newval = mergeWith[propName];
+	if (!newval) return;
+	else if (Array.isArray(newval)) return [...oldval, ...newval];
+	else if (newval instanceof Headers) {
+		const headers = oldval as Headers;
+		newval.forEach((hval, hkey) => {
+			if (!hval || hval == "null" || hval == "undefined")
+				headers.delete(hkey);
+			else headers.set(hkey, hval);
+		});
+		return headers;
+	}
+	else if (typeof newval === 'object') return mergeObject(oldval, newval);
+	return newval;
+}
