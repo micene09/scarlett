@@ -63,7 +63,7 @@ export default class RestClient {
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
 		const currOptions = requestOptions
-			? this.options.localAssign(requestOptions)
+			? this.options.localMerge(requestOptions)
 			: this.options.current()
 		const url = getRequestUrl(currOptions.host, currOptions.basePath, path);
 
@@ -141,7 +141,7 @@ export default class RestClient {
 					m = method;
 					repeatOptions = {};
 				}
-				const newOpts = this.options.localAssign(repeatOptions);
+				const newOpts = this.options.localMerge(repeatOptions);
 				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};
