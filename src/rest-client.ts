@@ -62,7 +62,9 @@ export default class RestClient {
 	//#endregion
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
-		const currOptions = this.options.localAssign(requestOptions);
+		const currOptions = requestOptions
+			? this.options.localAssign(requestOptions)
+			: this.options.current()
 		const url = getRequestUrl(currOptions.host, currOptions.basePath, path);
 
 		if (method === "GET" && currOptions.query)
