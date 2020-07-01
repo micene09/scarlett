@@ -140,8 +140,7 @@ export default class RestClient {
 			options: this.options,
 			request, data,
 			status: fetchResponse?.status as HTTPStatusCode,
-			repeat: function (m?: HttpMethod | IRestOptions, repeatOptions?: Partial<IRestOptions>) {
-				const currentAtRepeat = localOptions;
+			repeat(m?: HttpMethod | IRestOptions, repeatOptions?: Partial<IRestOptions>) {
 				if (arguments.length == 2) {
 					m = (m ? m : method);
 					repeatOptions = (repeatOptions ? repeatOptions : {});
@@ -154,7 +153,7 @@ export default class RestClient {
 					m = method;
 					repeatOptions = {};
 				}
-				const newOpts = that.localOverrideWithStrategy(currentAtRepeat, repeatOptions);
+				const newOpts = that.localOverrideWithStrategy(localOptions, repeatOptions);
 				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};
