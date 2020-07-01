@@ -6,12 +6,13 @@ export class RestOptions {
 	private _options: Partial<IRestOptions>;
 	private _restFactory: typeof RestClient;
 	constructor(options?: Partial<IRestOptions>, factoryClass?: typeof RestClient) {
-		this._options = options ?? {
-			responseType: "json",
-			timeout: 30000
-		};
+		this._options = options ?? {};
+
 		if (!this._options.throw && this._options.throwExcluding && this._options.throwExcluding.length)
 			this._options.throw = true;
+		if (!this._options.responseType) this._options.responseType = "json";
+		if (!this._options.timeout) this._options.timeout = 30000;
+		if (!this._options.overrideStrategy) this._options.overrideStrategy = "merge";
 
 		this._restFactory = factoryClass ?? RestClient;
 	}
@@ -45,15 +46,5 @@ export class RestOptions {
 	public assign(obj?: Partial<IRestOptions>) {
 		Object.assign(this._options, obj ?? {});
 		return this;
-	}
-	public localMerge(obj?: Partial<IRestOptions>) {
-		let copy = cloneObject(this._options);
-		mergeObject(copy, obj ?? {});
-		return copy as Partial<IRestOptions>;
-	}
-	public localAssign(obj?: Partial<IRestOptions>) {
-		let copy = cloneObject(this._options);
-		Object.assign(copy, obj ?? {});
-		return copy as Partial<IRestOptions>;
 	}
 }

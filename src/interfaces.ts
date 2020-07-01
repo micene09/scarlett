@@ -22,7 +22,9 @@ export interface IRestOptions extends IRestOptionsQuery {
 	cacheKey: string;
 	throw: boolean;
 	throwExcluding: IResponseFilter<any, any>[];
+	overrideStrategy: LocalOverrideStrategy;
 }
+export type LocalOverrideStrategy = | "merge" | "assign";
 export interface IRequest {
 	options: Partial<IRestOptions>;
 	url: URL

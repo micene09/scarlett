@@ -1,6 +1,6 @@
 import { IRestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode } from './interfaces';
 import RestError from "./rest-error";
-import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponseBody, transformRequestBody } from './utilities';
+import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponseBody, transformRequestBody, mergeObject, cloneObject } from './utilities';
 import { RestOptions } from "./rest-options";
 
 export default class RestClient {
@@ -60,21 +60,33 @@ export default class RestClient {
 		return this.request<TResponse, TError>("GET", path, overrides);
 	}
 	//#endregion
+
+	private localOverrideWithStrategy(target: Partial<IRestOptions>, obj?: Partial<IRestOptions>) {
+		if (this.options.current().overrideStrategy === "merge") {
+			let o = cloneObject(target);
+			return mergeObject(o, obj ?? {});
+		}
+		else {
+			let o = Object.assign({}, target, obj ?? {});
+			return o;
+		}
+	}
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
-		const currOptions = requestOptions
-			? this.options.localMerge(requestOptions)
-			: this.options.current()
-		const url = getRequestUrl(currOptions.host, currOptions.basePath, path);
+		const currentOptions = this.options.current();
+		const localOptions = requestOptions
+			? this.localOverrideWithStrategy(currentOptions, requestOptions)
+			: currentOptions
+		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
-		if (method === "GET" && currOptions.query)
-			setUrlParameters(url, currOptions.query);
+		if (method === "GET" && localOptions.query)
+			setUrlParameters(url, localOptions);
 
-		const headers = getRequestHeaders(method, currOptions);
-		currOptions.cacheKey = currOptions.cacheKey?.trim();
+		const headers = getRequestHeaders(method, localOptions);
+		localOptions.cacheKey = localOptions.cacheKey?.trim();
 
-		if (currOptions.useCache) {
-			const cachedResponse = this.cacheGet<TResponse>(currOptions, url);
+		if (localOptions.useCache) {
+			const cachedResponse = this.cacheGet<TResponse>(localOptions, url);
 			if (cachedResponse) return cachedResponse;
 		}
 
@@ -83,7 +95,7 @@ export default class RestClient {
 			let timeoutTrigger = false;
 			let fetchFullFilled = false;
 
-			const abortController = currOptions.abortController ?? new AbortController();
+			const abortController = localOptions.abortController ?? new AbortController();
 			const id = setTimeout(function requestTimeout() {
 				if (fetchFullFilled)
 					return;
@@ -91,15 +103,15 @@ export default class RestClient {
 				abortController.abort();
 				let timeoutError = new Error();
 				timeoutError.name = "timeout";
-				const seconds = (currOptions.timeout!/1000).toFixed(1).replace(".0", "");
+				const seconds = (localOptions.timeout!/1000).toFixed(1).replace(".0", "");
 				timeoutError.message = `Request timeout after ${seconds} second${seconds == "1" ? "" : "s"}.`;
 				reject(timeoutError);
-			}, currOptions.timeout);
+			}, localOptions.timeout);
 
 			fetch(url.href, {
 				method,
 				headers,
-				body: method === "GET" ? undefined : transformRequestBody(currOptions.body),
+				body: method === "GET" ? undefined : transformRequestBody(localOptions.body),
 				cache: "no-cache",
 				credentials: "same-origin",
 				signal: abortController.signal,
@@ -116,11 +128,11 @@ export default class RestClient {
 		}));
 
 		const request: IRequest = {
-			method, options: currOptions, url,
-			body: currOptions.body
+			method, options: localOptions, url,
+			body: localOptions.body
 		};
 
-		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, currOptions.responseType);
+		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, localOptions.responseType);
 
 		const response: IResponse<TResponse, TError> = {
 			fetchResponse: fetchResponse ?? undefined,
@@ -129,6 +141,7 @@ export default class RestClient {
 			request, data,
 			status: fetchResponse?.status as HTTPStatusCode,
 			repeat: function (m?: HttpMethod | IRestOptions, repeatOptions?: Partial<IRestOptions>) {
+				const currentAtRepeat = localOptions;
 				if (arguments.length == 2) {
 					m = (m ? m : method);
 					repeatOptions = (repeatOptions ? repeatOptions : {});
@@ -141,7 +154,7 @@ export default class RestClient {
 					m = method;
 					repeatOptions = {};
 				}
-				const newOpts = this.options.localMerge(repeatOptions);
+				const newOpts = that.localOverrideWithStrategy(currentAtRepeat, repeatOptions);
 				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};
@@ -156,7 +169,7 @@ export default class RestClient {
 			response.error = ser;
 		}
 		else if (!parseOk) {
-			const ser = new RestError<TResponse, TError>("BodyParseError", `An error occurred while parsing the response body as ${currOptions.responseType}`);
+			const ser = new RestError<TResponse, TError>("BodyParseError", `An error occurred while parsing the response body as ${localOptions.responseType}`);
 			ser.setRequest(request);
 			ser.setResponse(response);
 			response.error = ser;
@@ -168,8 +181,8 @@ export default class RestClient {
 			response.error = ser;
 		}
 
-		if (response.error && Boolean(currOptions.throw)) {
-			const throwFilterFound = currOptions.throwExcluding?.find((f: any) => response!.error!.throwFilterMatch(f))
+		if (response.error && Boolean(localOptions.throw)) {
+			const throwFilterFound = localOptions.throwExcluding?.find((f: any) => response!.error!.throwFilterMatch(f))
 				?? false;
 			if (!throwFilterFound)
 				throw response.error;
@@ -180,8 +193,8 @@ export default class RestClient {
 			}
 		}
 
-		if (currOptions.useCache && method !== "POST" && method !== "PUT" && method !== "DELETE")
-			this.cacheSet(currOptions, response);
+		if (localOptions.useCache && method !== "POST" && method !== "PUT" && method !== "DELETE")
+			this.cacheSet(localOptions, response);
 
 		return response;
 	}
