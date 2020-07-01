@@ -140,7 +140,7 @@ export default class RestClient {
 			options: this.options,
 			request, data,
 			status: fetchResponse?.status as HTTPStatusCode,
-			repeat(m?: HttpMethod | IRestOptions, repeatOptions?: Partial<IRestOptions>) {
+			repeat(m?: HttpMethod | Partial<IRestOptions>, repeatOptions?: Partial<IRestOptions>) {
 				if (arguments.length == 2) {
 					m = (m ? m : method);
 					repeatOptions = (repeatOptions ? repeatOptions : {});
