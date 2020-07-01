@@ -1,6 +1,3 @@
-
-/** @type {import('../lib/index.d.ts')} */
-
 import RestClient, { RestError } from "../lib/index";
 import { HTTPStatusCode } from "../src/interfaces";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
