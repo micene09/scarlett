@@ -41,7 +41,7 @@ export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) 
 	else
 		keys.forEach(key => {
 			const value = query[key];
-			url.searchParams.append(key, value)
+			url.searchParams.append(key, value ?? "")
 		});
 }
 export async function transformResponseBody<T>(response: Response | null = null, responseType: HttpResponseFormat = "json"): Promise<[boolean, T | null]> {
