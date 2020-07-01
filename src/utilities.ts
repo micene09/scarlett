@@ -97,20 +97,21 @@ export const cloneValue = (original: IKeyValue, propName: string | number): any 
 	else if (Array.isArray(oldval)) return oldval.map((v, i) => cloneValue(oldval, i));
 	return oldval;
 }
-export const mergeObject = (original: IKeyValue, mergeWith: IKeyValue) => {
+export const mergeObject = (target: IKeyValue, mergeWith: IKeyValue) => {
 	for (let [key, val] of Object.entries(mergeWith)) {
-		const mergedVal = mergeValue(original, mergeWith, key);
-		original[key] = mergedVal;
+		const mergedVal = mergeValue(target, mergeWith, key);
+		target[key] = mergedVal;
 	}
-	return original;
+	return target;
 }
 export const mergeValue = (original: IKeyValue, mergeWith: IKeyValue, propName: string) => {
 	const oldval = original[propName];
 	const newval = mergeWith[propName];
-	if (!newval) return;
-	else if (Array.isArray(newval)) return [...oldval, ...newval];
+	if (!newval) return oldval;
+	else if (Array.isArray(newval)) return oldval ? [...oldval, ...newval] : newval;
 	else if (newval instanceof Headers) {
-		const headers = oldval as Headers;
+		const headers = (oldval as Headers);
+		if (!headers) return newval;
 		newval.forEach((hval, hkey) => {
 			if (!hval || hval == "null" || hval == "undefined")
 				headers.delete(hkey);
@@ -118,6 +119,6 @@ export const mergeValue = (original: IKeyValue, mergeWith: IKeyValue, propName: 
 		});
 		return headers;
 	}
-	else if (typeof newval === 'object') return mergeObject(oldval, newval);
+	else if (typeof newval === 'object') return mergeObject(oldval ?? {}, newval);
 	return newval;
 }
