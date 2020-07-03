@@ -3,15 +3,15 @@ import { HTTPStatusCode } from "../src/interfaces";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { ok } from "assert";
 
-let restClient: RestClient;
-let restOptions: RestOptions;
+let baseClient: RestClient;
+let baseOptions: RestOptions;
 let host: string = "";
 beforeAll(async done => {
 	host = await startWebServer();
-	restOptions = new RestOptions()
+	baseOptions = new RestOptions()
 		.set("host", host)
 		.set("responseType", "json");
-	restClient = restOptions.createRestClient();
+	baseClient = baseOptions.createRestClient();
 	done();
 });
 afterAll(() => {
@@ -20,19 +20,19 @@ afterAll(() => {
 
 describe('Features', () => {
 	test("Typed response data (responseType)", async done => {
-		const response = await restClient.get<ITestJsonResponse>("/json");
+		const response = await baseClient.get<ITestJsonResponse>("/json");
 		expect(response.data!.fake).toEqual("model");
 		done();
 	});
 	test("Auto-translation for objects on body property", async done => {
 		const obj = { test: 1 };
-		const response = await restClient.post<ITestMirrorResponse>("/mirror", { body: obj });
+		const response = await baseClient.post<ITestMirrorResponse>("/mirror", { body: obj });
 		const responseAsText = response.data?.body;
 		expect(responseAsText).toEqual('{"test":1}');
 		done();
 	});
 	test("Object to query string", async done => {
-		const response = await restClient.get<any>("/mirror", {
+		const response = await baseClient.get<any>("/mirror", {
 			responseType: "json",
 			query: { a: "1", b: "2", c: 3 }
 		});
@@ -40,7 +40,7 @@ describe('Features', () => {
 		done();
 	});
 	test("Query string transformer before send", async done => {
-		const response = await restClient.get<any>("/mirror", {
+		const response = await baseClient.get<any>("/mirror", {
 			responseType: "json",
 			query: { a: "1", b: "2", some: ["one", "two"] },
 			queryParamsTransormer: (key, value) => {
@@ -54,7 +54,7 @@ describe('Features', () => {
 	});
 	test("Can throw error if specified", async done => {
 		try {
-			await restClient.get("/status-code/500", { throw: true });
+			await baseClient.get("/status-code/500", { throw: true });
 			fail();
 		}
 		catch {
@@ -64,7 +64,7 @@ describe('Features', () => {
 	});
 	test("Custom Error Object Interfaces", async done => {
 
-		const response = await restClient.get<any, ITestStatusCodeResponse>("/status-code/412");
+		const response = await baseClient.get<any, ITestStatusCodeResponse>("/status-code/412");
 		const errorData = response?.error?.data;
 		// intellisense here should work data prop:
 		expect(errorData?.statusText).toEqual("CustomStatusCode");
@@ -73,7 +73,7 @@ describe('Features', () => {
 	});
 	test("Custom Error Object handled as usual", async done => {
 		try {
-			await restClient.get("/status-code/412", { throw: true });
+			await baseClient.get("/status-code/412", { throw: true });
 			fail();
 		}
 		catch(err) {
@@ -85,7 +85,7 @@ describe('Features', () => {
 	});
 	test("Errors can be filtered to react properly", async done => {
 		try {
-			const response = await restClient.get<ITestStatusCodeResponse>("/status-code/412", {
+			const response = await baseClient.get<ITestStatusCodeResponse>("/status-code/412", {
 				throw: true,
 				throwExcluding: [{ method: "GET", statusCode: 412 }]
 			});
@@ -100,7 +100,7 @@ describe('Features', () => {
 		const ms = 1000;
 		async function repliedIn() {
 			const starting = Date.now();
-			await restClient.get<any>(`/reply-in/${ms}/milliseconds`, {
+			await baseClient.get<any>(`/reply-in/${ms}/milliseconds`, {
 				responseType: "text",
 				useCache: true,
 				cacheKey
@@ -114,7 +114,7 @@ describe('Features', () => {
 	});
 	test("Support for timeout requests", async done => {
 		const ms = 2000;
-		const response = await restClient.get<string>(`/reply-in/${ms}/milliseconds`, {
+		const response = await baseClient.get<string>(`/reply-in/${ms}/milliseconds`, {
 			responseType: "text",
 			timeout: 1000
 		});
@@ -125,7 +125,7 @@ describe('Features', () => {
 	test("Repeat the same request using the response object", async done => {
 		const expected = "a=1&b=2&c=3";
 
-		const firstR = await restClient.get<any>("/mirror", {
+		const firstR = await baseClient.get<any>("/mirror", {
 			responseType: "json",
 			query: { a: "1", b: "2", c: 3 }
 		});
@@ -143,7 +143,7 @@ describe('Features', () => {
 		done();
 	})
 	test("RestOptions builder", async done => {
-		const restOpts1 = restClient.options.clone()
+		const restOpts1 = baseClient.options.clone()
 			.set("responseType", "json")
 			.set("headers", new Headers({ "x-restoptions": "1" }))
 			.createRestClient();
@@ -153,7 +153,7 @@ describe('Features', () => {
 			.set("headers", new Headers({ "x-restoptions": "2" }))
 			.createRestClient();
 
-		const restOpts3 = restOptions.clone()
+		const restOpts3 = baseOptions.clone()
 			.set("headers", new Headers({ "x-restoptions": "3" }))
 			.createRestClient();
 
@@ -168,14 +168,14 @@ describe('Features', () => {
 		done();
 	});
 	test("Override global settings on local requests", async done => {
-		const response = await restClient.get<string>("/mirror", { responseType: "text" });
+		const response = await baseClient.get<string>("/mirror", { responseType: "text" });
 		const respType = typeof response.data;
 		expect(respType).toEqual("string");
 		done();
 	});
 	test("Override global settings using merge vs assign strategies", async done => {
 
-		const restOverrides = restOptions.clone()
+		const restOverrides = baseOptions.clone()
 			.set("query", { a: 1, b: 2 }) // << default query-string for every request
 			.createRestClient();
 
