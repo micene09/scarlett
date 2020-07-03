@@ -1,6 +1,6 @@
 import { IRestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode } from './interfaces';
 import RestError from "./rest-error";
-import { getRequestUrl, setUrlParameters, getRequestHeaders, resolveAny, transformResponseBody, transformRequestBody, mergeObject, cloneObject } from './utilities';
+import { getRequestUrl, setUrlParameters, resolveAny, transformResponseBody, transformRequestBody, mergeObject, cloneObject } from './utilities';
 import { RestOptions } from "./rest-options";
 
 export default class RestClient {
@@ -82,9 +82,7 @@ export default class RestClient {
 		if (localOptions.query && Object.keys(localOptions.query).length)
 			setUrlParameters(url, localOptions);
 
-		const headers = getRequestHeaders(method, localOptions);
 		localOptions.cacheKey = localOptions.cacheKey?.trim();
-
 		if (localOptions.useCache) {
 			const cachedResponse = this.cacheGet<TResponse>(localOptions, url);
 			if (cachedResponse) return cachedResponse;
@@ -111,8 +109,9 @@ export default class RestClient {
 				method,
 				body: method === "GET" ? undefined : transformRequestBody(localOptions.body),
 				signal: localOptions.abortController?.signal,
+				cache: localOptions.cache,
+				headers: localOptions.headers,
 				credentials: localOptions.credentials,
-				signal: abortController.signal,
 				keepalive: localOptions.keepalive,
 				mode: localOptions.mode,
 				redirect: localOptions.redirect,
