@@ -92,8 +92,7 @@ export default class RestClient {
 
 			let timeoutTrigger = false;
 			let fetchFullFilled = false;
-
-			const id = setTimeout(function requestTimeout() {
+			const timeoutId = setTimeout(function requestTimeout() {
 				if (fetchFullFilled)
 					return;
 				timeoutTrigger = true;
@@ -105,7 +104,7 @@ export default class RestClient {
 				reject(timeoutError);
 			}, localOptions.timeout);
 
-			fetch(url.href, {
+			const req: RequestInit = {
 				method,
 				body: method === "GET" ? undefined : transformRequestBody(localOptions.body),
 				signal: localOptions.abortController?.signal,
@@ -117,15 +116,16 @@ export default class RestClient {
 				redirect: localOptions.redirect,
 				referrerPolicy: localOptions.referrerPolicy,
 				referrer: localOptions.referrer
-			})
-			.then((response) => {
-				if (timeoutTrigger) return;
-				resolve(response);
+			};
+
+			fetch(url.href, req).then((response) => {
+				if (!timeoutTrigger)
+					resolve(response);
 			})
 			.catch((error) => reject(error))
 			.finally(() => {
 				fetchFullFilled = true;
-				clearTimeout(id);
+				clearTimeout(timeoutId);
 			});
 		}));
 
