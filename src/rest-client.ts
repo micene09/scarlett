@@ -74,7 +74,7 @@ export default class RestClient {
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
 		const currentOptions = this.options.current();
-		const localOptions = requestOptions
+		const localOptions: Partial<IRestOptions> = requestOptions
 			? this.localOverrideWithStrategy(currentOptions, requestOptions)
 			: currentOptions
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
