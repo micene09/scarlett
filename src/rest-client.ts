@@ -95,12 +95,11 @@ export default class RestClient {
 			let timeoutTrigger = false;
 			let fetchFullFilled = false;
 
-			const abortController = localOptions.abortController ?? new AbortController();
 			const id = setTimeout(function requestTimeout() {
 				if (fetchFullFilled)
 					return;
 				timeoutTrigger = true;
-				abortController.abort();
+				localOptions.abortController?.abort();
 				let timeoutError = new Error();
 				timeoutError.name = "timeout";
 				const seconds = (localOptions.timeout!/1000).toFixed(1).replace(".0", "");
@@ -110,9 +109,8 @@ export default class RestClient {
 
 			fetch(url.href, {
 				method,
-				headers,
 				body: method === "GET" ? undefined : transformRequestBody(localOptions.body),
-				cache: "no-cache",
+				signal: localOptions.abortController?.signal,
 				credentials: localOptions.credentials,
 				signal: abortController.signal,
 				keepalive: localOptions.keepalive,

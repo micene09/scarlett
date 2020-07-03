@@ -10,6 +10,7 @@ export class RestOptions {
 
 		if (!this._options.overrideStrategy) this._options.overrideStrategy = "merge";
 
+		if (!this._options.abortController) this._options.abortController = new AbortController();
 		if (!this._options.credentials) this._options.credentials = "same-origin";
 		if (!this._options.mode) this._options.mode = "same-origin";
 		if (!this._options.cache) this._options.cache = "default";
