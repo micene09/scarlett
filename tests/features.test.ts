@@ -102,7 +102,7 @@ describe('Features', () => {
 			const starting = Date.now();
 			await baseClient.get<any>(`/reply-in/${ms}/milliseconds`, {
 				responseType: "text",
-				useCache: true,
+				internalCache: true,
 				cacheKey
 			});
 			return Date.now() - starting;
