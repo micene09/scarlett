@@ -14,6 +14,7 @@ export class RestOptions {
 		if (!this._options.mode) this._options.mode = "same-origin";
 		if (!this._options.cache) this._options.cache = "default";
 		if (!this._options.redirect) this._options.redirect = "follow";
+		if (typeof this._options.referrer == "undefined") this._options.referrer = "";
 		if (!this._options.referrerPolicy) this._options.referrerPolicy = "no-referrer-when-downgrade";
 
 		if (!this._options.throw && this._options.throwExcluding && this._options.throwExcluding.length)

@@ -17,6 +17,7 @@ export interface IRestOptionsNative {
 	headers: Headers;
 	cache: RequestCache;
 	redirect: RequestRedirect;
+	referrer: string;
 	referrerPolicy: ReferrerPolicy;
 }
 export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
