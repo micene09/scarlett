@@ -79,7 +79,7 @@ export default class RestClient {
 			: currentOptions
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
-		if (method === "GET" && localOptions.query)
+		if (localOptions.query && Object.keys(localOptions.query).length)
 			setUrlParameters(url, localOptions);
 
 		const headers = getRequestHeaders(method, localOptions);
