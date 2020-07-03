@@ -168,29 +168,28 @@ describe('Features', () => {
 		done();
 	});
 	test("Override global settings on local requests", async done => {
-		const response = await restClient.request<string>("GET", "/mirror", { responseType: "text" });
+		const response = await restClient.get<string>("/mirror", { responseType: "text" });
 		const respType = typeof response.data;
 		expect(respType).toEqual("string");
 		done();
 	});
-	test("Override global settings using merge (defaults) vs assign strategies", async done => {
-		const qsDefault = { a: 1, b: 2 };
-		const qsOverride = { c: 3 };
+	test("Override global settings using merge vs assign strategies", async done => {
 
-		// Merge strategy (default)
-		const restMerge = restOptions.clone()
-			.set("query", qsDefault)
+		const restOverrides = restOptions.clone()
+			.set("query", { a: 1, b: 2 }) // << default query-string for every request
 			.createRestClient();
-		const restMergeResponse = await restMerge.request<ITestMirrorResponse>("GET", "/mirror", { query: qsOverride });
-		expect(restMergeResponse.data?.queryString).toEqual("a=1&b=2&c=3");
+
+		// Merge strategy
+		restOverrides.options.set("overrideStrategy", "merge");
+
+		const merged = await restOverrides.get<ITestMirrorResponse>("/mirror", { query: { c: 3 } });
+		expect(merged.data?.queryString).toEqual("a=1&b=2&c=3"); // << merged!
 
 		// Assign strategy
-		const restAssign = restOptions.clone()
-			.set("overrideStrategy", "assign")
-			.set("query", qsDefault)
-			.createRestClient();
-		const restAssignResponse = await restAssign.request<ITestMirrorResponse>("GET", "/mirror", { query: qsOverride });
-		expect(restAssignResponse.data?.queryString).toEqual("c=3");
+		restOverrides.options.set("overrideStrategy", "assign");
+
+		const assigned = await restOverrides.get<ITestMirrorResponse>("/mirror", { query: { c: 3 } });
+		expect(assigned.data?.queryString).toEqual("c=3"); // << assigned!
 
 		done();
 	});
