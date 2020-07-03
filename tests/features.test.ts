@@ -4,12 +4,14 @@ import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonRespon
 import { ok } from "assert";
 
 let restClient: RestClient;
+let restOptions: RestOptions;
+let host: string = "";
 beforeAll(async done => {
-	const host = await startWebServer();
-	restClient = new RestClient({
-		host,
-		responseType: "json"
-	});
+	host = await startWebServer();
+	restOptions = new RestOptions()
+		.set("host", host)
+		.set("responseType", "json");
+	restClient = restOptions.createRestClient();
 	done();
 });
 afterAll(() => {
