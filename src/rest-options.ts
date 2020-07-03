@@ -8,11 +8,18 @@ export class RestOptions {
 	constructor(options?: Partial<IRestOptions>, factoryClass?: typeof RestClient) {
 		this._options = options ?? {};
 
+		if (!this._options.overrideStrategy) this._options.overrideStrategy = "merge";
+
+		if (!this._options.credentials) this._options.credentials = "same-origin";
+		if (!this._options.mode) this._options.mode = "same-origin";
+		if (!this._options.cache) this._options.cache = "default";
+		if (!this._options.redirect) this._options.redirect = "follow";
+		if (!this._options.referrerPolicy) this._options.referrerPolicy = "no-referrer-when-downgrade";
+
 		if (!this._options.throw && this._options.throwExcluding && this._options.throwExcluding.length)
 			this._options.throw = true;
 		if (!this._options.responseType) this._options.responseType = "json";
 		if (!this._options.timeout) this._options.timeout = 30000;
-		if (!this._options.overrideStrategy) this._options.overrideStrategy = "merge";
 
 		this._restFactory = factoryClass ?? RestClient;
 	}
