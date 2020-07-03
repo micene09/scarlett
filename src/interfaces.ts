@@ -9,15 +9,22 @@ export interface IRestOptionsQuery {
 	queryParamsTransormer: IQueryParamTransformer;
 	queryParamsIncludeEmpty: boolean;
 }
-export interface IRestOptions extends IRestOptionsQuery {
+export interface IRestOptionsNative {
+	abortController: AbortController;
+	credentials: RequestCredentials;
+	mode: RequestMode;
+	keepalive: boolean;
+	headers: Headers;
+	cache: RequestCache;
+	redirect: RequestRedirect;
+	referrerPolicy: ReferrerPolicy;
+}
+export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
 	host: string;
 	basePath: string;
 	responseType: HttpResponseFormat;
 	body: | ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | IKeyValue;
-	abortController: AbortController;
-	keepalive: boolean;
 	timeout: number;
-	headers: Headers;
 	useCache: boolean;
 	cacheKey: string;
 	throw: boolean;
