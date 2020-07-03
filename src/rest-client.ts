@@ -113,8 +113,13 @@ export default class RestClient {
 				headers,
 				body: method === "GET" ? undefined : transformRequestBody(localOptions.body),
 				cache: "no-cache",
-				credentials: "same-origin",
+				credentials: localOptions.credentials,
 				signal: abortController.signal,
+				keepalive: localOptions.keepalive,
+				mode: localOptions.mode,
+				redirect: localOptions.redirect,
+				referrerPolicy: localOptions.referrerPolicy,
+				referrer: localOptions.referrer
 			})
 			.then((response) => {
 				if (timeoutTrigger) return;
