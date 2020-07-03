@@ -26,7 +26,7 @@ export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
 	responseType: HttpResponseFormat;
 	body: | ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | IKeyValue;
 	timeout: number;
-	useCache: boolean;
+	internalCache: boolean;
 	cacheKey: string;
 	throw: boolean;
 	throwExcluding: IResponseFilter<any, any>[];

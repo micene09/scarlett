@@ -83,7 +83,7 @@ export default class RestClient {
 			setUrlParameters(url, localOptions);
 
 		localOptions.cacheKey = localOptions.cacheKey?.trim();
-		if (localOptions.useCache) {
+		if (localOptions.internalCache) {
 			const cachedResponse = this.cacheGet<TResponse>(localOptions, url);
 			if (cachedResponse) return cachedResponse;
 		}
@@ -194,7 +194,7 @@ export default class RestClient {
 			}
 		}
 
-		if (localOptions.useCache && method !== "POST" && method !== "PUT" && method !== "DELETE")
+		if (localOptions.internalCache && method !== "POST" && method !== "PUT" && method !== "DELETE")
 			this.cacheSet(localOptions, response);
 
 		return response;
