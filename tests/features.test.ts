@@ -1,4 +1,4 @@
-import RestClient, { RestError } from "../lib/index";
+import RestClient, { RestError, RestOptions } from "../lib/index";
 import { HTTPStatusCode } from "../src/interfaces";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { ok } from "assert";
@@ -22,11 +22,6 @@ describe('Features', () => {
 	test("Typed response data (responseType)", async done => {
 		const response = await restClient.get<ITestJsonResponse>("/json");
 		expect(response.data!.fake).toEqual("model");
-		done();
-	});
-	test("Can override global settings on local requests", async done => {
-		const response = await restClient.request<string>("GET", "/mirror", { responseType: "text" });
-		expect(response.data).not.toBeFalsy();
 		done();
 	});
 	test("Auto-translation for objects on body property", async done => {
@@ -147,4 +142,56 @@ describe('Features', () => {
 
 		done();
 	})
+	test("RestOptions builder", async done => {
+		const restOpts1 = restClient.options.clone()
+			.set("responseType", "json")
+			.set("headers", new Headers({ "x-restoptions": "1" }))
+			.createRestClient();
+
+		const restOpts2 = restOpts1.options.clone()
+			.set("responseType", "json")
+			.set("headers", new Headers({ "x-restoptions": "2" }))
+			.createRestClient();
+
+		const restOpts3 = restOptions.clone()
+			.set("headers", new Headers({ "x-restoptions": "3" }))
+			.createRestClient();
+
+		const resp1 = await restOpts1.get<ITestMirrorResponse>("/mirror");
+		const resp2 = await restOpts2.get<ITestMirrorResponse>("/mirror");
+		const resp3 = await restOpts3.get<ITestMirrorResponse>("/mirror");
+
+		expect(resp1.data?.headers["x-restoptions"]).toEqual("1");
+		expect(resp2.data?.headers["x-restoptions"]).toEqual("2");
+		expect(resp3.data?.headers["x-restoptions"]).toEqual("3");
+
+		done();
+	});
+	test("Override global settings on local requests", async done => {
+		const response = await restClient.request<string>("GET", "/mirror", { responseType: "text" });
+		const respType = typeof response.data;
+		expect(respType).toEqual("string");
+		done();
+	});
+	test("Override global settings using merge (defaults) vs assign strategies", async done => {
+		const qsDefault = { a: 1, b: 2 };
+		const qsOverride = { c: 3 };
+
+		// Merge strategy (default)
+		const restMerge = restOptions.clone()
+			.set("query", qsDefault)
+			.createRestClient();
+		const restMergeResponse = await restMerge.request<ITestMirrorResponse>("GET", "/mirror", { query: qsOverride });
+		expect(restMergeResponse.data?.queryString).toEqual("a=1&b=2&c=3");
+
+		// Assign strategy
+		const restAssign = restOptions.clone()
+			.set("overrideStrategy", "assign")
+			.set("query", qsDefault)
+			.createRestClient();
+		const restAssignResponse = await restAssign.request<ITestMirrorResponse>("GET", "/mirror", { query: qsOverride });
+		expect(restAssignResponse.data?.queryString).toEqual("c=3");
+
+		done();
+	});
 });
