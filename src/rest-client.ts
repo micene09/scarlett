@@ -62,7 +62,7 @@ export default class RestClient {
 	//#endregion
 
 	private localOverrideWithStrategy(target: Partial<IRestOptions>, obj?: Partial<IRestOptions>) {
-		if (this.options.current().overrideStrategy === "merge") {
+		if (this.options.get("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
 			return mergeObject(o, obj ?? {});
 		}
