@@ -10,8 +10,8 @@ export default class RestClient {
 		this.options = new RestOptions(options ?? {});
 	}
 	//#region cache
-	protected cacheKey(url: URL, method: HttpMethod | "*" = "*") {
-		const cacheKey = this.options.get("cacheKey") ?? '';
+	protected cacheKey(url: URL, method: HttpMethod | "*" = "*", customKey?: string) {
+		const cacheKey = customKey ? customKey : (this.options.get("cacheKey") ?? '');
 		function formDataToObj(formData: FormData) {
 			let o: any = {};
 			formData.forEach((value, key) => (o[key] = value));
@@ -36,12 +36,12 @@ export default class RestClient {
 			if (key.startsWith(`${cacheKey}|`))
 				this._cache.delete(key);
 	}
-	protected cacheSet(response: IResponse<any>) {
-		const key = this.cacheKey(response.request.url, response.request.method);
+	protected cacheSet(response: IResponse<any>, customKey?: string) {
+		const key = this.cacheKey(response.request.url, response.request.method, customKey);
 		this._cache.set(key, response);
 	}
-	protected cacheGet<TResponse>(url: URL, method: HttpMethod | "*" = "*") {
-		const key = this.cacheKey(url, method);
+	protected cacheGet<TResponse>(url: URL, method: HttpMethod | "*" = "*", customKey?: string) {
+		const key = this.cacheKey(url, method, customKey);
 		return this._cache.get(key) as IResponse<TResponse> | undefined | null;
 	}
 	//#endregion
