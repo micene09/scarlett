@@ -32,6 +32,8 @@
 - [Advanced usage](#advanced-usage)
 	- [Extending](#extending)
 	- [Importing extras](#importing-extras)
+	- [RestOptions as rest client builder](#restoptions-as-rest-client-builder)
+	- [Cache System](#cache-system)
 - [API](#api)
 	- [RestClient](#restclient)
 		- [Instance](#instance)
@@ -163,6 +165,46 @@ import {
 	IResponseFilter
     ...
 } from `scarlett`
+```
+
+### RestOptions as rest client builder
+
+```typescript
+import { IRequestOptions } from `scarlett`
+
+const builder = new RestOptions()
+	.set("host", "https://localhost:5000")
+	.set("basePath", "/api")
+	.set("responseType", "json");
+
+const rest1 = builder.createRestClient();
+
+builder.clone().set("basePath", "/api-custom");
+const rest2 = builder.createRestClient();
+```
+
+### Cache System
+
+```typescript
+import RestClient from `scarlett`
+
+class AdvanceCache extends RestClient {
+	constructor() {
+		super({
+			host: "https://mybackend.com",
+			basePath: "/my-controller",
+			internalCache: true,
+			cacheKey: "my_key_all_requests"
+		});
+	}
+	async genericCall() {
+		return this.get(`/action1`);
+	}
+	async theCall() {
+		const cacheKey = "a_special_key_for_this_method";
+		return this.get(`/action2`, { cacheKey });
+	}
+}
 ```
 
 ## API
@@ -455,9 +497,13 @@ A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global
 
 This will improve performance in scenarios where your logic require recurring requests with the same response.
 
-The `IRequestOptions.cacheKey` is the default used to store response objects, it can be provided during the `RestClient` initialization or updated via `RestClient.options` property (via `RestOptions.set` method).
+The `IRequestOptions.cacheKey` is the default used to store response objects, it can be...
 
-Keep in mind that using the standard `request` method (or the equivalent http shortcuts) you cannot override this key just on a local request. To achieve this, you can extend the base `RestClient` class and create a custom method to handle different keys than the default one. See [Advanced usage](#advanced-usage) to get an example.
+ * provided during the `RestClient` initialization
+ * updated via `RestClient.options` property (`RestOptions` methods)
+ * overridden on any local `request` method (or the equivalent http shortcuts)
+
+See [Advanced usage](#advanced-usage) to get an example.
 
 This internal cache system will never infer the native [Request.cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache) property's behavior.
 
@@ -471,7 +517,7 @@ Here is the full list:
 
 Evaluate the unique cache-key for a particular request, having the provided `url`, (optional) `method`, combining this couple with the `cacheKey` option.
 
-Providing the third parameter `customKey`, the default `cacheKey` set on `RestClient` instance's options will be overridden.
+Providing the third parameter `customKey`, the string evaluated will change accordingly.
 
 This method, is used internally to complete common cache's taks operations like set, get and clear, see the next methods to understand better.
 
