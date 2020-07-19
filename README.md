@@ -34,9 +34,16 @@
 	- [Importing extras](#importing-extras)
 - [API](#api)
 	- [RestClient](#restclient)
-		- [Instance Options](#instance-options)
+		- [Instance](#instance)
+		- [IRequestOptionsGlobals](#irequestoptionsglobals)
+		- [request`<TResponse, TError = any>`()](#requesttresponse-terror--any)
+		- [HttpMethod shortcut methods](#httpmethod-shortcut-methods)
+		- [optionsOverride() method](#optionsoverride-method)
 		- [Response Object](#response-object)
 		- [Request (sent) Object](#request-sent-object)
+		- [Built-in Cache System](#built-in-cache-system)
+	- [RestOptions](#restoptions)
+		- [Usage](#usage)
 	- [RestError](#resterror)
 - [Testing](#testing)
 - [Inspired by...](#inspired-by)
@@ -185,7 +192,7 @@ const response = await client.get<any>(`/controller`, { responseType: `json` })
 
 In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
 
-#### IRequestOptions
+#### IRequestOptionsGlobals
 
 The following native properties from original [Fetch's Request Object](https://developer.mozilla.org/en-US/docs/Web/API/Request) are supported:
 
@@ -199,7 +206,7 @@ The following native properties from original [Fetch's Request Object](https://d
  * `referrer`
  * `referrerPolicy`
 
-Here is the list of additional properties:
+One of the library's goals is to extend the native capabilities, so here is a list of additional properties:
 
 **host (string)**
 
@@ -257,6 +264,8 @@ If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/d
 
 Every entry for this cache, will use a compound-key containing the `cacheKey`, if provided.
 
+See [Built-in cache](#built-in-cache) section for details.
+
 **cacheKey (string)**
 
 An optional alias reference to the current request, useful if you are using `internalCache` parameter as true.
@@ -288,11 +297,11 @@ interface IResponseFilter {
 }
 ```
 
-If a failed request match one of the objects provided, the API will not throw.
+If a failed request match one of the objects provided, your rest client instance will not throw any error.
+
+You will find the matched filter on [Response Object](#response-object).throwFilter property.
 
 Setting throwExcluding will also set `throw` option to `true`.
-
-Have a look at `tests/features.test.ts` to see it in action!
 
 **overrideStrategy ("merge" | "assign")**
 
@@ -337,7 +346,6 @@ const response = await client.request<string>(`GET`, `/action`);
 console.log(response.request.url.href); // -> "https://server.com/controller/action"
 ```
 
-<!-- omit in toc -->
 #### HttpMethod shortcut methods
 
 Every RestClient instance has all the http methods as a lower case named method as shortcut:
@@ -359,6 +367,15 @@ const response = await client.get<string>(`/action`);
 ```
 
 Note: every shortcut method will internally call the `request()` method.
+
+#### optionsOverride() method
+
+Having the following definition:
+
+```typescript
+optionsOverride(overrides?: Partial<IRestOptions>, base?: Partial<IRestOptions>)
+```
+...will provide a copy of the `IRequestOptions` updated using the `overrideStrategy` option.
 
 #### Response Object
 
@@ -430,11 +447,53 @@ This simple interface is used to qualify the Response Object, here you will find
 
 **method (HttpMethod)**
 
-**body**, he optional body used, tipically when HttpMethod is `PUT` or `POST`.
+**body**, the optional body used, tipically when HttpMethod is `PUT` or `POST`.
+
+#### Built-in Cache System
+
+A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based cache, disabled by default and triggered by the `internalCache` flag.
+
+This will improve performance in scenarios where your logic require recurring requests with the same response.
+
+The `IRequestOptions.cacheKey` is the default used to store response objects, it can be provided during the `RestClient` initialization or updated via `RestClient.options` property (via `RestOptions.set` method).
+
+Keep in mind that using the standard `request` method (or the equivalent http shortcuts) you cannot override this key just on a local request. To achieve this, you can extend the base `RestClient` class and create a custom method to handle different keys than the default one. See [Advanced usage](#advanced-usage) to get an example.
+
+This internal cache system will never infer the native [Request.cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache) property's behavior.
+
+Enabling it, if a cached response for a particular request exists, the library will avoid the fetch call to resolve the `Promise` immediately.
+
+All cache-related methods are `protected` and used internally on every request method if enabled.
+
+Here is the full list:
+
+**cacheKey(url: `URL`, method: `HttpMethod` | "*" = "*", customKey?: `string`)**
+
+Evaluate the unique cache-key for a particular request, having the provided `url`, (optional) `method`, combining this couple with the `cacheKey` option.
+
+Providing the third parameter `customKey`, the default `cacheKey` set on `RestClient` instance's options will be overridden.
+
+This method, is used internally to complete common cache's taks operations like set, get and clear, see the next methods to understand better.
+
+**cacheSet(response: `IResponse`, customKey?: `string`)**
+
+Store the response object provided to the internal `RestClient` instance's cache.
+
+**cacheGet<TResponse>(url: `URL`, method: `HttpMethod` | "*" = "*", customKey?: `string`)**
+
+Retrieve the response object, if exists, from the internal `RestClient` instance's cache.
+
+**cacheClearByKey(cacheKey: `string`)**
+
+Clears every cache entry in a `RestClient` instance context, matching withe provided `cacheKey`.
+
+**cacheClear()**
+
+Clears every cache entry in a `RestClient` instance context.
 
 ### RestOptions
 
-Every instance of RestClient will have a public property named **options**, this is just an instance of RestOptions class.
+Every instance of RestClient will have a public property named **options**, this is just an instance of `RestOptions` class.
 
 You can access and modify the global options of your rest client instance using his methods.
 
@@ -470,7 +529,7 @@ Will internally restore the default value.
 
 **clone()**
 
-Will return a new cloned instance of `RestOptions ` . 
+Will return a new cloned instance of `RestOptions` .
 
 **merge(options: `IRequestOptions`)**
 
