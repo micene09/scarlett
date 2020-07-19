@@ -11,7 +11,7 @@ export default class RestClient {
 	}
 	//#region cache
 	protected cacheKey(url: URL, method: HttpMethod | "*" = "*", customKey?: string) {
-		const cacheKey = customKey ? customKey : (this.options.get("cacheKey") ?? '');
+		const cacheKey = customKey?.trim() ? customKey : (this.options.get("cacheKey") ?? '');
 		function formDataToObj(formData: FormData) {
 			let o: any = {};
 			formData.forEach((value, key) => (o[key] = value));
