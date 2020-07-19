@@ -1,11 +1,11 @@
-import { IRestOptions } from './interfaces';
+import { IRestOptions, IRestOptionsGlobals } from './interfaces';
 import RestClient from '.';
 import { cloneObject, mergeObject } from './utilities';
 
 export class RestOptions {
-	private _options: Partial<IRestOptions>;
+	private _options: Partial<IRestOptionsGlobals>;
 	private _restFactory: typeof RestClient;
-	constructor(options?: Partial<IRestOptions>, factoryClass?: typeof RestClient) {
+	constructor(options?: Partial<IRestOptionsGlobals>, factoryClass?: typeof RestClient) {
 		this._options = options ?? {};
 
 		if (!this._options.overrideStrategy) this._options.overrideStrategy = "merge";
@@ -36,7 +36,7 @@ export class RestOptions {
 		const options = this.clone().current();
 		return new this._restFactory(options) as T;
 	}
-	public set<K extends keyof IRestOptions>(key: K, val: IRestOptions[K]) {
+	public set<K extends keyof IRestOptionsGlobals>(key: K, val: IRestOptionsGlobals[K]) {
 		this._options[key] = val;
 		return this;
 	}

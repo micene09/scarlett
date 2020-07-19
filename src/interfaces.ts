@@ -20,6 +20,9 @@ export interface IRestOptionsNative {
 	referrer: string;
 	referrerPolicy: ReferrerPolicy;
 }
+export interface IRestOptionsProtected {
+	overrideStrategy: LocalOverrideStrategy;
+}
 export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
 	host: string;
 	basePath: string;
@@ -30,8 +33,8 @@ export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
 	cacheKey: string;
 	throw: boolean;
 	throwExcluding: IResponseFilter<any, any>[];
-	overrideStrategy: LocalOverrideStrategy;
 }
+export interface IRestOptionsGlobals extends IRestOptions, IRestOptionsProtected {}
 export type LocalOverrideStrategy = | "merge" | "assign";
 export interface IRequest {
 	options: Partial<IRestOptions>;
