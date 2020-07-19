@@ -26,13 +26,9 @@ export default class RestClient {
 		return `${cacheKey}|${url.href}|${inputs}`;
 	}
 	protected cacheEraseByCacheKey(cacheKey: string) {
-		const keysIterator = this._cache.keys();
-		let result = keysIterator.next();
-		while (!result.done) {
-			if (result.value.startsWith(`${cacheKey}|`))
-				this._cache.delete(result.value);
-			result = keysIterator.next();
-		}
+		for (let key of this._cache.keys())
+			if (key.startsWith(`${cacheKey}|`))
+				this._cache.delete(key);
 	}
 	protected cacheSet(options: Partial<IRestOptions>, response: IResponse<any>) {
 		const key = this.cacheKey(options, response.request.url);
@@ -66,10 +62,7 @@ export default class RestClient {
 			let o = cloneObject(target);
 			return mergeObject(o, obj ?? {});
 		}
-		else {
-			let o = Object.assign({}, target, obj ?? {});
-			return o;
-		}
+		else return Object.assign({}, target, obj ?? {});
 	}
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
