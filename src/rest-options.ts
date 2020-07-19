@@ -41,6 +41,9 @@ export class RestOptions {
 		const options = this.clone().current();
 		return new this._restFactory(options) as T;
 	}
+	public get<K extends keyof IRestOptionsGlobals>(key: K) {
+		return this._options[key] as IRestOptionsGlobals[K];
+	}
 	public set<K extends keyof IRestOptionsGlobals>(key: K, val: IRestOptionsGlobals[K]) {
 		this._options[key] = val;
 		return this;
