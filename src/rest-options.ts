@@ -31,14 +31,14 @@ export class RestOptions {
 		if (!this._options.timeout) this._options.timeout = 30000;
 	}
 	public current() {
-		return this._options;
+		return cloneObject(this._options);
 	}
 	public setFactory(factoryClass: typeof RestClient) {
 		this._restFactory = factoryClass;
 		return this;
 	}
 	public createRestClient<T extends RestClient>() {
-		const options = this.clone().current();
+		const options = this.clone()._options;
 		return new this._restFactory(options) as T;
 	}
 	public get<K extends keyof IRestOptionsGlobals>(key: K) {
