@@ -1,6 +1,6 @@
 import { IRestOptions, IRestOptionsGlobals } from './interfaces';
 import RestClient from '.';
-import { cloneObject, mergeObject } from './utilities';
+import { cloneObject, mergeObject, cloneValue } from './utilities';
 
 export class RestOptions {
 	private _options: Partial<IRestOptionsGlobals>;
@@ -42,7 +42,7 @@ export class RestOptions {
 		return new this._restFactory(options) as T;
 	}
 	public get<K extends keyof IRestOptionsGlobals>(key: K) {
-		return this._options[key] as IRestOptionsGlobals[K];
+		return cloneValue(this._options, key) as IRestOptionsGlobals[K];
 	}
 	public set<K extends keyof IRestOptionsGlobals>(key: K, val: IRestOptionsGlobals[K]) {
 		this._options[key] = val;
