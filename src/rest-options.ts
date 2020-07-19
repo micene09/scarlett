@@ -8,6 +8,11 @@ export class RestOptions {
 	constructor(options?: Partial<IRestOptionsGlobals>, factoryClass?: typeof RestClient) {
 		this._options = options ?? {};
 
+		this._restFactory = factoryClass ?? RestClient;
+		this.checkAndRestoreDefaults();
+	}
+	private checkAndRestoreDefaults() {
+
 		if (!this._options.overrideStrategy) this._options.overrideStrategy = "merge";
 
 		if (!this._options.abortController) this._options.abortController = new AbortController();
@@ -23,7 +28,7 @@ export class RestOptions {
 		if (!this._options.responseType) this._options.responseType = "json";
 		if (!this._options.timeout) this._options.timeout = 30000;
 
-		this._restFactory = factoryClass ?? RestClient;
+		if (!this._options.timeout) this._options.timeout = 30000;
 	}
 	public current() {
 		return this._options;
@@ -42,6 +47,7 @@ export class RestOptions {
 	}
 	public unset<K extends keyof IRestOptions>(key: K) {
 		delete this._options[key];
+		this.checkAndRestoreDefaults();
 		return this;
 	}
 	public clone() {
