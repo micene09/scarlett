@@ -63,7 +63,7 @@ export default class RestClient {
 	}
 	//#endregion
 
-	private localOverrideWithStrategy(target: Partial<IRestOptions>, obj?: Partial<IRestOptions>) {
+	protected optionsOverride(target: Partial<IRestOptions>, obj?: Partial<IRestOptions>) {
 		if (this.options.get("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
 			return mergeObject(o, obj ?? {});
@@ -74,7 +74,7 @@ export default class RestClient {
 		const that = this;
 		const currentOptions = this.options.current();
 		const localOptions: Partial<IRestOptions> = requestOptions
-			? this.localOverrideWithStrategy(currentOptions, requestOptions)
+			? this.optionsOverride(currentOptions, requestOptions)
 			: currentOptions
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
@@ -83,7 +83,7 @@ export default class RestClient {
 
 		localOptions.cacheKey = localOptions.cacheKey?.trim();
 		if (localOptions.internalCache) {
-			const cachedResponse = this.cacheGet<TResponse>(localOptions, url);
+			const cachedResponse = this.cacheGet<TResponse>(url, method);
 			if (cachedResponse) return cachedResponse;
 		}
 
@@ -154,7 +154,7 @@ export default class RestClient {
 					m = method;
 					repeatOptions = {};
 				}
-				const newOpts = that.localOverrideWithStrategy(localOptions, repeatOptions);
+				const newOpts = that.optionsOverride(localOptions, repeatOptions);
 				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};
@@ -193,8 +193,8 @@ export default class RestClient {
 			}
 		}
 
-		if (localOptions.internalCache && method !== "POST" && method !== "PUT" && method !== "DELETE")
-			this.cacheSet(localOptions, response);
+		if (localOptions.internalCache)
+			this.cacheSet(response);
 
 		return response;
 	}
