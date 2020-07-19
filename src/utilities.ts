@@ -85,6 +85,11 @@ export const cloneValue = (original: IKeyValue, propName: string | number): any 
 	else if (type === "boolean") return Boolean(oldval);
 	else if (oldval instanceof Headers) return new Headers(oldval);
 	else if (oldval instanceof AbortController) return new AbortController();
+	else if (oldval instanceof FormData) {
+		const cloned = new FormData();
+		oldval.forEach((value, key) => cloned.append(key, value));
+		return cloned;
+	}
 	else if (typeof oldval === 'object') return cloneObject(oldval);
 	else if (Array.isArray(oldval)) return oldval.map((v, i) => cloneValue(oldval, i));
 	return oldval;
