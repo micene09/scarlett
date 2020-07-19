@@ -10,20 +10,22 @@ export default class RestClient {
 		this.options = new RestOptions(options ?? {});
 	}
 	//#region cache
-	protected cacheKey(options: Partial<IRestOptions>, url: URL) {
-		const cacheKey = options.cacheKey ?? '';
+	protected cacheKey(url: URL, method: HttpMethod | "*" = "*") {
+		const cacheKey = this.options.get("cacheKey") ?? '';
 		function formDataToObj(formData: FormData) {
 			let o: any = {};
 			formData.forEach((value, key) => (o[key] = value));
 			return o;
 		}
-		const inputs = options.body ? (
-			options.responseType === "json" ? JSON.stringify(options.body)
-			: options.responseType === "text" ? options.body
-			: options.responseType === "formData" ? JSON.stringify(formDataToObj(options.body as FormData))
+		const body = this.options.get("body");
+		const responseType = this.options.get("responseType");
+		const inputs = body ? (
+			responseType === "json" ? JSON.stringify(body)
+			: responseType === "text" ? body
+			: responseType === "formData" ? JSON.stringify(formDataToObj(body as FormData))
 			: ""
 		) : "";
-		return `${cacheKey}|${url.href}|${inputs}`;
+		return `${cacheKey}|${url.href}|${method}|${inputs}`;
 	}
 	protected cacheClear() {
 		this._cache.clear();
@@ -34,12 +36,12 @@ export default class RestClient {
 			if (key.startsWith(`${cacheKey}|`))
 				this._cache.delete(key);
 	}
-	protected cacheSet(options: Partial<IRestOptions>, response: IResponse<any>) {
-		const key = this.cacheKey(options, response.request.url);
+	protected cacheSet(response: IResponse<any>) {
+		const key = this.cacheKey(response.request.url, response.request.method);
 		this._cache.set(key, response);
 	}
-	protected cacheGet<TResponse>(options: Partial<IRestOptions>, url: URL) {
-		const key = this.cacheKey(options, url);
+	protected cacheGet<TResponse>(url: URL, method: HttpMethod | "*" = "*") {
+		const key = this.cacheKey(url, method);
 		return this._cache.get(key) as IResponse<TResponse> | undefined | null;
 	}
 	//#endregion
