@@ -25,7 +25,7 @@ export default class RestClient {
 		) : "";
 		return `${cacheKey}|${url.href}|${inputs}`;
 	}
-	protected cacheEraseByCacheKey(cacheKey: string) {
+	protected cacheEraseByKey(cacheKey: string) {
 		for (let key of this._cache.keys())
 			if (key.startsWith(`${cacheKey}|`))
 				this._cache.delete(key);
