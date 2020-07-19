@@ -4,36 +4,40 @@
 > A strongly typed, Typescript powered, rest client library based on Fetch API.
 
 <!-- omit in toc -->
+
 ## Key features
 
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) based rest client
 * Class based
 * Strongly-typed (...thank you Typescript)
 * Centralized config (via constructor)...with optional local overrides on http methods
+* Rest Client Builder using RestOptions class
 * Response body auto-parser, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
-* Built-in cache
 * Query-string utilities
-* Optional Error object's intellisense
-* Optional throw errors on request failures
-* Optional catch-filters to handle expected errors even when throw error is enabled
+* (Optional) Built-in cache
+* Error object's intellisense
+* (Optional) Throw errors on request failures
+* Catch/filters to handle expected errors even when throw error is enabled
 * Support for timeout
 * Easy request repeater
 
 <!-- omit in toc -->
 ## Summary
 
+- [Key features](#key-features)
 - [Installation](#installation)
 	- [Required Polyfills](#required-polyfills)
 	- [Different builds](#different-builds)
 - [Basic Usage](#basic-usage)
-- [RestClient](#restclient)
-	- [Instance Options](#instance-options)
-	- [Response Object](#response-object)
-	- [Request (sent) Object](#request-sent-object)
-- [RestError](#resterror)
 - [Advanced usage](#advanced-usage)
 	- [Extending](#extending)
 	- [Importing extras](#importing-extras)
+- [API](#api)
+	- [RestClient](#restclient)
+		- [Instance Options](#instance-options)
+		- [Response Object](#response-object)
+		- [Request (sent) Object](#request-sent-object)
+	- [RestError](#resterror)
 - [Testing](#testing)
 - [Inspired by...](#inspired-by)
 - [Why this name?](#why-this-name)
@@ -65,7 +69,7 @@ In the `lib/` folder of the package you will find different build files:
 
 | Format                    | Filename              |
 | ------------------------- | --------------------- |
-| **ES Module** *(default)* | `index.js`        |
+| **ES Module** *(default)* | `index.js`            |
 | **UMD**                   | `index.umd.js`        |
 | **CommonJs**              | `index.common.js`     |
 | **CommonJs ES3**          | `index.es3.common.js` |
@@ -92,23 +96,110 @@ Every request method will return a `Promise<IResponse<TResponse>>`.
 
 See the `tests/features.test.ts` to see it in action!
 
-## RestClient
+## Advanced usage
 
-### Instance Options
+### Extending
 
-To create a new rest client instance, you need to use the `IRequestOptions` interface.
+You can extend the base class for your specific needs as follows:
 
-You can override any property provided at every request method:
+```typescript
+import RestClient from `scarlett`
+
+class MyRestFactory1 extends RestClient {
+	constructor() {
+		super({
+			host: "https://mybackend.com",
+			basePath: "/my-controller"
+		});
+	}
+	items() {
+		return this.get("/action");
+	}
+	item(id: number) {
+		return this.get(`/action/${id}`);
+	}
+}
+```
+
+You can even import types/interfaces exported from the module itself:
+
+```typescript
+import RestClient, { IRequestOptions } from `scarlett`
+
+class MyRestFactory2 extends RestClient {
+	constructor(options: IRequestOptions) {
+		options.host = "https://mybackend.com";
+		options.basePath = "/my-controller";
+		options.throw = true;
+		super(options);
+	}
+	// your methods here...
+}
+```
+
+### Importing extras
+
+```typescript
+import {
+	RestError, // Rest error utility class
+    RestOptions, // Rest options
+
+	// Utility types:
+	HttpMethod,
+	HTTPStatusCode,
+
+	// Extra/Internal interfaces
+	IRequestOptions,
+	IRequestQueryOptions,
+	IResponse,
+	IRequest,
+	IResponseFilter
+    ...
+} from `scarlett`
+```
+
+## API
+
+### RestClient
+
+#### Instance
+
+To create a new instance, you need to provide `IRequestOptionsGlobals` object as first parameter:
 
 ```typescript
 const client = new RestClient({
 	host: `https://server.com`,
 	responseType: `text`
 })
-const response = await client.get<any>(`/my-json-path`, { responseType: `json` })
 ```
 
-Here is the list of properties:
+Any provided option will be considered the default for every subsequent request of the new instance.
+
+Every option will be accessible/updatable using the public **options** property, an instance of [RestOptions](#RestOptions) class.
+
+You can also override every options providing a `IRequestOptions` object as last parameter to the request method:
+
+```typescript
+const response = await client.get<any>(`/controller`, { responseType: `json` })
+```
+
+In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
+
+#### IRequestOptions
+
+The following native properties from original [Fetch's Request Object](https://developer.mozilla.org/en-US/docs/Web/API/Request) are supported:
+
+ * `abortController`
+ * `credentials`
+ * `mode`
+ * `keepalive`
+ * `headers`
+ * `cache`
+ * `redirect`
+ * `referrer`
+ * `referrerPolicy`
+
+Here is the list of additional properties:
 
 **host (string)**
 
@@ -116,7 +207,7 @@ Defaults to localhost.href .
 
 **basePath (string)**
 
-The base path to use on every request, defaults to `/`.
+The base path to use on every request, defaults to `/`, combined with the `host` option.
 
 **responseType (HttpResponseFormat)**
 
@@ -130,23 +221,15 @@ Optional request body content, aving one of the following instances: `ArrayBuffe
 
 If the method is `GET`, this value will be set to undefined.
 
-**abortController ([AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController))**
-
-Optional abort controller to perform a fetch abort.
-
-**headers ([Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers))**
-
-Optional Headers object.
-
 **query (`{ [key: string]: any }`)**
 
 Optional key-value pair, this will be converted (and appended) to the request URI.
 
-The value should be a `string`, otherwise use `queryParamsTransformer` callback.
-
 **queryParamsTransormer (IQueryParamTransformer)**
 
-A callback having the following definition:
+Let's suppose you have a complex key-value pair, in which every value needs to be converted using a custom logic.
+
+You can do this using this as a callback having the following definition:
 
 ```typescript
 interface IQueryParamTransformer {
@@ -168,25 +251,25 @@ If true, it will include falsy values as empty, example:
 
 Defaults to false.
 
-**useCache (boolean)**
+**internalCache (boolean)**
 
 If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based, cache system.
 
-Every entry for this cache, will use a compound-key containing the *cacheKey*, if provided.
+Every entry for this cache, will use a compound-key containing the `cacheKey`, if provided.
 
 **cacheKey (string)**
 
-An optional alias reference to the current request, *usefull if you are using useCache* parameter as true.
+An optional alias reference to the current request, useful if you are using `internalCache` parameter as true.
 
 **throw (boolean)**
 
 Defaults to false.
 
-As standard behaviour of fetch, every request will never throw error. But sometimes, in very large applications, you need a centralized API error handler.
+As standard behavior of fetch, every request will never throw error. But sometimes, in very large applications, you need a centralized API error handler.
 
 If true, when the standard [fetch -> Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is false the API will throw an error.
 
-The error object will be an instance of `RestError` class.
+The error object will be an instance of [RestError](#RestError) class.
 
 **throwExcluding (IResponseFilter[])**
 
@@ -211,13 +294,25 @@ Setting throwExcluding will also set `throw` option to `true`.
 
 Have a look at `tests/features.test.ts` to see it in action!
 
+**overrideStrategy ("merge" | "assign")**
+
+On every request method, you can override any option just providing it as parameter.
+
+Internally, the library supports the following strategies to update the request options:
+
+* *merge* (default), every simple primitive type (like strings, and numbers) will be overwritten, while Headers, Object-like and Array-like options will be merged.
+* *assign*, every value will be overwritten using [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
+
+Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestOptions API](#RestOptions).
+
 <!-- omit in toc -->
-### request`<TResponse, TError = any>`()
+
+#### request`<TResponse, TError = any>`()
 
 *Parameters*:
 
 * HttpMethod (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
-* path *(string)*, this will be appended to *host* and *basePath* option
+* path *(string)*, the request path relative to `host`+`basePath`
 * requestOptions *(IRequestOptions | undefined)*, local request options that will override the global options provided via constructor.
 
 *Returns* `Promise<IResponse<TResponse, TError>>`, where:
@@ -233,22 +328,19 @@ const client = new RestClient({
 	responseType: `text`
 })
 const response = await client.request<string>(`GET`, `/action`);
-console.log(response.request.url.href); // -> "https://server.com/controller/action"
-console.log(response.data); // -> "sample text"
 ```
 
-*Usage with error type*:
+Note that the `path` property will be combined with `host` and `basePath`:
 
 ```typescript
-const response = await client.request<string, IBackendError>(`GET`, `/action-with-error`);
-const error = response.error;
-console.log(error.response?.data?); // -> your error object, with intellisense on your editor
+const response = await client.request<string>(`GET`, `/action`);
+console.log(response.request.url.href); // -> "https://server.com/controller/action"
 ```
 
 <!-- omit in toc -->
-### HttpMethod shortcut methods
+#### HttpMethod shortcut methods
 
-For every HttpMethod string type, there will be a lower case version as method:
+Every RestClient instance has all the http methods as a lower case named method as shortcut:
 
 * *get`<T>`()*
 * *post`<T>`()*
@@ -258,22 +350,17 @@ For every HttpMethod string type, there will be a lower case version as method:
 ...having the following, simplified, parameters:
 
 * path *(string)*
-* requestOptions *(IRequestOptions | undefined)*
+* requestOptions *(IRequestOptions | undefined)
 
-Every shortcut method will internally call `request()` itself.
-Usage:
+Example:
 
 ```typescript
-const client = new RestClient({
-	host: `https://server.com`,
-	basePath: "/controller",
-	responseType: `text`
-})
 const response = await client.get<string>(`/action`);
-console.log(response.request.url.href); // -> "https://server.com/controller/action"
 ```
 
-### Response Object
+Note: every shortcut method will internally call the `request()` method.
+
+#### Response Object
 
 Properties:
 
@@ -283,13 +370,13 @@ Properties:
 
 **error ([RestError](#resterror)`<TError>`)**
 
-**status (HTTPStatusCode)**
+**status (exported enum => HTTPStatusCode)**
 
 **headers ([Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers))**
 
 **data (TResponse | null)**
 
-The response body, leaded by `IRequestOptions.responseType` (for runtime type) and `TResponse` (for Typescript intellisense).
+The response body, leaded by `IRequestOptions.responseType` (for runtime type) and `TResponse` (for IDE type checking).
 
 Example:
 
@@ -333,29 +420,101 @@ const first = await restClient.get<any>("/action");
 const second = first.repeat();
 ```
 
-### Request (sent) Object
+#### Request (sent) Object
 
 This simple interface is used to qualify the Response Object, here you will find details about the request executed to get the response.
 
 **options (IRequestOptions)**
 
-Options used on request.
-
-**url ([URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL))**
-
-The URL instance evaluated using `host`, `basePath` and `path`.
+**url ([URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL))**, the URL instance evaluated using `host`, `basePath` and `path`.
 
 **method (HttpMethod)**
 
-HttpMethod used on request.
+**body**, he optional body used, tipically when HttpMethod is `PUT` or `POST`.
 
-**body (any | undefined)**
+### RestOptions
 
-The optional body used, tipically when HttpMethod is `PUT` or `POST`.
+Every instance of RestClient will have a public property named **options**, this is just an instance of RestOptions class.
 
-## RestError
+You can access and modify the global options of your rest client instance using his methods.
 
-This class extends the default Javascript Error, it require a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
+To create a new instance, just pass an `IRequestOptionsGlobals` object as first parameter:
+
+```typescript
+import { RestOptions } from "scarlett"
+
+const opts = new RestOptions() {{
+	host: `https://server.com`,
+	basePath: "/controller",
+	responseType: `json`
+}}
+```
+
+Here is the full list of available instance's methods:
+
+**current()**
+
+Will return a copy of the current `IRequestOptions`.
+
+**get (option)**
+
+Will return a copy of the option's value.
+
+**set (option, newValue)**
+
+To directly update an option (your Typescript's IDE plugin will warn you about type issues).
+
+**unset(option)**
+
+Will internally restore the default value.
+
+**clone()**
+
+Will return a new cloned instance of `RestOptions ` . 
+
+**merge(options: `IRequestOptions`)**
+
+Override with *options* using the `merge` strategy.
+
+**assign(options: `IRequestOptions`)**
+
+Override with *options* using the `assign` strategy.
+
+**createRestClient ()**
+
+Will return a new `RestClient` based on the current options.
+
+**setFactory (factoryClass: typeof `RestClient`)**
+
+Supposing that you created a new Class, that extends the default RestClient (see [Advanced usage](#advanced-usage)), you can override the default factory class with this method.
+
+Example:
+
+```typescript
+class MyRest extends RestClient { ... }
+
+const rest = new RestOptions().setFactory(MyRest).createRestClient()
+console.log(rest instanceof MyRest) // >> true
+```
+
+Note: Keep in mind that custom classes having extra/custom parameters are **not supported**, the only way to make it work is a class having the same RestClient's constructor.
+
+#### Usage
+
+```typescript
+import { RestOptions } from "scarlett"
+
+const builder = new RestOptions()
+	.set("host", "https://example.com")
+	.set("basePath", "/api")
+	.set("responseType", "json")
+
+const restClient = builder.createRestClient()
+```
+
+### RestError
+
+This class extends the default JavaScript Error, it require a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
 
 ```typescript
 const response = await restClient.get<any, IBackendError>("/status-code/412");
@@ -367,7 +526,7 @@ import { RestError } from "scarlett";
 const err = new RestError<any, IBackendError>();
 ```
 
-Preoperties:
+Properties:
 
 **isRestError (boolean)**
 
@@ -417,66 +576,6 @@ Set the `response` object for the current error instance.
 Check if `response` object match with the `filter` provided.
 
 This method is used internally by `RestClient`.
-
-## Advanced usage
-
-### Extending
-
-You can extend the base class for your specific needs as follows:
-
-```typescript
-import RestClient from `scarlett`
-
-class MyRestFactory1 extends RestClient {
-	constructor() {
-		super({
-			host: "https://mybackend.com",
-			basePath: "/my-controller"
-		});
-	}
-	items() {
-		return this.get("/action");
-	}
-	item(id: number) {
-		return this.get(`/action/${id}`);
-	}
-}
-```
-
-You can even import types/interfaces exported from the module itself:
-
-```typescript
-import RestClient, { IRequestOptions } from `scarlett`
-
-class MyRestFactory2 extends RestClient {
-	constructor(options: IRequestOptions) {
-		options.host = "https://mybackend.com";
-		options.basePath = "/my-controller";
-		options.throw = true;
-		super(options);
-	}
-	// your methods here...
-}
-```
-
-### Importing extras
-
-```typescript
-import {
-	RestError, // Rest error utility class
-
-	// Utility types:
-	HttpMethod,
-	HTTPStatusCode,
-
-	// Extra/Internal interfaces
-	IRequestOptions,
-	IRequestQueryOptions,
-	IResponse,
-	IRequest,
-	IResponseFilter
-} from `scarlett`;
-```
 
 ## Testing
 
