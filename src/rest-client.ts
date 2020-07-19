@@ -63,19 +63,19 @@ export default class RestClient {
 	}
 	//#endregion
 
-	protected optionsOverride(target: Partial<IRestOptions>, obj?: Partial<IRestOptions>) {
+	protected optionsOverride(overrides?: Partial<IRestOptions>, base?: Partial<IRestOptions>) {
+		const target = base ?? this.options.current();
 		if (this.options.get("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
-			return mergeObject(o, obj ?? {});
+			return mergeObject(o, overrides ?? {});
 		}
-		else return Object.assign({}, target, obj ?? {});
+		else return Object.assign({}, target, overrides ?? {});
 	}
 	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
-		const currentOptions = this.options.current();
 		const localOptions: Partial<IRestOptions> = requestOptions
-			? this.optionsOverride(currentOptions, requestOptions)
-			: currentOptions
+			? this.optionsOverride(requestOptions)
+			: this.options.current()
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
 		if (localOptions.query && Object.keys(localOptions.query).length)
@@ -154,7 +154,7 @@ export default class RestClient {
 					m = method;
 					repeatOptions = {};
 				}
-				const newOpts = that.optionsOverride(localOptions, repeatOptions);
+				const newOpts = that.optionsOverride(repeatOptions, localOptions);
 				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
 			}
 		};
