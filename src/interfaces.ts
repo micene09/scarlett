@@ -54,10 +54,10 @@ export interface IResponse<TResponse, TError = any> {
 	repeat: IRepeat<TResponse, TError>;
 }
 export interface IRepeat<TResponse, TError = any> {
-	(method?: HttpMethod, requestOptions?: Partial<IRestOptions>): Promise<IResponse<TResponse, TError>>
+	(method: HttpMethod, requestOptions: Partial<IRestOptions>): Promise<IResponse<TResponse, TError>>
 }
 export interface IRepeat<TResponse, TError = any> {
-	(requestOptions?: Partial<IRestOptions>): Promise<IResponse<TResponse, TError>>
+	(requestOptions: Partial<IRestOptions>): Promise<IResponse<TResponse, TError>>
 }
 export interface IResponseFilter<TResponse, TError> {
 	path?: string;
