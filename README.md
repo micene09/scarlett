@@ -4,27 +4,26 @@
 > A strongly typed, Typescript powered, rest client library based on Fetch API.
 
 <!-- omit in toc -->
-
 ## Key features
 
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) based rest client
 * Class based
 * Strongly-typed (...thank you Typescript)
 * Centralized config (via constructor)...with optional local overrides on http methods
+* Advanced options override tecniques
 * Rest Client Builder using RestOptions class
 * Response body auto-parser, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
 * Query-string utilities
-* (Optional) Built-in cache
-* Error object's intellisense
-* (Optional) Throw errors on request failures
-* Catch/filters to handle expected errors even when throw error is enabled
+* Built-in cache system (optional) to improve performance on recurring requests
+* Response and Error object's intellisense, even with different interfaces
+* Throw errors (optional) on request failures
+* Catch/filters to handle expected errors even when throw gloval error is enabled
 * Support for timeout
 * Easy request repeater
 
 <!-- omit in toc -->
 ## Summary
 
-- [Key features](#key-features)
 - [Installation](#installation)
 	- [Required Polyfills](#required-polyfills)
 	- [Different builds](#different-builds)
@@ -68,6 +67,8 @@ Scarlett will require the following APIs:
 
 * [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+* [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+* [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
 * [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers)
 * [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
 * [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
@@ -355,8 +356,6 @@ Internally, the library supports the following strategies to update the request 
 * *assign*, every value will be overwritten using [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 
 Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestOptions API](#RestOptions).
-
-<!-- omit in toc -->
 
 #### request`<TResponse, TError = any>`()
 
