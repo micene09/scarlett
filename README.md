@@ -551,11 +551,11 @@ To create a new instance, just pass an `IRequestOptionsGlobals` object as first 
 ```typescript
 import { RestOptions } from "scarlett"
 
-const opts = new RestOptions() {{
+const opts = new RestOptions({
 	host: `https://server.com`,
 	basePath: "/controller",
 	responseType: `json`
-}}
+})
 ```
 
 Here is the full list of available instance's methods:
