@@ -329,7 +329,7 @@ Defaults to false.
 
 **throwExcluding (IResponseFilter[])**
 
-Even when you throwing error on failed requests, sometime you may need to filter this errors.
+Even when you throwing error on failed requests, sometimes you may need to filter this errors and react properly without throwing.
 
 You can do this providing an array of `IResponseFilter`:
 
