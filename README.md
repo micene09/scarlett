@@ -42,7 +42,7 @@
 		- [optionsOverride() method](#optionsoverride-method)
 		- [Response Object](#response-object)
 		- [Request (sent) Object](#request-sent-object)
-		- [Built-in Cache System](#built-in-cache-system)
+	- [Built-in Cache System](#built-in-cache-system)
 	- [RestOptions](#restoptions)
 		- [Usage](#usage)
 	- [RestError](#resterror)
@@ -494,7 +494,7 @@ This simple interface is used to qualify the Response Object, here you will find
 
 **body**, the optional body used, tipically when HttpMethod is `PUT` or `POST`.
 
-#### Built-in Cache System
+### Built-in Cache System
 
 A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based cache, disabled by default and triggered by the `internalCache` flag.
 
