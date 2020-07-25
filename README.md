@@ -623,9 +623,9 @@ const restClient = builder.createRestClient()
 
 ### RestError
 
-This class extends the default JavaScript Error, it require a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
+This class extends the default JavaScript Error, it requires a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
 
-When a request has an error, you will find an instance of `RestError` as a property named **error** on `IResponse` object. If the `throw` flag is enabled, this instance will be used to with the Javascript native `throw` keyword.
+When a request's response has an error, you will find an instance of `RestError` as a property named **error** on `IResponse` object. If the `throw` flag is enabled, the library will internally `throw` it.
 
 If you expect a model for your error, you can provide its interface as follows:
 
