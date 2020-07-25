@@ -309,9 +309,13 @@ Every entry for this cache, will use a compound-key containing the `cacheKey`, i
 
 See [Built-in cache](#built-in-cache) section for details.
 
+Defaults to false.
+
 **cacheKey (string)**
 
 An optional alias reference to the current request, useful if you are using `internalCache` parameter as true.
+
+Defaults to empty string.
 
 **throw (boolean)**
 
