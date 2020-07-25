@@ -512,7 +512,7 @@ This internal cache system will never infer the native [Request.cache](https://d
 
 Enabling it, if a cached response for a particular request exists, the library will avoid the fetch call to resolve the `Promise` immediately.
 
-All cache-related methods are `protected` and used internally on every request method if enabled.
+All cache-related methods are `protected` and used internally on every request method if enabled, but you can use it to give more super-powers on your custom rest client.
 
 Here is the full list:
 
