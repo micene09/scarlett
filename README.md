@@ -6,13 +6,13 @@
 <!-- omit in toc -->
 ## Key features
 
-* [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) based rest client
-* Class based
-* Strongly-typed (...thank you Typescript)
-* Centralized config (via constructor)...with optional local overrides on http methods
+* [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) & [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based rest client
+* Class style
+* Typescript powered, primary goal >> *strongly-typed*
+* Centralized config (via constructor) with optional local overrides on http methods
 * Advanced options override tecniques
-* Rest Client Builder using RestOptions class
-* Response body auto-parser, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
+* Rest Client Builder (RestOptions API)
+* Response body auto-parser/converter, based on fetch's [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body)
 * Query-string utilities
 * Built-in cache system (optional) to improve performance on recurring requests
 * Response and Error object's intellisense, even with different interfaces
