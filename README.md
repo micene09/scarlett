@@ -319,13 +319,13 @@ Defaults to empty string.
 
 **throw (boolean)**
 
-Defaults to false.
-
 As standard behavior of fetch, every request will never throw error. But sometimes, in very large applications, you need a centralized API error handler.
 
 If true, when the standard [fetch -> Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is false the API will throw an error.
 
 The error object will be an instance of [RestError](#RestError) class.
+
+Defaults to false.
 
 **throwExcluding (IResponseFilter[])**
 
