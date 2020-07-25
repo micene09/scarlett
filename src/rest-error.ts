@@ -1,6 +1,6 @@
 import { IResponse, IRequest, IResponseFilter } from "./interfaces";
 
-export default class RestError<TResponse, TError> extends Error {
+export default class RestError<TError, TResponse = any> extends Error {
 	isRestError = true;
 	request?: IRequest;
 	response?: IResponse<TResponse>;

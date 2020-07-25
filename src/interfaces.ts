@@ -45,7 +45,7 @@ export interface IRequest {
 export interface IResponse<TResponse, TError = any> {
 	fetchResponse?: Response;
 	request: IRequest;
-	error?: RestError<TResponse, TError>;
+	error?: RestError<TError, TResponse>;
 	status: HTTPStatusCode;
 	headers?: Headers;
 	data: TResponse | null;
@@ -64,7 +64,7 @@ export interface IResponseFilter<TResponse, TError> {
 	method?: HttpMethod;
 	statusCode?: HTTPStatusCode;
 	onFilterMatch?: {
-		(restError: RestError<TResponse, TError>): void
+		(restError: RestError<TError, TResponse>): void
 	};
 }
 export interface IQueryParamTransformer {
@@ -74,7 +74,7 @@ export interface IResponseAny {
 	<TData = any, TError = any>(prom: Promise<any>): Promise<[TData | null, TError | null]>
 }
 export interface IResponseAny {
-	<TResponse>(prom: Promise<TResponse>): Promise<[TResponse | null, Error | RestError<TResponse, any> | null]>
+	<TResponse>(prom: Promise<TResponse>): Promise<[TResponse | null, Error | RestError<any, TResponse> | null]>
 }
 export type HttpMethod = | 'GET' | 'DELETE' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'LINK';
 export type HttpResponseFormat = | "json" | "text" | "blob" | "arrayBuffer" | "formData";

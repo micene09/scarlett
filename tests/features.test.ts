@@ -77,7 +77,7 @@ describe('Features', () => {
 			fail();
 		}
 		catch(err) {
-			const error = err as RestError<any, ITestStatusCodeResponse>;
+			const error = err as RestError<ITestStatusCodeResponse>;
 			expect(error.data?.statusText).toEqual("CustomStatusCode");
 			expect(error.data?.statusCode).toEqual(412);
 			done();
