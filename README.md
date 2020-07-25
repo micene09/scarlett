@@ -624,14 +624,20 @@ const restClient = builder.createRestClient()
 
 This class extends the default JavaScript Error, it require a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
 
+When a request has an error, you will find an instance of `RestError` as a property named **error** on `IResponse` object. If the `throw` flag is enabled, this instance will be used to with the Javascript native `throw` keyword.
+
+If you expect a model for your error, you can provide its interface as follows:
+
 ```typescript
 const response = await restClient.get<any, IBackendError>("/status-code/412");
-// intellisense here should work data prop:
-const error = response.error?.data;
+const error = response.error?.data; // << error.data property will infer IBackendError interface
+```
 
-// ...or just import and create it manually
+You can event import it and create an instance to extend your business logic:
+
+```typescript
 import { RestError } from "scarlett";
-const err = new RestError<any, IBackendError>();
+const err = new RestError<IBackendError>();
 ```
 
 Properties:
