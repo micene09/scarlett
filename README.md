@@ -33,7 +33,7 @@
 	- [Importing extras](#importing-extras)
 	- [RestOptions as rest client builder](#restoptions-as-rest-client-builder)
 	- [Cache System](#cache-system)
-- [API](#api)
+- [API in depth](#api-in-depth)
 	- [RestClient](#restclient)
 		- [Instance](#instance)
 		- [IRequestOptionsGlobals](#irequestoptionsglobals)
@@ -208,7 +208,7 @@ class AdvanceCache extends RestClient {
 }
 ```
 
-## API
+## API in depth
 
 ### RestClient
 
