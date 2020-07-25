@@ -307,7 +307,7 @@ If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/d
 
 Every entry for this cache, will use a compound-key containing the `cacheKey`, if provided.
 
-See [Built-in cache](#built-in-cache) section for details.
+See the [cache section](#built-in-cache-system) for more details.
 
 Defaults to false.
 
