@@ -546,7 +546,7 @@ Every instance of RestClient will have a public property named **options**, this
 
 You can access and modify the global options of your rest client instance using his methods.
 
-To create a new instance, just pass an `IRequestOptionsGlobals` object as first parameter:
+To create a new instance, just pass an `IRequestOptionsGlobals` object (optional) as first parameter:
 
 ```typescript
 import { RestOptions } from "scarlett"
