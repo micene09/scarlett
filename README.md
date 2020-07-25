@@ -37,14 +37,13 @@
 	- [RestClient](#restclient)
 		- [Instance](#instance)
 		- [IRequestOptionsGlobals](#irequestoptionsglobals)
-		- [request`<TResponse, TError = any>`()](#requesttresponse-terror--any)
+		- [request()](#request)
 		- [HttpMethod shortcut methods](#httpmethod-shortcut-methods)
 		- [optionsOverride() method](#optionsoverride-method)
 		- [Response Object](#response-object)
 		- [Request (sent) Object](#request-sent-object)
 	- [Built-in Cache System](#built-in-cache-system)
 	- [RestOptions](#restoptions)
-		- [Usage](#usage)
 	- [RestError](#resterror)
 - [Testing](#testing)
 - [Inspired by...](#inspired-by)
@@ -361,7 +360,7 @@ Internally, the library supports the following strategies to update the request 
 
 Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestOptions API](#RestOptions).
 
-#### request`<TResponse, TError = any>`()
+#### request()
 
 *Parameters*:
 
@@ -421,6 +420,8 @@ Having the following definition:
 optionsOverride(overrides?: Partial<IRestOptions>, base?: Partial<IRestOptions>)
 ```
 ...will provide a copy of the `IRequestOptions` updated using the `overrideStrategy` option.
+
+The optional `base` parameter defaults to the current rest client options object.
 
 #### Response Object
 
@@ -607,7 +608,7 @@ console.log(rest instanceof MyRest) // >> true
 
 Note: Keep in mind that custom classes having extra/custom parameters are **not supported**, the only way to make it work is a class having the same RestClient's constructor.
 
-#### Usage
+**Usage:**
 
 ```typescript
 import { RestOptions } from "scarlett"
