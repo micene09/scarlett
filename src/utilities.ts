@@ -1,4 +1,4 @@
-import { IRestOptions, HttpMethod, HttpResponseFormat, IRestOptionsQuery, IKeyValue } from "./interfaces";
+import { IRestOptions, HttpMethod, HttpResponseFormat, IRestOptionsQuery, IKeyValue, IResponseAny } from "./interfaces";
 import RestError from "./rest-error";
 
 export function getRequestUrl(host: string = location.origin, basePath: string = "/", path: string = "/") {
@@ -55,12 +55,6 @@ export function transformRequestBody(body: | ArrayBuffer | Blob | File | FormDat
 		: JSON.stringify(body)
 	);
 }
-interface IResponseAny {
-	<TData = any, TError = any>(prom: Promise<any>): Promise<[TData | null, TError | null]>
-}
-interface IResponseAny {
-	<TResponse>(prom: Promise<TResponse>): Promise<[TResponse | null, Error | RestError<TResponse, any> | null]>
-}
 export const resolveAny: IResponseAny = (prom: Promise<any>) => {
 	return new Promise<any>(resolve => {
 		prom.then((response: any) => resolve([response, null]))
@@ -68,7 +62,7 @@ export const resolveAny: IResponseAny = (prom: Promise<any>) => {
 	});
 };
 
-export const cloneObject = (obj: IKeyValue) => {
+export function cloneObject (obj: IKeyValue) {
 	let cloned: IKeyValue = {};
 	for (let [key, val] of Object.entries(obj)) {
 		const clonedVal  = cloneValue(obj, key);
@@ -76,16 +70,16 @@ export const cloneObject = (obj: IKeyValue) => {
 	}
 	return cloned;
 }
-export const cloneValue = (original: IKeyValue, propName: string | number): any => {
+export function cloneValue (original: IKeyValue, propName: string | number): any {
 	const oldval = original[propName];
 	const type = typeof oldval;
 	if (!oldval) return;
 	else if (type === "string") return String(oldval);
 	else if (type === "number") return Number(oldval);
 	else if (type === "boolean") return Boolean(oldval);
-	else if (oldval instanceof Headers) return new Headers(oldval);
-	else if (oldval instanceof AbortController) return new AbortController();
-	else if (oldval instanceof FormData) {
+	else if (globalThis.Headers && oldval instanceof Headers) return new Headers(oldval);
+	else if (globalThis.AbortController && oldval instanceof AbortController) return new AbortController();
+	else if (globalThis.FormData && oldval instanceof FormData) {
 		const cloned = new FormData();
 		oldval.forEach((value, key) => cloned.append(key, value));
 		return cloned;
@@ -94,14 +88,14 @@ export const cloneValue = (original: IKeyValue, propName: string | number): any 
 	else if (Array.isArray(oldval)) return oldval.map((v, i) => cloneValue(oldval, i));
 	return oldval;
 }
-export const mergeObject = (target: IKeyValue, mergeWith: IKeyValue) => {
+export function mergeObject (target: IKeyValue, mergeWith: IKeyValue) {
 	for (let [key, val] of Object.entries(mergeWith)) {
 		const mergedVal = mergeValue(target, mergeWith, key);
 		target[key] = mergedVal;
 	}
 	return target;
 }
-export const mergeValue = (original: IKeyValue, mergeWith: IKeyValue, propName: string) => {
+export function mergeValue (original: IKeyValue, mergeWith: IKeyValue, propName: string) {
 	const oldval = original[propName];
 	const newval = mergeWith[propName];
 	if (!newval) return oldval;
