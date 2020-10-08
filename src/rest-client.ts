@@ -87,6 +87,15 @@ export default class RestClient {
 			if (cachedResponse) return cachedResponse;
 		}
 
+		const request: IRequest = {
+			method, options: localOptions, url,
+			body: localOptions.body
+		};
+
+		const onRequest = this.options.get("onRequest");
+		if (typeof onRequest == "function")
+			onRequest(request);
+
 		const [fetchResponse, fetchError] = await resolveAny<Response, Error>(new Promise((resolve, reject) => {
 
 			let timeoutTrigger = false;
@@ -116,7 +125,6 @@ export default class RestClient {
 				referrerPolicy: localOptions.referrerPolicy,
 				referrer: localOptions.referrer
 			};
-
 			fetch(url.href, req).then((response) => {
 				if (!timeoutTrigger)
 					resolve(response);
@@ -127,11 +135,6 @@ export default class RestClient {
 				clearTimeout(timeoutId);
 			});
 		}));
-
-		const request: IRequest = {
-			method, options: localOptions, url,
-			body: localOptions.body
-		};
 
 		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, localOptions.responseType);
 
@@ -181,20 +184,30 @@ export default class RestClient {
 			response.error = ser;
 		}
 
-		if (response.error && Boolean(localOptions.throw)) {
-			const throwFilterFound = localOptions.throwExcluding?.find((f: any) => response!.error!.throwFilterMatch(f))
-				?? false;
-			if (!throwFilterFound)
-				throw response.error;
-			else {
-				if (typeof throwFilterFound.onFilterMatch === "function")
-					throwFilterFound.onFilterMatch(response.error);
-				response.throwFilter = throwFilterFound;
+		if (response.error) {
+			const onError = this.options.get("onError");
+			if (typeof onError == "function")
+				onError(response.error);
+
+			if (localOptions.throw) {
+				const throwFilterFound = localOptions.throwExcluding?.find((f: any) => response!.error!.throwFilterMatch(f))
+					?? false;
+				if (!throwFilterFound)
+					throw response.error;
+				else {
+					if (typeof throwFilterFound.onFilterMatch === "function")
+						throwFilterFound.onFilterMatch(response.error);
+					response.throwFilter = throwFilterFound;
+				}
 			}
 		}
 
 		if (localOptions.internalCache)
 			this.cacheSet(response);
+
+		const onReponse = this.options.get("onResponse");
+		if (typeof onReponse == "function")
+			onReponse(response);
 
 		return response;
 	}

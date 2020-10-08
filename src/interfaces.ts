@@ -33,6 +33,9 @@ export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
 	cacheKey: string;
 	throw: boolean;
 	throwExcluding: IResponseFilter<any, any>[];
+	onRequest(request: IRequest): void
+	onResponse<TResponse = any, TError = any>(response: IResponse<TResponse, TError>): void
+	onError<TError = any, TResponse = any>(error: RestError<TError, TResponse>): void
 }
 export interface IRestOptionsGlobals extends IRestOptions, IRestOptionsProtected {}
 export type LocalOverrideStrategy = | "merge" | "assign";

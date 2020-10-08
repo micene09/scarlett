@@ -193,4 +193,26 @@ describe('Features', () => {
 
 		done();
 	});
+	test("Global handlers (onRequest, onResponse, onError)", async done => {
+		const onError = jest.fn();
+		const onRequest = jest.fn();
+		const onResponse = jest.fn();
+		const rest = baseClient.options.clone()
+			.set("responseType", "json")
+			.set("throw", true)
+			.set("onRequest", request => onRequest())
+			.set("onResponse", response => onResponse())
+			.set("onError", error => onError())
+			.createRestClient();
+
+		try {
+			await rest.get<ITestMirrorResponse>("/mirror");
+			await rest.get<ITestMirrorResponse>("/status-code/412");
+		} catch (e) {}
+
+		expect(onRequest).toBeCalledTimes(2);
+		expect(onResponse).toBeCalledTimes(1);
+		expect(onError).toBeCalledTimes(1);
+		done();
+	});
 });
