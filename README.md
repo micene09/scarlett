@@ -360,6 +360,19 @@ Internally, the library supports the following strategies to update the request 
 
 Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestOptions API](#RestOptions).
 
+**onRequest(request: IRequest): void**
+
+Global handler, running on your `RestClient`'s instance context, called at every request.
+
+**onResponse(response: IResponse): void**
+
+Global handler, running on your `RestClient`'s instance context, called at every response received.
+Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
+
+**onError(error: RestError): void**
+
+Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request, even if you `throw` or exclude an error from throwing it.
+
 #### request()
 
 *Parameters*:
