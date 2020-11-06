@@ -1,7 +1,7 @@
 import RestClient, { RestError, RestOptions } from "../lib/index";
 import { HTTPStatusCode } from "../src/interfaces";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
-import { ok } from "assert";
+import { fail, ok } from "assert";
 
 let baseClient: RestClient;
 let baseOptions: RestOptions;
@@ -52,15 +52,35 @@ describe('Features', () => {
 		expect(decodeURIComponent(response.data.queryString)).toEqual("a=1&b=2&some=one,two");
 		done();
 	});
-	test("Can throw error if specified", async done => {
+	test("Throw error disabled by default, but not on a 'special' requests", async done => {
+		const client = new RestOptions()
+			.set("host", host)
+			.set("responseType", "json")
+			.createRestClient();
 		try {
-			await baseClient.get("/status-code/500", { throw: true });
+			await client.get("/status-code/500");
+			ok("Error not thrown as expected.");
+		}
+		catch { fail(); }
+		try {
+			await client.get("/status-code/500", { throw: true });
 			fail();
 		}
-		catch {
-			ok("Error thrown successfully.");
-			done();
+		catch { ok("Error thrown as expected.");}
+		done();
+	});
+	test("Throw error always, but not on a 'special' requests", async done => {
+		const client = new RestOptions()
+			.set("host", host)
+			.set("responseType", "json")
+			.set("throw", true)
+			.createRestClient();
+		try {
+			await client.get("/status-code/500", { throw: false });
+			ok("Error not thrown as expected.");
 		}
+		catch { fail();}
+		done();
 	});
 	test("Custom Error Object Interfaces", async done => {
 
