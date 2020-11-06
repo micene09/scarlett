@@ -98,7 +98,8 @@ export function mergeObject (target: IKeyValue, mergeWith: IKeyValue) {
 export function mergeValue (original: IKeyValue, mergeWith: IKeyValue, propName: string) {
 	const oldval = original[propName];
 	const newval = mergeWith[propName];
-	if (!newval) return oldval;
+	if (typeof newval === "undefined" || newval === null)
+		return oldval;
 	else if (Array.isArray(newval)) return oldval ? [...oldval, ...newval] : newval;
 	else if (newval instanceof Headers) {
 		const headers = (oldval as Headers);
