@@ -1,4 +1,4 @@
-import { IRestOptions, HttpMethod, HttpResponseFormat, IRestOptionsQuery, IKeyValue, IResponseAny } from "./interfaces";
+import { HttpResponseFormat, IRestOptionsQuery, IKeyValue, IResponseAny } from "./interfaces";
 import RestError from "./rest-error";
 
 export function getRequestUrl(host: string = location.origin, basePath: string = "/", path: string = "/") {
@@ -64,7 +64,7 @@ export const resolveAny: IResponseAny = (prom: Promise<any>) => {
 
 export function cloneObject (obj: IKeyValue) {
 	let cloned: IKeyValue = {};
-	for (let [key, val] of Object.entries(obj)) {
+	for (let [key] of Object.entries(obj)) {
 		const clonedVal  = cloneValue(obj, key);
 		cloned[key] = clonedVal;
 	}
@@ -89,7 +89,7 @@ export function cloneValue (original: IKeyValue, propName: string | number): any
 	return oldval;
 }
 export function mergeObject (target: IKeyValue, mergeWith: IKeyValue) {
-	for (let [key, val] of Object.entries(mergeWith)) {
+	for (let [key] of Object.entries(mergeWith)) {
 		const mergedVal = mergeValue(target, mergeWith, key);
 		target[key] = mergedVal;
 	}

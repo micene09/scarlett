@@ -26,7 +26,6 @@ export class RestOptions {
 		if (!this._options.throw && this._options.throwExcluding && this._options.throwExcluding.length)
 			this._options.throw = true;
 		if (!this._options.responseType) this._options.responseType = "json";
-		if (!this._options.timeout) this._options.timeout = 30000;
 
 		if (!this._options.timeout) this._options.timeout = 30000;
 	}
