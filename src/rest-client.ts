@@ -56,10 +56,10 @@ export default class RestClient {
 		return this.request<TResponse, TError>("POST", path, overrides);
 	}
 	public put<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
-		return this.request<TResponse, TError>("GET", path, overrides);
+		return this.request<TResponse, TError>("PUT", path, overrides);
 	}
 	public patch<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
-		return this.request<TResponse, TError>("GET", path, overrides);
+		return this.request<TResponse, TError>("PATCH", path, overrides);
 	}
 	//#endregion
 
