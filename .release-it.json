@@ -25,6 +25,6 @@
 			"git archive --format zip -o \"Source code.zip\" master --prefix scarlett-${version}/",
 			"git archive --format tar -o \"Source code.tar\" master --prefix scarlett-${version}/"
 		],
-		"after:release": "echo Successfully created a release draft v${version} for ${repo.repository}. Please add release notes when necessary and publish it!"
+		"after:release": "echo Release draft v${version} is ready to go!"
 	}
 }
