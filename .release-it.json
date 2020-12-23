@@ -7,9 +7,8 @@
 	},
 	"github": {
 		"assets": [
-			"lib/*.*",
-			"logo.jpg",
-			"README.md"
+			"Source code.zip",
+			"Source code.tar.gz"
 		],
 		"draft": true,
 		"release": true,
