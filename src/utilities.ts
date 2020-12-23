@@ -39,7 +39,12 @@ export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) 
 export async function transformResponseBody<T>(response: Response | null = null, responseType: HttpResponseFormat = "json"): Promise<[boolean, T | null]> {
 	if (!response)
 		return [false, null];
-	else try {
+
+	const responseSize = parseInt(response.headers.get("Content-Length") ?? "");
+	if (response.status === 204 || !responseSize)
+		return [true, null];
+
+	try {
 		return [true, await response[responseType]() as T];
 	} catch (error) {
 		return [false, null];
