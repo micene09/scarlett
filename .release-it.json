@@ -20,6 +20,10 @@
 	},
 	"hooks": {
 		"before:init": [ "yarn run build", "yarn run build:es3", "yarn run build:declarations" ],
+		"after:init": [
+			"git archive --format zip -o \"Source code.zip\" master --prefix scarlett-${version}/",
+			"git archive --format tar -o \"Source code.tar\" master --prefix scarlett-${version}/"
+		],
 		"after:bump": "npm run test",
 		"after:release": "echo Successfully created a release draft v${version} for ${repo.repository}. Please add release notes when necessary and publish it!"
 	}
