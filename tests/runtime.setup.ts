@@ -12,8 +12,8 @@ export interface ITestJsonResponse {
 }
 export interface ITestMirrorResponse {
 	queryString: string;
-	queryObject: fastify.DefaultQuery;
-	headers: fastify.DefaultHeaders;
+	queryObject: any;
+	headers: any;
 	body: any;
 }
 export interface ITestStatusCodeResponse {
@@ -32,11 +32,15 @@ export async function startWebServer(port: number = 3000) {
 		})
 		.get("/status-code/:code", (req, res) => {
 			res.header("Content-type", "application/json");
-			res.status(+req.params.code);
+			res.status(+(req.params as any).code);
 			res.send({
 				statusText: "CustomStatusCode",
-				statusCode: +req.params.code
+				statusCode: +(req.params as any).code
 			} as ITestStatusCodeResponse);
+		})
+		.get("/status-code/:code/empty", (req, res) => {
+			res.status(+(req.params as any).code);
+			res.send();
 		})
 		.all("/mirror", (req, res) => {
 			res.header("Content-type", "application/json");
@@ -51,7 +55,7 @@ export async function startWebServer(port: number = 3000) {
 			res.header("Content-type", "text/plain");
 			setTimeout(() => {
 				res.send("ok");
-			}, +req.params.ms);
+			}, +(req.params as any).ms);
 		});
 	await testServer.listen(port);
 	return `http://localhost:${port}`;

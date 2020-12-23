@@ -58,12 +58,12 @@ describe('Features', () => {
 			.set("responseType", "json")
 			.createRestClient();
 		try {
-			await client.get("/status-code/500");
+			await client.get("/status-code/500/empty");
 			ok("Error not thrown as expected.");
 		}
 		catch { fail(); }
 		try {
-			await client.get("/status-code/500", { throw: true });
+			await client.get("/status-code/500/empty", { throw: true });
 			fail();
 		}
 		catch { ok("Error thrown as expected.");}
@@ -76,7 +76,7 @@ describe('Features', () => {
 			.set("throw", true)
 			.createRestClient();
 		try {
-			await client.get("/status-code/500", { throw: false });
+			await client.get("/status-code/500/empty", { throw: false });
 			ok("Error not thrown as expected.");
 		}
 		catch { fail();}
@@ -227,7 +227,7 @@ describe('Features', () => {
 
 		try {
 			await rest.get<ITestMirrorResponse>("/mirror");
-			await rest.get<ITestMirrorResponse>("/status-code/412");
+			await rest.get<ITestMirrorResponse>("/status-code/412/empty");
 		} catch (e) {}
 
 		expect(onRequest).toBeCalledTimes(2);
