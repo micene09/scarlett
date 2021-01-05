@@ -6,10 +6,6 @@
 		"tagName": "${version}"
 	},
 	"github": {
-		"assets": [
-			"Sources.zip",
-			"Sources.tar.gz"
-		],
 		"draft": true,
 		"release": true,
 		"releaseName": "v${version}"
@@ -20,10 +16,6 @@
 	"hooks": {
 		"before:init": [ "yarn run build", "yarn run build:es3", "yarn run build:declarations" ],
 		"after:init": "npm run test",
-		"after:bump": [
-			"git archive --format zip -o \"Sources.zip\" master --prefix scarlett-${version}/",
-			"git archive --format tar.gz -o \"Sources.tar.gz\" master --prefix scarlett-${version}/"
-		],
 		"after:release": "echo 'Release draft v${version} is ready to go!'"
 	}
 }
