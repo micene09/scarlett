@@ -40,9 +40,15 @@ export async function transformResponseBody<T>(response: Response | null = null,
 	if (!response)
 		return [false, null];
 
-	const responseSize = parseInt(response.headers.get("Content-Length") ?? "");
-	if (response.status === 204 || !responseSize)
+	if (response.status === 204)
 		return [true, null];
+
+	const contentLen = response.headers.get("Content-Length");
+	if (contentLen) {
+		const responseSize = parseInt(response.headers.get("Content-Length") ?? "");
+		if (!responseSize)
+			return [true, null];
+	}
 
 	try {
 		return [true, await response[responseType]() as T];
