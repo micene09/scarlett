@@ -184,6 +184,7 @@ export default class RestClient {
 			response.error = ser;
 		}
 
+		let onErrorCalled = false;
 		if (response.error) {
 			const throwFilterFound = localOptions.throwExcluding
 				? localOptions.throwExcluding.find((f: any) => response!.error!.throwFilterMatch(f))
@@ -199,8 +200,10 @@ export default class RestClient {
 			}
 			else if (shouldThrow) {
 				const onError = this.options.get("onError");
-				if (typeof onError == "function")
+				if (typeof onError == "function") {
+					onErrorCalled = true;
 					onError(response.error);
+				}
 				else throw response.error;
 			}
 		}
@@ -208,9 +211,11 @@ export default class RestClient {
 		if (localOptions.internalCache)
 			this.cacheSet(response);
 
-		const onReponse = this.options.get("onResponse");
-		if (typeof onReponse == "function")
-			onReponse(response);
+		if (!onErrorCalled) {
+			const onReponse = this.options.get("onResponse");
+			if (typeof onReponse == "function")
+				onReponse(response);
+		}
 
 		return response;
 	}
