@@ -362,16 +362,16 @@ Note that this option cannot be overridden on a request method, to do this you n
 
 **onRequest(request: IRequest): void**
 
-Global handler, running on your `RestClient`'s instance context, called at every request.
+Global handler, running on your `RestClient`'s instance context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument.
 
 **onResponse(response: IResponse): void**
 
-Global handler, running on your `RestClient`'s instance context, called at every response received.
+Global handler, running on your `RestClient`'s instance context, called at every successful response received.
 Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
 
 **onError(error: RestError): void**
 
-Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request, even if you `throw` or exclude an error from throwing it.
+Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request, this will prevent the standard javascript `throw` error. This callback will not be called if the error was filtered by `throwExcluding` option.
 
 #### request()
 
