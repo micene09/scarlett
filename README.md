@@ -371,7 +371,7 @@ Keep in mind that, if you set the `throw` option as true, or any of your `throwE
 
 **onError(error: RestError): void**
 
-Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request, this will prevent the standard javascript `throw` error. This callback will not be called if the error was filtered by `throwExcluding` option.
+Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request. This callback will not be called if the error was filtered by `throwExcluding` option.
 
 #### request()
 
