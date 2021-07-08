@@ -53,23 +53,61 @@ describe('Features', () => {
 		done();
 	});
 	test("Throw error disabled by default, but not on a 'special' requests", async done => {
-		const client = new RestOptions()
+
+		const baseOptions = new RestOptions()
 			.set("host", host)
 			.set("responseType", "json")
-			.createRestClient();
+		let onErrorCallback = jest.fn(err => err)
+
 		try {
-			await client.get("/status-code/500/empty");
-			ok("Error not thrown as expected.");
+			onErrorCallback = jest.fn(err => err)
+			baseOptions
+				.set("onError", onErrorCallback)
+				.set("throw", false)
+			const client = baseOptions.createRestClient()
+			await client.get("/status-code/500/empty")
+			expect(onErrorCallback).not.toBeCalled()
+			ok("Error not thrown as expected.")
 		}
-		catch { fail(); }
+		catch(e) { fail(e); }
+
 		try {
-			await client.get("/status-code/500/empty", { throw: true });
-			fail();
+			onErrorCallback = jest.fn(err => err)
+			baseOptions
+				.set("onError", onErrorCallback)
+				.set("throw", true)
+			const client = baseOptions.createRestClient()
+			await client.get("/status-code/500/empty")
+			fail("Error not thrown...");
 		}
-		catch { ok("Error thrown as expected.");}
+		catch {
+			expect(onErrorCallback).toBeCalled();
+			ok("Error thrown as expected.");
+		}
+
+
+		const handledStatusCode = 502
+		onErrorCallback = jest.fn(err => err)
+		baseOptions
+			.set("onError", onErrorCallback)
+			.set("throwExcluding", [ { statusCode: handledStatusCode } ])
+		const client = baseOptions.createRestClient()
+
+		await client.get(`/status-code/${handledStatusCode}/empty`)
+		expect(onErrorCallback).not.toBeCalled()
+
+		try {
+			await client.get(`/status-code/404/empty`)
+			fail("Error not thrown on unhandled (404) status code")
+		}
+		catch {
+			expect(onErrorCallback).toBeCalled()
+		}
+
 		done();
 	});
-	test("Throw error always, but not on a 'special' requests", async done => {
+	test("Throw error always, but not on a 'special' request", async done => {
+
 		const client = new RestOptions()
 			.set("host", host)
 			.set("responseType", "json")

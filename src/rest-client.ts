@@ -185,20 +185,23 @@ export default class RestClient {
 		}
 
 		if (response.error) {
-			const onError = this.options.get("onError");
-			if (typeof onError == "function")
-				onError(response.error);
+			const throwFilterFound = localOptions.throwExcluding
+				? localOptions.throwExcluding.find((f: any) => response!.error!.throwFilterMatch(f))
+				: false;
+			const shouldThrow = Boolean(localOptions.throw
+				? localOptions.throw
+				: localOptions.throwExcluding?.length)
 
-			if (localOptions.throw) {
-				const throwFilterFound = localOptions.throwExcluding?.find((f: any) => response!.error!.throwFilterMatch(f))
-					?? false;
-				if (!throwFilterFound)
-					throw response.error;
-				else {
-					if (typeof throwFilterFound.onFilterMatch === "function")
-						throwFilterFound.onFilterMatch(response.error);
-					response.throwFilter = throwFilterFound;
-				}
+			if (throwFilterFound) {
+				response.throwFilter = throwFilterFound;
+				if (typeof throwFilterFound.onFilterMatch === "function")
+					throwFilterFound.onFilterMatch(response.error);
+			}
+			else if (shouldThrow) {
+				const onError = this.options.get("onError");
+				if (typeof onError == "function")
+					onError(response.error);
+				else throw response.error;
 			}
 		}
 

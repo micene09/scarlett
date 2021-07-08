@@ -84,8 +84,7 @@ export function cloneObject (obj: IKeyValue) {
 export function cloneValue (original: IKeyValue, propName: string | number): any {
 	const oldval = original[propName];
 	const type = typeof oldval;
-	if (!oldval) return;
-	else if (type === "string") return String(oldval);
+	if (type === "string") return String(oldval);
 	else if (type === "number") return Number(oldval);
 	else if (type === "boolean") return Boolean(oldval);
 	else if (globalThis.Headers && oldval instanceof Headers) return new Headers(oldval);
@@ -95,8 +94,8 @@ export function cloneValue (original: IKeyValue, propName: string | number): any
 		oldval.forEach((value, key) => cloned.append(key, value));
 		return cloned;
 	}
-	else if (typeof oldval === 'object') return cloneObject(oldval);
 	else if (Array.isArray(oldval)) return oldval.map((v, i) => cloneValue(oldval, i));
+	else if (typeof oldval === 'object') return cloneObject(oldval);
 	return oldval;
 }
 export function mergeObject (target: IKeyValue, mergeWith: IKeyValue) {
