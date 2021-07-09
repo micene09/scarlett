@@ -47,31 +47,17 @@ describe('Features', () => {
 		});
 		expect(decodeURIComponent(response.data.queryString)).toEqual("a=1&b=2&some=one,two");
 	});
-	test("Throw error disabled by default, but not on a 'special' requests", async () => {
+	test("Throw error on not successful requests", async () => {
 
+		const onErrorCallback = jest.fn(err => err)
 		const baseOptions = new RestOptions()
 			.set("host", host)
 			.set("responseType", "json")
-		let onErrorCallback = jest.fn(err => err)
+			.set("onError", onErrorCallback)
+			.set("throw", true)
+		const client = baseOptions.createRestClient()
 
 		try {
-			onErrorCallback = jest.fn(err => err)
-			baseOptions
-				.set("onError", onErrorCallback)
-				.set("throw", false)
-			const client = baseOptions.createRestClient()
-			await client.get("/status-code/500/empty")
-			expect(onErrorCallback).not.toBeCalled()
-			ok("Error not thrown as expected.")
-		}
-		catch(e) { fail(e); }
-
-		try {
-			onErrorCallback = jest.fn(err => err)
-			baseOptions
-				.set("onError", onErrorCallback)
-				.set("throw", true)
-			const client = baseOptions.createRestClient()
 			await client.get("/status-code/500/empty")
 			fail("Error not thrown...");
 		}
@@ -79,11 +65,31 @@ describe('Features', () => {
 			expect(onErrorCallback).toBeCalled();
 			ok("Error thrown as expected.");
 		}
+	})
+	test("Throw error disabled, onError() callback will never be called", async () => {
 
+		const onErrorCallback = jest.fn(err => err)
+		const baseOptions = new RestOptions()
+			.set("host", host)
+			.set("responseType", "json")
+			.set("onError", onErrorCallback)
+			.set("throw", false)
+		const client = baseOptions.createRestClient()
+
+		try {
+			await client.get("/status-code/500/empty")
+			expect(onErrorCallback).not.toBeCalled()
+			ok("Error not thrown as expected.")
+		}
+		catch(e) { fail(e); }
+	})
+	test("Throw error enabled, but will not throw on 'special' requests", async () => {
 
 		const handledStatusCode = 502
-		onErrorCallback = jest.fn(err => err)
-		baseOptions
+		const onErrorCallback = jest.fn(err => err)
+		const baseOptions = new RestOptions()
+			.set("host", host)
+			.set("responseType", "json")
 			.set("onError", onErrorCallback)
 			.set("throwExcluding", [ { statusCode: handledStatusCode } ])
 		const client = baseOptions.createRestClient()
@@ -98,19 +104,6 @@ describe('Features', () => {
 		catch {
 			expect(onErrorCallback).toBeCalled()
 		}
-	});
-	test("Throw error always, but not on a 'special' request", async () => {
-
-		const client = new RestOptions()
-			.set("host", host)
-			.set("responseType", "json")
-			.set("throw", true)
-			.createRestClient();
-		try {
-			await client.get("/status-code/500/empty", { throw: false });
-			ok("Error not thrown as expected.");
-		}
-		catch { fail();}
 	});
 	test("Custom Error Object Interfaces", async () => {
 
