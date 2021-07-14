@@ -98,19 +98,21 @@ export default class RestClient {
 
 		const [fetchResponse, fetchError] = await resolveAny<Response, Error>(new Promise((resolve, reject) => {
 
-			let timeoutTrigger = false;
+			let timeoutTriggered = false;
 			let fetchFullFilled = false;
-			const timeoutId = setTimeout(function requestTimeout() {
-				if (fetchFullFilled)
-					return;
-				timeoutTrigger = true;
-				localOptions.abortController?.abort();
-				let timeoutError = new Error();
-				timeoutError.name = "timeout";
-				const seconds = (localOptions.timeout!/1000).toFixed(1).replace(".0", "");
-				timeoutError.message = `Request timeout after ${seconds} second${seconds == "1" ? "" : "s"}.`;
-				reject(timeoutError);
-			}, localOptions.timeout);
+			const timeoutId = localOptions.timeout
+				? setTimeout(function requestTimeout() {
+					if (fetchFullFilled) return;
+					timeoutTriggered = true;
+					localOptions.abortController?.abort();
+					let timeoutError = new Error();
+					timeoutError.name = "timeout";
+					const seconds = (localOptions.timeout!/1000).toFixed(2);
+					const secondsIsOne = (localOptions.timeout!/1000).toFixed(1).replace(".0", "") == "1";
+					timeoutError.message = `Request timed out after ${seconds} second${secondsIsOne ? "" : "s"}.`;
+					reject(timeoutError);
+				}, localOptions.timeout)
+				: null;
 
 			const req: RequestInit = {
 				method,
@@ -125,15 +127,22 @@ export default class RestClient {
 				referrerPolicy: localOptions.referrerPolicy,
 				referrer: localOptions.referrer
 			};
-			fetch(url.href, req).then((response) => {
-				if (!timeoutTrigger)
+			fetch(url.href, req)
+				.then((response) => {
+					if (timeoutTriggered) return;
+					else if (timeoutId)
+						clearTimeout(timeoutId);
+
+					fetchFullFilled = true;
 					resolve(response);
-			})
-			.catch((error) => reject(error))
-			.finally(() => {
-				fetchFullFilled = true;
-				clearTimeout(timeoutId);
-			});
+				})
+				.catch((error) => {
+					if (timeoutId)
+						clearTimeout(timeoutId);
+
+					fetchFullFilled = true;
+					reject(error);
+				});
 		}));
 
 		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, localOptions.responseType);

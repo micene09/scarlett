@@ -160,6 +160,16 @@ describe('Features', () => {
 		expect(response.error?.code).toEqual("timeout");
 		expect(response.status).toEqual(HTTPStatusCode.RequestTimeout);
 	})
+	test("Timeout can also be disabled", async () => {
+		const rest = baseClient.options.clone()
+			.set("responseType", "text")
+			.set("throw", false)
+			.set("timeout", 0)
+			.createRestClient();
+		const response = await rest.get<string>(`/reply-in/1000/milliseconds`);
+		expect(response.error).toBeFalsy();
+		expect(response.status).not.toEqual(HTTPStatusCode.RequestTimeout);
+	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
 
