@@ -148,8 +148,8 @@ export default class RestClient {
 		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, localOptions.responseType);
 
 		const response: IResponse<TResponse, TError> = {
-			fetchResponse: fetchResponse ?? undefined,
-			headers: await fetchResponse?.trailer,
+			fetchResponse,
+			headers: fetchResponse?.headers,
 			options: this.options,
 			request, data,
 			status: fetchResponse?.status as HTTPStatusCode,
