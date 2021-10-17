@@ -42,7 +42,7 @@
 		- [HttpMethod shortcut methods](#httpmethod-shortcut-methods)
 		- [optionsOverride() method](#optionsoverride-method)
 		- [Response Object](#response-object)
-		- [Request (sent) Object](#request-sent-object)
+		- [request](#request-1)
 	- [Built-in in-memory Cache System](#built-in-in-memory-cache-system)
 	- [RestOptions](#restoptions)
 	- [RestError](#resterror)
@@ -267,7 +267,7 @@ This property will lead the response body parsing, to get the proper type output
 
 **body**
 
-Optional request body content, aving one of the following instances: `ArrayBuffer`, `ArrayBufferView`, `Blob`, `File`, `string`, `URLSearchParams`, `FormData`, or just a key-value pair object (`{ [key: string]: any }`).
+Optional request body content, aving one of the following instances: `ArrayBuffer`, `ArrayBufferView`, `Blob`, `File`, `string`, `FormData`, or just a key-value pair object (`{ [key: string]: any }`).
 
 If the method is `GET`, this value will be set to undefined.
 
@@ -497,17 +497,19 @@ const first = await restClient.get<any>("/action");
 const second = await first.repeat();
 ```
 
-#### Request (sent) Object
+#### request
 
-This simple interface is used to qualify the Response Object, here you will find details about the request executed to get the response.
+The request object used to get the response, including options, url, method and body.
 
-**options (IRequestOptions)**
+**url**
 
-**url ([URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL))**, the URL instance evaluated using `host`, `basePath` and `path`.
+The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using `host`, `basePath` and the request `path`.
 
 **method (HttpMethod)**
 
-**body**, the optional body used, tipically when HttpMethod is `PUT` or `POST`.
+**body**
+
+The optional body used, tipically when HttpMethod is `PUT` or `POST`.
 
 ### Built-in in-memory Cache System
 
