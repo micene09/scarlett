@@ -494,7 +494,7 @@ Every parameter is optional, you can override every option as usual.
 *Usage*
 ```typescript
 const first = await restClient.get<any>("/action");
-const second = first.repeat();
+const second = await first.repeat();
 ```
 
 #### Request (sent) Object
