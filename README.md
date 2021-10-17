@@ -43,7 +43,7 @@
 		- [optionsOverride() method](#optionsoverride-method)
 		- [Response Object](#response-object)
 		- [Request (sent) Object](#request-sent-object)
-	- [Built-in Cache System](#built-in-cache-system)
+	- [Built-in in-memory Cache System](#built-in-in-memory-cache-system)
 	- [RestOptions](#restoptions)
 	- [RestError](#resterror)
 - [Testing](#testing)
@@ -509,17 +509,17 @@ This simple interface is used to qualify the Response Object, here you will find
 
 **body**, the optional body used, tipically when HttpMethod is `PUT` or `POST`.
 
-### Built-in Cache System
+### Built-in in-memory Cache System
 
 A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based cache, disabled by default and triggered by the `internalCache` flag.
 
-This will improve performance in scenarios where your logic require recurring requests with the same response.
+If, for any reason, you want to avoid the complexity of the standard [Request.cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache), this is the right way to go.
 
 The `IRequestOptions.cacheKey` is the default used to store response objects, it can be...
 
  * provided during the `RestClient` initialization
  * updated via `RestClient.options` property (`RestOptions` methods)
- * overridden on any local `request` method (or the equivalent http shortcuts)
+ * overridden on any local `request` method (or any equivalent http shortcut)
 
 See [Advanced usage](#advanced-usage) to get an example.
 
