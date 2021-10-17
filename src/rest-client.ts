@@ -150,7 +150,6 @@ export default class RestClient {
 		const response: IResponse<TResponse, TError> = {
 			fetchResponse,
 			headers: fetchResponse?.headers,
-			options: this.options,
 			request, data,
 			status: fetchResponse?.status as HTTPStatusCode,
 			repeat(m?: HttpMethod | Partial<IRestOptions>, repeatOptions?: Partial<IRestOptions>) {

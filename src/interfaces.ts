@@ -52,7 +52,6 @@ export interface IResponse<TResponse, TError = any> {
 	status: HTTPStatusCode;
 	headers?: Headers;
 	data: TResponse | null;
-	options: RestOptions;
 	throwFilter?: IResponseFilter<TError>;
 	repeat: IRepeat<TResponse, TError>;
 }
