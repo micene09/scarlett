@@ -10,6 +10,10 @@ export default class RestError<TError> extends Error {
 		this.statusCode = statusCode;
 		this.message = `[${this.statusCode}] ${message}`;
 	}
+	setRequest(request: IRequest) {
+		this.request = request;
+		return this;
+	}
 	setResponse(response: IResponse<any>) {
 		this.data = response.data ? { ...response.data } : null;
 		return this;

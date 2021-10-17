@@ -177,6 +177,7 @@ export default class RestClient {
 			const err = new RestError<TError>(response.status, fetchError.message);
 			err.stack = fetchError.stack;
 			err.setResponse(response);
+			err.setRequest(request);
 			response.error = err;
 		}
 		else if (!parseOk) {
@@ -185,11 +186,13 @@ export default class RestClient {
 				`An error occurred while parsing the response body as ${localOptions.responseType}`
 			);
 			err.setResponse(response);
+			err.setRequest(request);
 			response.error = err;
 		}
 		else if (fetchResponse?.ok === false) {
 			const err = new RestError<TError>(fetchResponse.status, fetchResponse.statusText);
 			err.setResponse(response);
+			err.setRequest(request);
 			response.error = err;
 		}
 

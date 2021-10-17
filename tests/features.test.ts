@@ -97,6 +97,7 @@ describe('Features', () => {
 		const response = await client.get(`/status-code/${handledStatusCode}/empty`)
 		expect(onErrorCallback).not.toBeCalled()
 		expect(response.status).toEqual(handledStatusCode)
+		expect(response.data).toBeNull()
 
 		try {
 			await client.get(`/status-code/404/empty`)
