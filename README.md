@@ -370,9 +370,9 @@ Global handler, running on your `RestClient`'s instance context, called at every
 Global handler, running on your `RestClient`'s instance context, called at every successful response received.
 Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
 
-**onError(error: RestError): void**
+**onError(error: RestError, response: IResponse): void**
 
-Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request. This callback will not be called if the error was filtered by `throwExcluding` option.
+Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
 
 #### request()
 
