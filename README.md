@@ -644,6 +644,7 @@ If you expect a model for your error, you can provide its interface as follows:
 
 ```typescript
 const response = await restClient.get<any, IBackendError>("/status-code/412");
+const data = response.data;         // << response.data property will be null becouse of the error
 const error = response.error?.data; // << error.data property will infer IBackendError interface
 ```
 
