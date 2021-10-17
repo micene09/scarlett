@@ -176,8 +176,6 @@ export default class RestClient {
 				response.status = HTTPStatusCode.RequestTimeout;
 			const err = new RestError<TError>(response.status, fetchError.message);
 			err.stack = fetchError.stack;
-			err.setResponse(response);
-			err.setRequest(request);
 			response.error = err;
 		}
 		else if (!parseOk) {
@@ -185,19 +183,17 @@ export default class RestClient {
 				HTTPStatusCode.ClientErrors,
 				`An error occurred while parsing the response body as ${localOptions.responseType}`
 			);
-			err.setResponse(response);
-			err.setRequest(request);
 			response.error = err;
 		}
 		else if (fetchResponse?.ok === false) {
 			const err = new RestError<TError>(fetchResponse.status, fetchResponse.statusText);
-			err.setResponse(response);
-			err.setRequest(request);
 			response.error = err;
 		}
 
 		let onErrorCalled = false;
 		if (response.error) {
+			response.error.data = response.data ? { ...response.data } as any : undefined;
+			response.error.request = request;
 			response.data = null;
 			const throwFilterFound = localOptions.throwExcluding
 				? localOptions.throwExcluding.find(f => response.error!.throwFilterMatch(f))

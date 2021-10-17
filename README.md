@@ -658,46 +658,19 @@ Properties:
 
 **isRestError (boolean)**
 
-Always true, it's a simple utility prop that can be usefull when using any kind of Two-Way Binding framework.
+Always true, it's a simple utility prop that can be usefull to distinguish the standard `Error` from the `RestError`.
 
 **request (IRequest)**
-
-**response (IResponse`<TResponse, TError>`)**
-
-Where `TError` will be the model type of error object.
 
 **data (TError)**
 
 The error object parsed from response body content.
 
-**code (string | number)**
+**statusCode (string | number)**
 
 It can be the HTTPStatusCode or an internal identifier error string.
 
-**Console Methods:**
-
-Some methods overrides using error code as prefix for messages, example:
-
-```typescript
-errorInstance.consoleWarn("Test Message");
-// -> [error code] Test Message
-```
-
-**consoleTable(...tabularData: any[])**
-
-**consoleWarn(message: string)**
-
-**consoleError(message: string)**
-
 **Methods:**
-
-**setRequest(request: IRequest)**
-
-Set the `request` object for the current error instance.
-
-**setResponse(response: IResponse)**
-
-Set the `response` object for the current error instance.
 
 **throwFilterMatch(filter: IResponseFilter) => boolean**
 
