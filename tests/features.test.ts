@@ -81,12 +81,12 @@ describe('Features', () => {
 			expect(onErrorCallback).not.toBeCalled()
 			ok("Error not thrown as expected.")
 		}
-		catch(e) { fail(e); }
+		catch(e) { fail(e as any); }
 	})
 	test("Throw error enabled, but will not throw on 'special' requests", async () => {
 
 		const handledStatusCode = 502
-		const onErrorCallback = jest.fn(err => err)
+		const onErrorCallback = jest.fn(err => {})
 		const baseOptions = new RestOptions()
 			.set("host", host)
 			.set("responseType", "json")
@@ -94,8 +94,9 @@ describe('Features', () => {
 			.set("throwExcluding", [ { statusCode: handledStatusCode } ])
 		const client = baseOptions.createRestClient()
 
-		await client.get(`/status-code/${handledStatusCode}/empty`)
+		const response = await client.get(`/status-code/${handledStatusCode}/empty`)
 		expect(onErrorCallback).not.toBeCalled()
+		expect(response.status).toEqual(handledStatusCode)
 
 		try {
 			await client.get(`/status-code/404/empty`)
@@ -124,17 +125,6 @@ describe('Features', () => {
 			expect(error.data?.statusCode).toEqual(412);
 		}
 	});
-	test("Errors can be filtered to react properly", async () => {
-		try {
-			const response = await baseClient.get<ITestStatusCodeResponse>("/status-code/412", {
-				throw: true,
-				throwExcluding: [{ method: "GET", statusCode: 412 }]
-			});
-			expect(response.data?.statusCode).toEqual(412);
-			ok("Error filtered successfully.");
-		}
-		catch { fail(); }
-	});
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
 		const ms = 1000;
@@ -157,7 +147,6 @@ describe('Features', () => {
 			responseType: "text",
 			timeout: 1000
 		});
-		expect(response.error?.code).toEqual("timeout");
 		expect(response.status).toEqual(HTTPStatusCode.RequestTimeout);
 	})
 	test("Timeout can also be disabled", async () => {

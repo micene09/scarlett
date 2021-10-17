@@ -32,10 +32,10 @@ export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
 	internalCache: boolean;
 	cacheKey: string;
 	throw: boolean;
-	throwExcluding: IResponseFilter<any, any>[];
+	throwExcluding: IResponseFilter<any>[];
 	onRequest(request: IRequest): void
 	onResponse<TResponse = any, TError = any>(response: IResponse<TResponse, TError>): void
-	onError<TError = any, TResponse = any>(error: RestError<TError, TResponse>): void
+	onError<TError = any, TResponse = any>(error: RestError<TError>, response: TResponse): void
 }
 export interface IRestOptionsGlobals extends IRestOptions, IRestOptionsProtected {}
 export type LocalOverrideStrategy = | "merge" | "assign";
@@ -46,14 +46,14 @@ export interface IRequest {
 	body: any
 }
 export interface IResponse<TResponse, TError = any> {
-	fetchResponse?: Response;
+	fetchResponse: Response | null;
 	request: IRequest;
-	error?: RestError<TError, TResponse>;
+	error?: RestError<TError>;
 	status: HTTPStatusCode;
 	headers?: Headers;
 	data: TResponse | null;
 	options: RestOptions;
-	throwFilter?: IResponseFilter<TResponse, TError>;
+	throwFilter?: IResponseFilter<TError>;
 	repeat: IRepeat<TResponse, TError>;
 }
 export interface IRepeat<TResponse, TError = any> {
@@ -62,12 +62,12 @@ export interface IRepeat<TResponse, TError = any> {
 export interface IRepeat<TResponse, TError = any> {
 	(requestOptions?: Partial<IRestOptions>): Promise<IResponse<TResponse, TError>>
 }
-export interface IResponseFilter<TResponse, TError> {
+export interface IResponseFilter<TError> {
 	path?: string;
 	method?: HttpMethod;
 	statusCode?: HTTPStatusCode;
 	onFilterMatch?: {
-		(restError: RestError<TError, TResponse>): void
+		(restError: RestError<TError>): void
 	};
 }
 export interface IQueryParamTransformer {
@@ -77,7 +77,7 @@ export interface IResponseAny {
 	<TData = any, TError = any>(prom: Promise<any>): Promise<[TData | null, TError | null]>
 }
 export interface IResponseAny {
-	<TResponse>(prom: Promise<TResponse>): Promise<[TResponse | null, Error | RestError<any, TResponse> | null]>
+	<TResponse>(prom: Promise<TResponse>): Promise<[TResponse | null, Error | RestError<any> | null]>
 }
 export type HttpMethod = | 'GET' | 'DELETE' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'LINK';
 export type HttpResponseFormat = | "json" | "text" | "blob" | "arrayBuffer" | "formData";

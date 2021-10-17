@@ -1,44 +1,23 @@
 import { IResponse, IRequest, IResponseFilter } from "./interfaces";
 
-export default class RestError<TError, TResponse = any> extends Error {
+export default class RestError<TError> extends Error {
 	isRestError = true;
 	request?: IRequest;
-	response?: IResponse<TResponse>;
-	code: string | number = "";
+	statusCode: string | number = "";
 	data?: TError;
-	constructor(errorCode: string | number, message: string) {
+	constructor(statusCode: number, message: string) {
 		super(message);
-		this.code = errorCode;
-		this.message = this.decorateErrorMessage(message);
-	}
-	private decorateErrorMessage(message: string) {
-		return `[${this.code}] ${message}`;
-	}
-	consoleTable(...tabularData: any[]) {
-		console.table(...tabularData);
-		return this;
-	}
-	consoleWarn(message: string) {
-		console.warn(this.decorateErrorMessage(message));
-		return this;
-	}
-	consoleError(message: string) {
-		console.error(this.decorateErrorMessage(message));
-		return this;
-	}
-	setRequest(request: IRequest) {
-		this.request = request;
-		return this;
+		this.statusCode = statusCode;
+		this.message = `[${this.statusCode}] ${message}`;
 	}
 	setResponse(response: IResponse<any>) {
-		this.response = response;
-		this.data = response.data;
+		this.data = response.data ? { ...response.data } : null;
 		return this;
 	}
-	throwFilterMatch(flt: IResponseFilter<any, TError>): boolean {
-		if (!this.request || !this.response) return false;
+	throwFilterMatch(flt: IResponseFilter<TError>): boolean {
+		if (!this.request || !this.statusCode) return false;
 		return (!flt.path || this.request.url.href.indexOf(flt.path) > -1)
 			&& (!flt.method || flt.method.toLowerCase() === this.request.method.toLowerCase())
-			&& (!flt.statusCode || Boolean(flt.statusCode === this.response.status));
+			&& (!flt.statusCode || Boolean(flt.statusCode === this.statusCode));
 	}
 }

@@ -172,31 +172,32 @@ export default class RestClient {
 		};
 
 		if (fetchError) {
-			const ser = new RestError<TError, TResponse>(fetchError.name, fetchError.message);
-			ser.stack = fetchError.stack;
-			if (ser.code === "timeout")
+			if (fetchError.name === "timeout")
 				response.status = HTTPStatusCode.RequestTimeout;
-			ser.setRequest(request);
-			ser.setResponse(response);
-			response.error = ser;
+			const err = new RestError<TError>(response.status, fetchError.message);
+			err.stack = fetchError.stack;
+			err.setResponse(response);
+			response.error = err;
 		}
 		else if (!parseOk) {
-			const ser = new RestError<TError, TResponse>("BodyParseError", `An error occurred while parsing the response body as ${localOptions.responseType}`);
-			ser.setRequest(request);
-			ser.setResponse(response);
-			response.error = ser;
+			const err = new RestError<TError>(
+				HTTPStatusCode.ClientErrors,
+				`An error occurred while parsing the response body as ${localOptions.responseType}`
+			);
+			err.setResponse(response);
+			response.error = err;
 		}
 		else if (fetchResponse?.ok === false) {
-			const ser = new RestError<TError, TResponse>(fetchResponse.status, fetchResponse.statusText);
-			ser.setRequest(request);
-			ser.setResponse(response);
-			response.error = ser;
+			const err = new RestError<TError>(fetchResponse.status, fetchResponse.statusText);
+			err.setResponse(response);
+			response.error = err;
 		}
 
 		let onErrorCalled = false;
 		if (response.error) {
+			response.data = null;
 			const throwFilterFound = localOptions.throwExcluding
-				? localOptions.throwExcluding.find((f: any) => response!.error!.throwFilterMatch(f))
+				? localOptions.throwExcluding.find(f => response.error!.throwFilterMatch(f))
 				: false;
 			const shouldThrow = Boolean(localOptions.throw
 				? localOptions.throw
@@ -211,7 +212,7 @@ export default class RestClient {
 				const onError = this.options.get("onError");
 				if (typeof onError == "function") {
 					onErrorCalled = true;
-					onError(response.error);
+					onError(response.error, response);
 				}
 				else throw response.error;
 			}

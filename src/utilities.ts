@@ -1,3 +1,4 @@
+import { HTTPStatusCode } from ".";
 import { HttpResponseFormat, IRestOptionsQuery, IKeyValue, IResponseAny } from "./interfaces";
 import RestError from "./rest-error";
 
@@ -21,7 +22,7 @@ export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) 
 
 			if (t !== "string" && t !== "undefined" && newval !== null)
 				throw new RestError(
-					"ArgumentException",
+					HTTPStatusCode.ClientErrors,
 					`Invalid type for '${key}' parameter: \r\n${JSON.stringify(newval)}`
 				);
 			url.searchParams.delete(key);
