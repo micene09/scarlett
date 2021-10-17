@@ -605,11 +605,11 @@ Override with *options* using the `merge` strategy.
 
 Override with *options* using the `assign` strategy.
 
-**createRestClient ()**
+**createRestClient()**
 
 Will return a new `RestClient` based on the current options.
 
-**setFactory (factoryClass: typeof `RestClient`)**
+**setFactory(factoryClass: typeof `RestClient`)**
 
 Supposing that you created a new Class, that extends the default RestClient (see [Advanced usage](#advanced-usage)), you can override the default factory class with this method.
 
