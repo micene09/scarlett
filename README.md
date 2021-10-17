@@ -1,13 +1,14 @@
 <!-- omit in toc -->
 <img src="https://github.com/Micene09/scarlett/blob/master/logo.jpg?raw=true">
 
-> A strongly typed, Typescript powered, rest client library based on Fetch API.
+> A strongly typed, Typescript powered, with zero dependencies, rest client library based on Fetch API.
 
 <!-- omit in toc -->
 ## Key features
 
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) & [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based rest client
 * Class style
+* Zero dependencies to ensure the smallest bundle
 * Typescript powered, primary goal >> *strongly-typed*
 * Centralized config (via constructor) with optional local overrides on http methods
 * Advanced options override tecniques
