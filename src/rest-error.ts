@@ -5,7 +5,7 @@ export default class RestError<TError> extends Error {
 	request?: IRequest;
 	statusCode: string | number = "";
 	data?: TError;
-	constructor(statusCode: number, message: string) {
+	constructor(statusCode: string | number, message: string) {
 		super(message);
 		this.statusCode = statusCode;
 		this.message = `[${this.statusCode}] ${message}`;

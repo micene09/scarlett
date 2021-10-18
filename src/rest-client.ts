@@ -171,15 +171,14 @@ export default class RestClient {
 		};
 
 		if (fetchError) {
-			if (fetchError.name === "timeout")
-				response.status = HTTPStatusCode.RequestTimeout;
-			const err = new RestError<TError>(response.status, fetchError.message);
+			const status = fetchError.name === "timeout" ? "timeout" : response.status;
+			const err = new RestError<TError>(status, fetchError.message);
 			err.stack = fetchError.stack;
 			response.error = err;
 		}
 		else if (!parseOk) {
 			const err = new RestError<TError>(
-				HTTPStatusCode.ClientErrors,
+				"body-parse-error",
 				`An error occurred while parsing the response body as ${localOptions.responseType}`
 			);
 			response.error = err;

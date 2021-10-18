@@ -148,7 +148,8 @@ describe('Features', () => {
 			responseType: "text",
 			timeout: 1000
 		});
-		expect(response.status).toEqual(HTTPStatusCode.RequestTimeout);
+		expect(response.status).toBeUndefined()
+		expect(response.error?.statusCode).toEqual("timeout")
 	})
 	test("Timeout can also be disabled", async () => {
 		const rest = baseClient.options.clone()
@@ -158,7 +159,7 @@ describe('Features', () => {
 			.createRestClient();
 		const response = await rest.get<string>(`/reply-in/1000/milliseconds`);
 		expect(response.error).toBeFalsy();
-		expect(response.status).not.toEqual(HTTPStatusCode.RequestTimeout);
+		expect(response.error?.statusCode).not.toEqual("timeout");
 	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
