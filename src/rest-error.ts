@@ -1,8 +1,9 @@
-import { IResponse, IRequest, IResponseFilter } from "./interfaces";
+import { IRequest, IResponseFilter } from "./interfaces";
 
 export default class RestError<TError> extends Error {
 	isRestError = true;
 	request?: IRequest;
+	fetchResponse?: Response;
 	statusCode: string | number = "";
 	data?: TError;
 	constructor(statusCode: string | number, message: string) {

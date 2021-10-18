@@ -192,6 +192,7 @@ export default class RestClient {
 		if (response.error) {
 			response.error.data = response.data ? { ...response.data } as any : undefined;
 			response.error.request = request;
+			response.error.fetchResponse = fetchResponse ?? undefined;
 			response.data = null;
 			const throwFilterFound = localOptions.throwExcluding
 				? localOptions.throwExcluding.find(f => response.error!.throwFilterMatch(f))
