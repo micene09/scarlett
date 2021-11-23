@@ -5,9 +5,9 @@ export default class RestError<TError> extends Error {
 	isRestError = true;
 	request?: IRequest;
 	fetchResponse?: Response;
-	statusCode: HTTPStatusCode | "timeout" | "body-parse-error" | null = null;
+	statusCode: HTTPStatusCode | undefined;
 	data?: TError;
-	constructor(statusCode: HTTPStatusCode | "timeout" | "body-parse-error", message: string) {
+	constructor(message: string, statusCode?: HTTPStatusCode) {
 		super(message);
 		this.statusCode = statusCode;
 		this.message = message;
