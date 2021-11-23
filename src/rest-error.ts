@@ -5,11 +5,13 @@ export default class RestError<TError> extends Error {
 	isRestError = true;
 	request?: IRequest;
 	fetchResponse?: Response;
+	code: "Timeout" | "BodyParse" | "UrlParameter" | undefined;
 	statusCode: HTTPStatusCode | undefined;
 	data?: TError;
-	constructor(message: string, statusCode?: HTTPStatusCode) {
+	constructor(message: string, statusCode?: HTTPStatusCode, code?: "Timeout" | "BodyParse" | "UrlParameter") {
 		super(message);
 		this.statusCode = statusCode;
+		this.code = code;
 		this.message = message;
 	}
 	throwFilterMatch(flt: IResponseFilter<TError>): boolean {

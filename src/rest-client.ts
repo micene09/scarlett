@@ -86,6 +86,8 @@ export default class RestClient {
 			const cachedResponse = this.cacheGet<TResponse>(url, method);
 			if (cachedResponse) return cachedResponse;
 		}
+		if (!localOptions.abortController)
+			localOptions.abortController = new AbortController();
 
 		const request: IRequest = {
 			method, options: localOptions, url,
@@ -96,24 +98,9 @@ export default class RestClient {
 		if (typeof onRequest == "function")
 			onRequest(request);
 
+		let timeoutTriggered = false;
+		let fetchFullFilled = false;
 		const [fetchResponse, fetchError] = await resolveAny<Response, Error>(new Promise((resolve, reject) => {
-
-			let timeoutTriggered = false;
-			let fetchFullFilled = false;
-			const timeoutId = localOptions.timeout
-				? setTimeout(function requestTimeout() {
-					if (fetchFullFilled) return;
-					timeoutTriggered = true;
-					localOptions.abortController?.abort();
-					let timeoutError = new Error();
-					timeoutError.name = "timeout";
-					const seconds = (localOptions.timeout!/1000).toFixed(2);
-					const secondsIsOne = (localOptions.timeout!/1000).toFixed(1).replace(".0", "") == "1";
-					timeoutError.message = `Request timed out after ${seconds} second${secondsIsOne ? "" : "s"}.`;
-					reject(timeoutError);
-				}, localOptions.timeout)
-				: null;
-
 			const req: RequestInit = {
 				method,
 				body: method === "GET" ? undefined : transformRequestBody(localOptions.body),
@@ -127,26 +114,34 @@ export default class RestClient {
 				referrerPolicy: localOptions.referrerPolicy,
 				referrer: localOptions.referrer
 			};
+			const timeoutId = localOptions.timeout
+				? setTimeout(onRequestTimeout, localOptions.timeout)
+				: null;
+			function onRequestTimeout() {
+				if (fetchFullFilled) return;
+				timeoutTriggered = true;
+				localOptions.abortController?.abort();
+				reject(new Error("timeout"));
+			}
+			function stopTimeout() {
+				if (!timeoutId || timeoutTriggered) return;
+				clearTimeout(timeoutId);
+				timeoutTriggered = false;
+			};
 			fetch(url.href, req)
 				.then((response) => {
-					if (timeoutTriggered) return;
-					else if (timeoutId)
-						clearTimeout(timeoutId);
-
+					stopTimeout();
 					fetchFullFilled = true;
 					resolve(response);
 				})
-				.catch((error) => {
-					if (timeoutId)
-						clearTimeout(timeoutId);
-
-					fetchFullFilled = true;
+				.catch(error => {
+					stopTimeout();
 					reject(error);
 				});
 		}));
 
 		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, localOptions.responseType);
-
+		const isTimeout = fetchError?.message && timeoutTriggered && !fetchFullFilled;
 		const response: IResponse<TResponse, TError> = {
 			fetchResponse,
 			headers: fetchResponse?.headers,
@@ -170,21 +165,21 @@ export default class RestClient {
 			}
 		};
 
-		if (fetchError) {
-			const status = fetchError.name === "timeout" ? "timeout" : response.status;
-			const err = new RestError<TError>(status, fetchError.message);
+		if (!parseOk || isTimeout) {
+			const seconds = (localOptions.timeout!/1000).toFixed(2);
+			const secondsIsOne = (localOptions.timeout!/1000).toFixed(1).replace(".0", "") == "1";
+			const message = isTimeout
+				? `Request timed out after ${seconds} second${secondsIsOne ? "" : "s"}.`
+				: `An error occurred while parsing the response body as ${localOptions.responseType}`
+			response.error = new RestError<TError>(message, undefined, isTimeout ? "Timeout" : "BodyParse");
+		}
+		else if (fetchError) {
+			const err = new RestError<TError>(fetchError.message, response.status);
 			err.stack = fetchError.stack;
 			response.error = err;
 		}
-		else if (!parseOk) {
-			const err = new RestError<TError>(
-				"body-parse-error",
-				`An error occurred while parsing the response body as ${localOptions.responseType}`
-			);
-			response.error = err;
-		}
 		else if (fetchResponse?.ok === false) {
-			const err = new RestError<TError>(fetchResponse.status, fetchResponse.statusText);
+			const err = new RestError<TError>(fetchResponse.statusText, fetchResponse.status);
 			response.error = err;
 		}
 
@@ -215,7 +210,6 @@ export default class RestClient {
 				else throw response.error;
 			}
 		}
-
 		if (localOptions.internalCache)
 			this.cacheSet(response);
 

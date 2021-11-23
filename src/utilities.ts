@@ -21,7 +21,11 @@ export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) 
 			const t = typeof newval;
 
 			if (t !== "string" && t !== "undefined" && newval !== null)
-				throw new RestError(`Invalid type for '${key}' parameter: \r\n${JSON.stringify(newval)}`);
+				throw new RestError(
+					`Invalid type for '${key}' parameter: \r\n${JSON.stringify(newval)}`,
+					undefined,
+					"UrlParameter"
+				);
 			url.searchParams.delete(key);
 			if (newval)
 				url.searchParams.append(key, newval);

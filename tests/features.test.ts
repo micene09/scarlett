@@ -1,5 +1,4 @@
 import RestClient, { RestError, RestOptions } from "../lib/index";
-import { HTTPStatusCode } from "../src/interfaces";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { fail, ok } from "assert";
 
@@ -146,10 +145,10 @@ describe('Features', () => {
 		const ms = 2000;
 		const response = await baseClient.get<string>(`/reply-in/${ms}/milliseconds`, {
 			responseType: "text",
-			timeout: 1000
+			timeout: 100
 		});
 		expect(response.status).toBeUndefined()
-		expect(response.error?.statusCode).toEqual("timeout")
+		expect(response.error?.code).toEqual("Timeout")
 	})
 	test("Timeout can also be disabled", async () => {
 		const rest = baseClient.options.clone()
