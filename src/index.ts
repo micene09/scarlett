@@ -7,5 +7,5 @@ export { RestOptions, RestError };
 export {
 	IResponse, IRequest,
 	IRestOptions, IRestOptionsQuery, IRestOptionsProtected, IRestOptionsGlobals, IRestOptionsNative,
-	IQueryParamTransformer, LocalOverrideStrategy, IResponseFilter,
+	IQueryParamTransformer, LocalOverrideStrategy, IResponseFilter, InternalErrorCode,
 	HttpResponseFormat, HttpMethod, HTTPStatusCode } from './interfaces';

@@ -32,7 +32,7 @@ export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
 	internalCache: boolean;
 	cacheKey: string;
 	throw: boolean;
-	throwExcluding: IResponseFilter<any>[];
+	throwExcluding: IResponseFilter[];
 	onRequest(request: IRequest): void
 	onResponse<TResponse = any, TError = any>(response: IResponse<TResponse, TError>): void
 	onError<TError = any, TResponse = any>(error: RestError<TError>, response: TResponse): void
@@ -52,7 +52,7 @@ export interface IResponse<TResponse, TError = any> {
 	status: HTTPStatusCode;
 	headers?: Headers;
 	data: TResponse | null;
-	throwFilter?: IResponseFilter<TError>;
+	throwFilter?: IResponseFilter;
 	repeat: IRepeat<TResponse, TError>;
 }
 export interface IRepeat<TResponse, TError = any> {
@@ -61,14 +61,13 @@ export interface IRepeat<TResponse, TError = any> {
 export interface IRepeat<TResponse, TError = any> {
 	(requestOptions?: Partial<IRestOptions>): Promise<IResponse<TResponse, TError>>
 }
-export interface IResponseFilter<TError> {
+export interface IResponseFilter {
 	path?: string;
 	method?: HttpMethod;
 	statusCode?: HTTPStatusCode;
-	onFilterMatch?: {
-		(restError: RestError<TError>): void
-	};
+	errorCode?: InternalErrorCode;
 }
+export type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
 export interface IQueryParamTransformer {
 	(key: string, value: any, query: any): string
 }

@@ -158,7 +158,16 @@ describe('Features', () => {
 			.createRestClient();
 		const response = await rest.get<string>(`/reply-in/1000/milliseconds`);
 		expect(response.error).toBeFalsy();
-		expect(response.error?.statusCode).not.toEqual("timeout");
+	})
+	test("Timeout error handling", async () => {
+		const rest = baseClient.options.clone()
+			.set("responseType", "text")
+			.set("timeout", 100)
+			.set("throwExcluding", [{ errorCode: "Timeout" }])
+			.createRestClient();
+
+		const response = await rest.get<string>(`/reply-in/1000/milliseconds`);
+		expect(response.error?.code).toEqual("Timeout");
 	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";

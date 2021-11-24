@@ -124,17 +124,20 @@ export default class RestClient {
 				reject(new Error("timeout"));
 			}
 			function stopTimeout() {
-				if (!timeoutId || timeoutTriggered) return;
-				clearTimeout(timeoutId);
+				if (timeoutId)
+					clearTimeout(timeoutId);
+				if (timeoutTriggered) return;
 				timeoutTriggered = false;
 			};
 			fetch(url.href, req)
 				.then((response) => {
+					if (timeoutTriggered) return;
 					stopTimeout();
 					fetchFullFilled = true;
 					resolve(response);
 				})
 				.catch(error => {
+					if (timeoutTriggered) return;
 					stopTimeout();
 					reject(error);
 				});
@@ -196,11 +199,8 @@ export default class RestClient {
 				? localOptions.throw
 				: localOptions.throwExcluding?.length)
 
-			if (throwFilterFound) {
+			if (throwFilterFound)
 				response.throwFilter = throwFilterFound;
-				if (typeof throwFilterFound.onFilterMatch === "function")
-					throwFilterFound.onFilterMatch(response.error);
-			}
 			else if (shouldThrow) {
 				const onError = this.options.get("onError");
 				if (typeof onError == "function") {

@@ -338,9 +338,6 @@ interface IResponseFilter {
 	path?: string
 	method?: HttpMethod
 	statusCode?: HTTPStatusCode
-	onFilterMatch?: {
-		(error: RestError): void
-	}
 }
 ```
 
@@ -673,14 +670,6 @@ The error object parsed from response body content.
 **statusCode (string | number)**
 
 It can be the HTTPStatusCode or an internal identifier error string.
-
-**Methods:**
-
-**throwFilterMatch(filter: IResponseFilter) => boolean**
-
-Check if `response` object match with the `filter` provided.
-
-This method is used internally by `RestClient`.
 
 ## Testing
 
