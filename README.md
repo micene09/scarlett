@@ -331,14 +331,33 @@ Defaults to false.
 
 Even when you throwing error on failed requests, sometimes you may need to filter this errors and react properly without throwing.
 
-You can do this providing an array of `IResponseFilter`:
+You can do this providing an array of `IResponseFilter`.
+
+A filter can be defined as object:
 
 ```typescript
-interface IResponseFilter {
-	path?: string
-	method?: HttpMethod
-	statusCode?: HTTPStatusCode
-}
+await client.get(`/example`, {
+	throwExcluding: [{ // every prop here is optional
+		path: "/example", // filter based on url path
+		method: "GET",
+		statusCode: 404,
+		errorCode: "Timeout", // the internal error code
+	}]
+})
+```
+
+...or as sync/async method returning `true` to prevent the `throw`:
+
+```typescript
+await client.get(`/example`, {
+	throwExcluding: [
+		async (err) => {
+			let willPreventError = true;
+			// ...awaitable methods here...
+			return willPreventError;
+		}
+	]
+})
 ```
 
 If a failed request match one of the objects provided, your rest client instance will not throw any error.
@@ -556,7 +575,7 @@ Clears every cache entry in a `RestClient` instance context.
 
 ### RestOptions
 
-Every instance of RestClient will have a public property named **options**, this is just an instance of `RestOptions` class.
+Every instance of RestClient will have a public property named **options**, this is just an instance of `RestOptions`.
 
 You can access and modify the global options of your rest client instance using his methods.
 
@@ -652,7 +671,7 @@ You can event import it and create an instance to extend your business logic:
 
 ```typescript
 import { RestError } from "scarlett";
-const err = new RestError<IBackendError>();
+const err = new RestError<IBackendError>("The Error Message");
 ```
 
 Properties:
@@ -663,13 +682,19 @@ Always true, it's a simple utility prop that can be usefull to distinguish the s
 
 **request (IRequest)**
 
+**fetchResponse ([Response](https://developer.mozilla.org/en-US/docs/Web/API/Response))**
+
 **data (TError)**
 
 The error object parsed from response body content.
 
-**statusCode (string | number)**
+**statusCode (number)**
 
-It can be the HTTPStatusCode or an internal identifier error string.
+It can be the HTTPStatusCode.
+
+**code ("Timeout" | "BodyParse" | "UrlParameter")**
+
+Internal error code, not provided by the server.
 
 ## Testing
 
