@@ -106,6 +106,42 @@ describe('Features', () => {
 			expect(onErrorCallback).toBeCalled()
 		}
 	});
+	test("Throw error enabled, excluding errors via custom hook functions", async () => {
+		const baseOptions = new RestOptions()
+			.set("host", host)
+			.set("responseType", "json")
+		const client = baseOptions.createRestClient()
+
+		const businessApiCall = jest.fn((body: any) => new Promise<void>(resolve => {
+			setTimeout(resolve, 300);
+		}));
+		const businessApiTrigger = 405;
+
+		client.options.set("throwExcluding", [
+			{ statusCode: 404 },
+			err => err.statusCode === 401,
+			async (err) => {
+				let isMatchingBusinessLogic = false;
+				if (err.statusCode === businessApiTrigger) {
+					await businessApiCall(err.data);
+					isMatchingBusinessLogic = true;
+				}
+				return isMatchingBusinessLogic;
+			},
+			{ statusCode: 409 }
+		]);
+
+		await client.get(`/status-code/404`)
+		await client.get(`/status-code/${businessApiTrigger}`)
+		await client.get(`/status-code/409`)
+		expect(businessApiCall).toBeCalledTimes(1)
+		try {
+			await client.get(`/status-code/500`)
+			fail("Expected to throw error")
+		} catch (error) {
+			ok(error, "Error thrown as expected")
+		}
+	});
 	test("Custom Error Object Interfaces", async () => {
 
 		const response = await baseClient.get<any, ITestStatusCodeResponse>("/status-code/412");

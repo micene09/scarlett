@@ -192,22 +192,19 @@ export default class RestClient {
 			response.error.request = request;
 			response.error.fetchResponse = fetchResponse ?? undefined;
 			response.data = null;
-			const throwFilterFound = localOptions.throwExcluding
-				? localOptions.throwExcluding.find(f => response.error!.throwFilterMatch(f))
-				: false;
-			const shouldThrow = Boolean(localOptions.throw
-				? localOptions.throw
-				: localOptions.throwExcluding?.length)
-
-			if (throwFilterFound)
-				response.throwFilter = throwFilterFound;
-			else if (shouldThrow) {
-				const onError = this.options.get("onError");
-				if (typeof onError == "function") {
-					onErrorCalled = true;
-					onError(response.error, response);
+			const couldThrow = Boolean(localOptions.throw || localOptions.throwExcluding?.length);
+			if (couldThrow) {
+				const throwFilterFound = await response.error.findMatch(localOptions.throwExcluding ?? []);
+				if (throwFilterFound)
+					response.throwFilter = throwFilterFound;
+				else {
+					const onError = this.options.get("onError");
+					if (typeof onError == "function") {
+						onErrorCalled = true;
+						onError(response.error, response);
+					}
+					else throw response.error;
 				}
-				else throw response.error;
 			}
 		}
 		if (localOptions.internalCache)
