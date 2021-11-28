@@ -1,6 +1,6 @@
 import RestClient from './rest-client';
 import RestError from './rest-error';
-import { RestOptions } from './rest-options';
+import RestOptions from './rest-options';
 
 export default RestClient;
 export { RestOptions, RestError };

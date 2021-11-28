@@ -1,5 +1,4 @@
 import RestError from "./rest-error";
-import { RestOptions } from "./rest-options";
 
 export interface IKeyValue {
 	[key: string]: any

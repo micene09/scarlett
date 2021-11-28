@@ -1,7 +1,7 @@
 import { IRestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode, IRestOptionsGlobals } from './interfaces';
 import RestError from "./rest-error";
 import { getRequestUrl, setUrlParameters, resolveAny, transformResponseBody, transformRequestBody, mergeObject, cloneObject } from './utilities';
-import { RestOptions } from "./rest-options";
+import RestOptions from "./rest-options";
 
 export default class RestClient {
 	private _cache = new Map<string, IResponse<any>>();

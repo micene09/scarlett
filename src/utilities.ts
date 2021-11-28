@@ -1,4 +1,3 @@
-import { HTTPStatusCode } from ".";
 import { HttpResponseFormat, IRestOptionsQuery, IKeyValue, IResponseAny } from "./interfaces";
 import RestError from "./rest-error";
 

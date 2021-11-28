@@ -2,7 +2,7 @@ import { IRestOptions, IRestOptionsGlobals } from './interfaces';
 import RestClient from '.';
 import { cloneObject, mergeObject, cloneValue } from './utilities';
 
-export class RestOptions {
+export default class RestOptions {
 	private _options: Partial<IRestOptionsGlobals>;
 	private _restFactory: typeof RestClient;
 	constructor(options?: Partial<IRestOptionsGlobals>, factoryClass?: typeof RestClient) {
