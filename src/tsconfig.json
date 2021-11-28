@@ -1,9 +1,0 @@
-{
-	"extends": "../tsconfig.json",
-	"include": ["./**/*.ts"],
-	"compilerOptions": {
-		"noImplicitAny": true,
-		"sourceMap": true,
-		"lib": [ "ES2020", "dom" ]
-	}
-}

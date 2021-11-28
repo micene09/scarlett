@@ -9,7 +9,6 @@
 		"test": "jest",
 		"build": "rollup --config",
 		"build:es3": "rollup --config --es3",
-		"build:declarations": "tsc -p src/tsconfig.d.json",
 		"release": "dotenv release-it"
 	},
 	"files": [

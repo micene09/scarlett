@@ -3,7 +3,16 @@ import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 const input = "src/index.ts";
-const output = "./lib/index";
+const outDir = "./lib";
+const output = `${outDir}/index`;
+
+/** @type {import('rollup').RollupTypescriptOptions} */
+const tsOptions = {
+	tsconfig: "./tsconfig.json",
+	declaration: true,
+	declarationDir: ".",
+	include: [ "src/**/*.ts" ],
+};
 
 /** @type {import('rollup').RollupOptions} */
 const options = {
@@ -40,9 +49,7 @@ const options = {
 		}
 	],
 	plugins: [
-		typescript({
-			tsconfig: "src/tsconfig.json"
-		}),
+		typescript(tsOptions),
 		resolve()
 	]
 };
@@ -64,9 +71,10 @@ const es3Options = {
 	],
 	plugins: [
 		typescript({
-			tsconfig: "src/tsconfig.json",
+			...tsOptions,
 			lib: ["es5", "es6", "dom"],
-			target: "ES3"
+			target: "ES3",
+			declaration: false
 		}),
 		resolve()
 	]

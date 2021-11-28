@@ -61,7 +61,7 @@ or
 
 ### Required Polyfills
 
-As `tsconfig.json`, sources are compiled to`ES2019`, keep in mind that **polyfills are not included**.
+As `tsconfig.json`, sources are compiled to`ES2021`, keep in mind that **polyfills are not included**.
 
 Scarlett will require the following APIs:
 
