@@ -1,4 +1,4 @@
-import RestClient, { RestError, RestOptions } from "../lib/index";
+import RestClient, { RestError, RestOptions } from "../src/index";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { fail, ok } from "assert";
 
@@ -9,7 +9,8 @@ beforeAll(async () => {
 	host = await startWebServer();
 	baseOptions = new RestOptions()
 		.set("host", host)
-		.set("responseType", "json");
+		.set("responseType", "json")
+		.set("throw", true);
 	baseClient = baseOptions.createRestClient();
 });
 afterAll(() => {
@@ -144,7 +145,7 @@ describe('Features', () => {
 	});
 	test("Custom Error Object Interfaces", async () => {
 
-		const response = await baseClient.get<any, ITestStatusCodeResponse>("/status-code/412");
+		const response = await baseClient.get<any, ITestStatusCodeResponse>("/status-code/412", { throw: false });
 		const errorData = response?.error?.data;
 		// intellisense here should work data prop:
 		expect(errorData?.statusText).toEqual("CustomStatusCode");
@@ -181,7 +182,8 @@ describe('Features', () => {
 		const ms = 2000;
 		const response = await baseClient.get<string>(`/reply-in/${ms}/milliseconds`, {
 			responseType: "text",
-			timeout: 100
+			timeout: 100,
+			throw: false
 		});
 		expect(response.status).toBeUndefined()
 		expect(response.error?.code).toEqual("Timeout")
