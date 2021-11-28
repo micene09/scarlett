@@ -37,9 +37,9 @@ export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) 
 			url.searchParams.append(key, value ?? "")
 		});
 }
-export async function transformResponseBody<T>(response: Response | null = null, responseType: HttpResponseFormat = "json"): Promise<[boolean, T | null]> {
+export async function transformResponseBody<T>(response: Response | null = null, responseType: HttpResponseFormat = "json"): Promise<[boolean | null, T | null]> {
 	if (!response)
-		return [false, null];
+		return [null, null];
 
 	if (response.status === 204)
 		return [true, null];
