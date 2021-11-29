@@ -144,7 +144,9 @@ export default class RestClient {
 		}));
 
 		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, localOptions.responseType);
-		const isTimeout = fetchError?.message && timeoutTriggered && !fetchFullFilled;
+		const isBodyParseError = parseOk === false;
+		const isTimeout = timeoutTriggered && !fetchFullFilled;
+		const isAbort = fetchError?.name === 'AbortError' && !fetchFullFilled;
 		const response: IResponse<TResponse, TError> = {
 			fetchResponse,
 			headers: fetchResponse?.headers,
@@ -168,12 +170,12 @@ export default class RestClient {
 			}
 		};
 
-		if (!parseOk || isTimeout) {
+		if (isBodyParseError || isTimeout || isAbort) {
 			const seconds = (localOptions.timeout!/1000).toFixed(2);
 			const secondsIsOne = (localOptions.timeout!/1000).toFixed(1).replace(".0", "") == "1";
-			const message = isTimeout
-				? `Request timed out after ${seconds} second${secondsIsOne ? "" : "s"}.`
-				: `An error occurred while parsing the response body as ${localOptions.responseType}`
+			const message = isTimeout ? `Request timed out after ${seconds} second${secondsIsOne ? "" : "s"}`
+				: isBodyParseError ? `An error occurred while parsing the response body as ${localOptions.responseType}`
+				: isAbort ? `Request aborted` : ""
 			response.error = new RestError<TError>(message, undefined, isTimeout ? "Timeout" : "BodyParse");
 		}
 		else if (fetchError) {
@@ -187,7 +189,7 @@ export default class RestClient {
 		}
 
 		let onErrorCalled = false;
-		if (response.error) {
+		if (response.error && !isAbort) {
 			response.error.data = response.data ? { ...response.data } as any : undefined;
 			response.error.request = request;
 			response.error.fetchResponse = fetchResponse ?? undefined;

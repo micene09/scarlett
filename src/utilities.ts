@@ -77,7 +77,7 @@ export const resolveAny: IResponseAny = (prom: Promise<any>) => {
 export function cloneObject (obj: IKeyValue) {
 	let cloned: IKeyValue = {};
 	for (let [key] of Object.entries(obj)) {
-		const clonedVal  = cloneValue(obj, key);
+		const clonedVal = cloneValue(obj, key);
 		cloned[key] = clonedVal;
 	}
 	return cloned;
@@ -89,7 +89,7 @@ export function cloneValue (original: IKeyValue, propName: string | number): any
 	else if (type === "number") return Number(oldval);
 	else if (type === "boolean") return Boolean(oldval);
 	else if (globalThis.Headers && oldval instanceof Headers) return new Headers(oldval);
-	else if (globalThis.AbortController && oldval instanceof AbortController) return new AbortController();
+	else if (globalThis.AbortController && oldval instanceof AbortController) return oldval;
 	else if (globalThis.FormData && oldval instanceof FormData) {
 		const cloned = new FormData();
 		oldval.forEach((value, key) => cloned.append(key, value));
@@ -111,6 +111,8 @@ export function mergeValue (original: IKeyValue, mergeWith: IKeyValue, propName:
 	const newval = mergeWith[propName];
 	if (typeof newval === "undefined" || newval === null)
 		return oldval;
+	else if (newval instanceof AbortController)
+		return newval;
 	else if (Array.isArray(newval)) return oldval ? [...oldval, ...newval] : newval;
 	else if (newval instanceof Headers) {
 		const headers = (oldval as Headers);

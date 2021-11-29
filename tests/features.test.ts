@@ -207,6 +207,19 @@ describe('Features', () => {
 		const response = await rest.get<string>(`/reply-in/1000/milliseconds`);
 		expect(response.error?.code).toEqual("Timeout");
 	})
+	test("Abort request supported", async () => {
+		const abortController = new AbortController()
+		const rest = baseClient.options.clone()
+			.set("responseType", "text")
+			.createRestClient()
+		const milliseconds = 10000;
+
+		const requestedAt = Date.now()
+		setTimeout(() => abortController.abort(), 200)
+		await rest.get<string>(`/reply-in/${milliseconds}/milliseconds`, { abortController })
+		const elapsed = Date.now() - requestedAt
+		expect(elapsed).toBeLessThan(milliseconds)
+	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
 
