@@ -178,7 +178,7 @@ describe('Features', () => {
 		const t2 = await repliedIn();
 		expect(t2).toBeLessThan(t1);
 	});
-	test("Support for timeout requests", async () => {
+	test("Supported timeout on requests", async () => {
 		const ms = 2000;
 		const response = await baseClient.get<string>(`/reply-in/${ms}/milliseconds`, {
 			responseType: "text",
@@ -223,20 +223,19 @@ describe('Features', () => {
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
 
-		const firstR = await baseClient.get<any>("/mirror", {
-			responseType: "json",
+		const firstR = await baseClient.get<ITestMirrorResponse>("/mirror", {
 			query: { a: "1", b: "2", c: 3 }
 		});
-		expect(firstR.data.queryString).toEqual(expected);
+		expect(firstR.data?.queryString).toEqual(expected);
 
 		const secondR = await firstR.repeat();
-		expect(secondR.data.queryString).toEqual(expected);
+		expect(secondR.data?.queryString).toEqual(expected);
 
 		const thirdR = await secondR.repeat({
 			queryParamsIncludeEmpty: true,
 			query: { a: "1", b: "2", c: 3, d: "" }
 		});
-		expect(thirdR.data.queryString).toEqual(expected + "&d=");
+		expect(thirdR.data?.queryString).toEqual(expected + "&d=");
 	})
 	test("RestOptions builder", async () => {
 		const restOpts1 = baseClient.options.clone()

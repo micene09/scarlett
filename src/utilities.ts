@@ -85,19 +85,21 @@ export function cloneObject (obj: IKeyValue) {
 export function cloneValue (original: IKeyValue, propName: string | number): any {
 	const oldval = original[propName];
 	const type = typeof oldval;
+	if (oldval === null) return null;
+	if (type === "function") return oldval;
 	if (type === "string") return String(oldval);
-	else if (type === "number") return Number(oldval);
-	else if (type === "boolean") return Boolean(oldval);
-	else if (globalThis.Headers && oldval instanceof Headers) return new Headers(oldval);
-	else if (globalThis.AbortController && oldval instanceof AbortController) return oldval;
-	else if (globalThis.FormData && oldval instanceof FormData) {
+	if (type === "number") return Number(oldval);
+	if (type === "boolean") return Boolean(oldval);
+	if (type === "undefined") return undefined;
+	if (globalThis.Headers && oldval instanceof Headers) return new Headers(oldval);
+	if (globalThis.AbortController && oldval instanceof AbortController) return new AbortController();
+	if (globalThis.FormData && oldval instanceof FormData) {
 		const cloned = new FormData();
 		oldval.forEach((value, key) => cloned.append(key, value));
 		return cloned;
 	}
-	else if (Array.isArray(oldval)) return oldval.map((v, i) => cloneValue(oldval, i));
-	else if (typeof oldval === 'object') return cloneObject(oldval);
-	return oldval;
+	if (Array.isArray(oldval)) return oldval.map((v, i) => cloneValue(oldval, i));
+	if (type === 'object') return { ...oldval };
 }
 export function mergeObject (target: IKeyValue, mergeWith: IKeyValue) {
 	for (let [key] of Object.entries(mergeWith)) {
