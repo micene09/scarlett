@@ -1,14 +1,12 @@
 name: build
 
 on:
-  push:
-    branches: [ develop ]
   workflow_dispatch:
     inputs:
       name:
         description: 'The manual run reason'
         required: false
-        default: 'Testing'
+        default: ''
 
 jobs:
   build:
