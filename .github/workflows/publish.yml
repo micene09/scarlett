@@ -1,0 +1,25 @@
+name: build
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: use node v14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+          cache: 'npm'
+      - run: yarn install --immutable
+      - run: yarn build
+      - run: yarn build:es3
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

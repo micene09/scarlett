@@ -1,0 +1,30 @@
+name: build
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'The manual run reason'
+        required: false
+        default: 'Testing'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: use node v14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+          cache: 'npm'
+      - run: yarn install --immutable
+      - run: yarn build
+      - run: yarn build:es3
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: yarn test
+
