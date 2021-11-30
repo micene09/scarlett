@@ -22,6 +22,7 @@ jobs:
       - run: yarn build
       - run: yarn build:es3
   test:
+    if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
       - run: yarn test
