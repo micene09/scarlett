@@ -46,6 +46,8 @@
 	- [Built-in in-memory Cache System](#built-in-in-memory-cache-system)
 	- [RestOptions](#restoptions)
 	- [RestError](#resterror)
+		- [The `constructor`:](#the-constructor)
+		- [Instance properties:](#instance-properties)
 - [Testing](#testing)
 - [Inspired by...](#inspired-by)
 - [Why this name?](#why-this-name)
@@ -655,9 +657,9 @@ const restClient = builder.createRestClient()
 
 ### RestError
 
-This class extends the default JavaScript Error, it requires a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
+This class extends the default JavaScript's Error, it requires a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
 
-When a request's response has an error, you will find an instance of `RestError` as a property named **error** on `IResponse` object. If the `throw` flag is enabled, the library will internally `throw` it.
+When a request's response has an error, you will find an instance of `RestError` as a property named **error** on `IResponse` object. If the `throw` flag is enabled, or the `throwExcluding` fails to filter an error, the library will internally `throw` it.
 
 If you expect a model for your error, you can provide its interface as follows:
 
@@ -674,7 +676,28 @@ import { RestError } from "scarlett";
 const err = new RestError<IBackendError>("The Error Message");
 ```
 
-Properties:
+#### The `constructor`:
+```typescript
+constructor(message: string, statusCode?: HTTPStatusCode, code?: InternalErrorCode)
+```
+
+**message (string)**
+
+A human-friendly error message.
+
+**statusCode (HTTPStatusCode)**
+
+The standard http status code.
+
+**code (InternalErrorCode)**
+
+An internal error code:
+
+```typescript
+type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
+```
+
+#### Instance properties:
 
 **isRestError (boolean)**
 
@@ -684,17 +707,13 @@ Always true, it's a simple utility prop that can be usefull to distinguish the s
 
 **fetchResponse ([Response](https://developer.mozilla.org/en-US/docs/Web/API/Response))**
 
+**code (InternalErrorCode)**
+
+**statusCode (HTTPStatusCode)**
+
 **data (TError)**
 
 The error object parsed from response body content.
-
-**statusCode (number)**
-
-It can be the HTTPStatusCode.
-
-**code ("Timeout" | "BodyParse" | "UrlParameter")**
-
-Internal error code, not provided by the server.
 
 ## Testing
 
