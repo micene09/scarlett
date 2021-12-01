@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'The manual run reason'
+        description: 'Reason'
         required: false
         default: ''
 
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: use node v14.x
+      - name: Use Node.js v14.x
         uses: actions/setup-node@v1
         with:
           node-version: '14.x'
@@ -21,10 +21,4 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - run: yarn build:es3
-  test:
-    if: ${{ success() }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - run: yarn test
-

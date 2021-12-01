@@ -17,11 +17,7 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - run: yarn build:es3
-  publish:
-    if: ${{ success() }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
+      - run: yarn test
       - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          env:
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
