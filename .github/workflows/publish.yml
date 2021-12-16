@@ -24,6 +24,7 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - run: yarn build:es3
+      - run: yarn build:es6
       - run: yarn test
       - run: npm publish
         env:

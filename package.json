@@ -1,6 +1,6 @@
 {
 	"name": "scarlett",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A strongly typed, Typescript powered, rest client library based on Fetch API.",
 	"browser": "lib/index.umd.js",
 	"module": "lib/index.js",
@@ -8,7 +8,8 @@
 	"scripts": {
 		"test": "jest",
 		"build": "rollup --config",
-		"build:es3": "rollup --config --es3"
+		"build:es3": "rollup --config --es3",
+		"build:es6": "rollup --config --es6"
 	},
 	"files": [
 		"lib/*.*"
