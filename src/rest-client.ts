@@ -95,8 +95,11 @@ export default class RestClient {
 		};
 
 		const onRequest = this.options.get("onRequest");
-		if (typeof onRequest == "function")
-			onRequest(request);
+		if (typeof onRequest == "function") {
+			const result = onRequest(request);
+			if (result instanceof Promise)
+				await result;
+		}
 
 		let timeoutTriggered = false;
 		let fetchFullFilled = false;

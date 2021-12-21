@@ -380,9 +380,11 @@ Internally, the library supports the following strategies to update the request 
 
 Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestOptions API](#RestOptions).
 
-**onRequest(request: IRequest): void**
+**onRequest(request: IRequest): void | Promise**
 
 Global handler, running on your `RestClient`'s instance context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument.
+
+If the return value is a `Promise`'s instance, the request will `await` for it before starting.
 
 **onResponse(response: IResponse): void**
 

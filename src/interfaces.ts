@@ -32,7 +32,7 @@ export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
 	cacheKey: string;
 	throw: boolean;
 	throwExcluding: IResponseFilter[];
-	onRequest(request: IRequest): void
+	onRequest(request: IRequest): void | Promise<void>
 	onResponse<TResponse = any, TError = any>(response: IResponse<TResponse, TError>): void
 	onError<TError = any, TResponse = any>(error: RestError<TError>, response: TResponse): void
 }

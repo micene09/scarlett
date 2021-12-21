@@ -304,4 +304,20 @@ describe('Features', () => {
 		expect(onResponse).toBeCalledTimes(1);
 		expect(onError).toBeCalledTimes(1);
 	});
+	test("onRequest can be a Promise", async () => {
+		const rest = baseClient.options.clone()
+			.set("responseType", "json")
+			.set("throw", false)
+			.set("onRequest", request => new Promise(resolve => {
+				request.options.headers = new Headers({
+					"X-Example": "1234"
+				});
+				setTimeout(() => resolve(), 600);
+			}))
+			.createRestClient();
+
+		const response = await rest.get<ITestMirrorResponse>("/mirror");
+		const headers = new Headers(response.data?.headers);
+		expect(headers.get("X-Example")).toEqual("1234");
+	});
 });
