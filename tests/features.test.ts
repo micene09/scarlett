@@ -208,17 +208,25 @@ describe('Features', () => {
 		expect(response.error?.code).toEqual("Timeout");
 	})
 	test("Abort request supported", async () => {
-		const abortController = new AbortController()
+		let abortController = new AbortController()
 		const rest = baseClient.options.clone()
 			.set("responseType", "text")
+			.set("throw", false)
 			.createRestClient()
 		const milliseconds = 10000;
 
-		const requestedAt = Date.now()
+		let requestedAt = Date.now()
 		setTimeout(() => abortController.abort(), 200)
 		await rest.get<string>(`/reply-in/${milliseconds}/milliseconds`, { abortController })
-		const elapsed = Date.now() - requestedAt
+		let elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(milliseconds)
+
+		requestedAt = Date.now()
+		abortController = new AbortController();
+		abortController.abort();
+		await rest.get<string>(`/reply-in/${milliseconds}/milliseconds`, { abortController })
+		elapsed = Date.now() - requestedAt
+		expect(elapsed).toBeLessThan(10)
 	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
