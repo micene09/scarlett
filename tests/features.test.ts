@@ -59,7 +59,7 @@ describe('Features', () => {
 			.rejects
 			.toThrowError();
 	})
-	test("Error will not be thrown, becouse of the onError callback", async () => {
+	test("Error will not be thrown, because of the onError callback", async () => {
 
 		const onErrorCallback = jest.fn(err => err)
 		const baseOptions = new RestOptions()
