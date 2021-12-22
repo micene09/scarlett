@@ -67,10 +67,10 @@ interface IResponseFilterObject {
 	errorCode?: InternalErrorCode;
 }
 interface IResponseFilterHook {
-	<T = any>(restError: RestError<T>): boolean
+	(restError: RestError<any>): boolean
 }
 interface IResponseFilterHookAsync {
-	<T = any>(restError: RestError<T>): Promise<boolean>
+	(restError: RestError<any>): Promise<boolean>
 }
 export type IResponseFilter = IResponseFilterHook | IResponseFilterHookAsync | IResponseFilterObject;
 export type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
