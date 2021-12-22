@@ -47,7 +47,19 @@ describe('Features', () => {
 		});
 		expect(decodeURIComponent(response.data.queryString)).toEqual("a=1&b=2&some=one,two");
 	});
-	test("Throw error on not successful requests", async () => {
+	test("Throw error on not successful requests", () => {
+
+		const baseOptions = new RestOptions()
+			.set("host", host)
+			.set("responseType", "json")
+			.set("throw", true)
+		const client = baseOptions.createRestClient()
+
+		expect(() => client.get("/status-code/500/empty"))
+			.rejects
+			.toThrowError();
+	})
+	test("Error will be not throw, becouse of the onError callback", async () => {
 
 		const onErrorCallback = jest.fn(err => err)
 		const baseOptions = new RestOptions()
@@ -57,14 +69,8 @@ describe('Features', () => {
 			.set("throw", true)
 		const client = baseOptions.createRestClient()
 
-		try {
-			await client.get("/status-code/500/empty")
-			fail("Error not thrown...");
-		}
-		catch {
-			expect(onErrorCallback).toBeCalled();
-			ok("Error thrown as expected.");
-		}
+		await client.get("/status-code/500/empty");
+		expect(onErrorCallback).toBeCalled();
 	})
 	test("Throw error disabled, onError() callback will never be called", async () => {
 
