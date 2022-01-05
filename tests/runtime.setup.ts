@@ -22,11 +22,11 @@ export interface ITestStatusCodeResponse {
 }
 export async function startWebServer(port: number = 3000) {
 	testServer
-		.get("/json", (req, res) => {
+		.all("/json", (req, res) => {
 			res.header("Content-type", "application/json");
 			res.send({ fake: "model" });
 		})
-		.get("/text", (req, res) => {
+		.all("/text", (req, res) => {
 			res.header("Content-type", "text/plain");
 			res.send("text");
 		})
