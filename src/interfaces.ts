@@ -84,7 +84,7 @@ export interface IResponseAny {
 	<TResponse>(prom: Promise<TResponse>): Promise<[TResponse | null, Error | RestError<any> | null]>
 }
 export type HttpMethod = | 'GET' | 'DELETE' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'LINK';
-export type HttpResponseFormat = | "json" | "text" | "blob" | "arrayBuffer" | "formData";
+export type HttpResponseFormat = "json" | "text" | "blob" | "arrayBuffer" | "formData" | undefined | null;
 export const enum HTTPStatusCode {
 	Continue = 100,
 	SwitchingProtocols = 101,

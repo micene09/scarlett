@@ -21,7 +21,6 @@ export default class RestOptions {
 		if (typeof this._options.referrer == "undefined") this._options.referrer = "";
 		if (!this._options.referrerPolicy) this._options.referrerPolicy = "no-referrer-when-downgrade";
 		if (typeof this._options.timeout === "undefined") this._options.timeout = 30000;
-		if (!this._options.responseType) this._options.responseType = "json";
 		if (typeof this._options.throw === "undefined" && this._options.throwExcluding && this._options.throwExcluding.length)
 			this._options.throw = true;
 	}

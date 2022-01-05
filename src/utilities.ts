@@ -41,7 +41,7 @@ export async function transformResponseBody<T>(response: Response | null = null,
 	if (!response)
 		return [null, null];
 
-	if (response.status === 204)
+	if (response.status === 204 || !responseType)
 		return [true, null];
 
 	const contentLen = response.headers.get("Content-Length");
