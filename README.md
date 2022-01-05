@@ -264,9 +264,11 @@ The base path to use on every request, defaults to `/`, combined with the `host`
 
 **responseType (HttpResponseFormat)**
 
-One of the following: `json` (default), `text`, `blob`, `arrayBuffer`, `formData`.
+One of the following: `undefined` (default), `null`, `json`, `text`, `blob`, `arrayBuffer`, `formData`.
 
-This property will lead the response body parsing, to get the proper type output. For example, with `json` as responseType you don't need to `JSON.parse()` on `response.data`.
+This property will lead the response body parsing, to get the proper output type. For example, with `json` as responseType you don't need to `JSON.parse()` on `response.data`.
+
+When the value is `undefined` or `null`, the response's body will not be parsed.
 
 **body**
 
