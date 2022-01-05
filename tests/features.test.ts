@@ -19,8 +19,16 @@ afterAll(() => {
 
 describe('Features', () => {
 	test("Typed response data (responseType)", async () => {
-		const response = await baseClient.get<ITestJsonResponse>("/json");
-		expect(response.data!.fake).toEqual("model");
+		const response1 = await baseClient.get<ITestJsonResponse>("/json");
+		expect(response1.data!.fake).toEqual("model");
+
+		const response2 = await baseClient.delete<string>("/text", { responseType: "text" });
+		expect(response2.data).toEqual("text");
+
+		const response3 = await baseClient.get("/status-code/200/empty", { responseType: undefined });
+		expect(response3.data).toBeNull();
+		const response3AsText = await response3.fetchResponse?.text();
+		expect(response3AsText).toEqual("");
 	});
 	test("Auto-translation for objects on body property", async () => {
 		const obj = { test: 1 };
