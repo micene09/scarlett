@@ -21,14 +21,23 @@ describe('Features', () => {
 	test("Typed response data (responseType)", async () => {
 		const response1 = await baseClient.get<ITestJsonResponse>("/json");
 		expect(response1.data!.fake).toEqual("model");
+		expect(response1.request.options.responseType).toEqual("json");
 
 		const response2 = await baseClient.delete<string>("/text", { responseType: "text" });
 		expect(response2.data).toEqual("text");
+		expect(response2.request.options.responseType).toEqual("text");
 
 		const response3 = await baseClient.get("/status-code/200/empty", { responseType: undefined });
 		expect(response3.data).toBeNull();
+		expect(response3.request.options.responseType).toBeUndefined();
 		const response3AsText = await response3.fetchResponse?.text();
 		expect(response3AsText).toEqual("");
+
+		const response4 = await baseClient.get("/status-code/200/empty", { responseType: null });
+		expect(response4.data).toBeNull();
+		expect(response4.request.options.responseType).toBeNull();
+		const response4AsText = await response4.fetchResponse?.text();
+		expect(response4AsText).toEqual("");
 	});
 	test("Auto-translation for objects on body property", async () => {
 		const obj = { test: 1 };

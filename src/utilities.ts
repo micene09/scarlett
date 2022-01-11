@@ -111,7 +111,7 @@ export function mergeObject (target: IKeyValue, mergeWith: IKeyValue) {
 export function mergeValue (original: IKeyValue, mergeWith: IKeyValue, propName: string) {
 	const oldval = original[propName];
 	const newval = mergeWith[propName];
-	if (typeof newval === "undefined" || newval === null)
+	if (propName !== "responseType" && (typeof newval === "undefined" || newval === null))
 		return oldval;
 	else if (newval instanceof AbortController)
 		return newval;
@@ -126,6 +126,8 @@ export function mergeValue (original: IKeyValue, mergeWith: IKeyValue, propName:
 		});
 		return headers;
 	}
-	else if (typeof newval === 'object') return mergeObject(oldval ?? {}, newval);
+	else if (typeof newval === 'object' && newval !== null)
+		return mergeObject(oldval ?? {}, newval);
+
 	return newval;
 }
