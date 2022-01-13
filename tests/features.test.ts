@@ -39,7 +39,7 @@ describe('Features', () => {
 		const response4AsText = await response4.fetchResponse?.text();
 		expect(response4AsText).toEqual("");
 
-		const response5 = await baseClient.get<null, string | null>("/status-code/500", {
+		const response5 = await baseClient.get<ITestStatusCodeResponse, string | null>("/status-code/500", {
 			throw: false,
 			responseType(request, response) {
 				if (response?.status === 500)
