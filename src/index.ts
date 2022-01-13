@@ -8,4 +8,5 @@ export {
 	IResponse, IRequest,
 	IRestOptions, IRestOptionsQuery, IRestOptionsProtected, IRestOptionsGlobals, IRestOptionsNative,
 	IQueryParamTransformer, LocalOverrideStrategy, IResponseFilter, InternalErrorCode,
-	HttpResponseFormat, HttpMethod, HTTPStatusCode } from './interfaces';
+	HttpResponseFormat, HttpResponseFormatType, HttpResponseFormatResult,
+	HttpMethod, HTTPStatusCode } from './interfaces';

@@ -146,8 +146,10 @@ export default class RestClient {
 				});
 		}));
 
-		const [ parseOk, data ] = await transformResponseBody<TResponse>(fetchResponse, localOptions.responseType);
-		const isBodyParseError = parseOk === false;
+		const transformResult = await transformResponseBody(request, fetchResponse);
+		localOptions.responseType = transformResult.resultType;
+		const data = transformResult.result;
+		const isBodyParseError = transformResult.success === false;
 		const isTimeout = timeoutTriggered && !fetchFullFilled;
 		const isAbort = fetchError?.name === 'AbortError' && !fetchFullFilled;
 		const response: IResponse<TResponse, TError> = {
@@ -193,7 +195,7 @@ export default class RestClient {
 
 		let onErrorCalled = false;
 		if (response.error && !isAbort) {
-			response.error.data = response.data ? { ...response.data } as any : undefined;
+			response.error.data = data;
 			response.error.request = request;
 			response.error.fetchResponse = fetchResponse ?? undefined;
 			response.data = null;

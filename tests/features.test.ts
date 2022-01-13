@@ -38,6 +38,18 @@ describe('Features', () => {
 		expect(response4.request.options.responseType).toBeNull();
 		const response4AsText = await response4.fetchResponse?.text();
 		expect(response4AsText).toEqual("");
+
+		const response5 = await baseClient.get<null, string | null>("/status-code/500", {
+			throw: false,
+			responseType(request, response) {
+				if (response?.status === 500)
+					return "text";
+
+				return "json";
+			}
+		});
+		expect(response5.request.options.responseType).toEqual("text");
+		expect(typeof response5.error?.data).toEqual("string");
 	});
 	test("Auto-translation for objects on body property", async () => {
 		const obj = { test: 1 };

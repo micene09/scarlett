@@ -84,7 +84,10 @@ export interface IResponseAny {
 	<TResponse>(prom: Promise<TResponse>): Promise<[TResponse | null, Error | RestError<any> | null]>
 }
 export type HttpMethod = | 'GET' | 'DELETE' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'LINK';
-export type HttpResponseFormat = "json" | "text" | "blob" | "arrayBuffer" | "formData" | undefined | null;
+export type HttpResponseFormatType = "json" | "text" | "blob" | "arrayBuffer" | "formData" | undefined | null;
+export type HttpResponseFormat = HttpResponseFormatType
+	| { (request: IRequest, fetchResponse: Response | null): HttpResponseFormatType }
+	| { (request: IRequest, fetchResponse: Response | null): Promise<HttpResponseFormatType> };
 export const enum HTTPStatusCode {
 	Continue = 100,
 	SwitchingProtocols = 101,
@@ -196,4 +199,9 @@ export const enum HTTPStatusCode {
 		InternalServerError | NotImplemented | BadGateway | ServiceUnavailable | GatewayTimeout | HTTPVersionNotSupported |
 		VariantAlsoNegotiates | InsufficientStorage | LoopDetected | NotExtended | NetworkAuthenticationRequired
 	)
+}
+export interface HttpResponseFormatResult {
+	success: boolean
+	result: any
+	resultType: HttpResponseFormatType
 }

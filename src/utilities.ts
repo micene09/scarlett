@@ -1,4 +1,5 @@
-import { HttpResponseFormat, IRestOptionsQuery, IKeyValue, IResponseAny } from "./interfaces";
+import { HttpResponseFormat, IRequest } from ".";
+import { IRestOptionsQuery, IKeyValue, IResponseAny, HttpResponseFormatResult } from "./interfaces";
 import RestError from "./rest-error";
 
 export function getRequestUrl(host: string = location.origin, basePath: string = "/", path: string = "/") {
@@ -37,24 +38,33 @@ export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) 
 			url.searchParams.append(key, value ?? "")
 		});
 }
-export async function transformResponseBody<T>(response: Response | null = null, responseType?: HttpResponseFormat): Promise<[boolean | null, T | null]> {
-	if (!response)
-		return [null, null];
+export async function transformResponseBody(request: IRequest, fetchResponse: Response | null = null): Promise<HttpResponseFormatResult> {
+	let resultType: HttpResponseFormat = null;
+	if (request.options.responseType && typeof request.options.responseType === "function") {
+		let resolved = request.options.responseType(request, fetchResponse);
+		resultType = resolved instanceof Promise ? await resolved : resolved;
+	}
+	else resultType = request.options.responseType;
 
-	if (response.status === 204 || !responseType)
-		return [true, null];
+	if (!fetchResponse || fetchResponse.status === 204 || !request.options.responseType)
+		return { success: true, result: null, resultType };
 
-	const contentLen = response.headers.get("Content-Length");
+	const contentLen = fetchResponse.headers.get("Content-Length");
 	if (contentLen) {
-		const responseSize = parseInt(response.headers.get("Content-Length") ?? "");
+		const responseSize = parseInt(fetchResponse.headers.get("Content-Length") ?? "");
 		if (!responseSize)
-			return [true, null];
+			return { success: true, result: null, resultType };
 	}
 
+	if (!resultType)
+		return { success: true, result: null, resultType };
+
 	try {
-		return [true, await response[responseType]() as T];
-	} catch (error) {
-		return [false, null];
+		const result = await fetchResponse[resultType]();
+		return { success: true, result, resultType };
+	}
+	catch (error) {
+		return { success: false, result: null, resultType };
 	}
 }
 export function transformRequestBody(body: | ArrayBuffer | Blob | File | FormData | string | any) {
