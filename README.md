@@ -264,17 +264,26 @@ The base path to use on every request, defaults to `/`, combined with the `host`
 
 **responseType (HttpResponseFormat)**
 
-One of the following: `undefined` (default), `null`, `json`, `text`, `blob`, `arrayBuffer`, `formData`.
-
 This property will lead the response body parsing, to get the proper output type. For example, with `json` as responseType you don't need to `JSON.parse()` on `response.data`.
 
-When the value is `undefined` or `null`, the response's body will not be parsed.
+It can be defined as:
+1. `HttpResponseFormatType` typed value: `undefined` (default), `null`, `json`, `text`, `blob`, `arrayBuffer`, `formData`
+2. A sync method returning a `HttpResponseFormatType`
+   ```
+   (request: IRequest, fetchResponse: Response | null) => HttpResponseFormatType
+   ```
+3. An async method resolving a `HttpResponseFormatType`
+   ```
+   (request: IRequest, fetchResponse: Response | null) => Promise<HttpResponseFormatType>
+   ```
+
+When the value resolved is `undefined` or `null`, the response's body will not be parsed.
 
 **body**
 
 Optional request body content, aving one of the following instances: `ArrayBuffer`, `ArrayBufferView`, `Blob`, `File`, `string`, `FormData`, or just a key-value pair object (`{ [key: string]: any }`).
 
-If the method is `GET`, this value will be set to undefined.
+If the method is `GET`, this value will be set to `undefined`.
 
 **query (`{ [key: string]: any }`)**
 
