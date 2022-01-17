@@ -269,11 +269,11 @@ This property will lead the response body parsing, to get the proper output type
 It can be defined as:
 1. `HttpResponseFormatType` typed value: `undefined` (default), `null`, `json`, `text`, `blob`, `arrayBuffer`, `formData`
 2. A sync method returning a `HttpResponseFormatType`
-   ```
+   ```typescript
    (request: IRequest, fetchResponse: Response | null) => HttpResponseFormatType
    ```
 3. An async method resolving a `HttpResponseFormatType`
-   ```
+   ```typescript
    (request: IRequest, fetchResponse: Response | null) => Promise<HttpResponseFormatType>
    ```
 
