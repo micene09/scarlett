@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 <img src="https://github.com/Micene09/scarlett/blob/master/logo.jpg?raw=true">
 
-> A strongly typed, Typescript powered, with zero dependencies, rest client library based on Fetch API.
+> A strongly typed, TypeScript powered, with zero dependencies, rest client library based on Fetch API.
 
 <!-- omit in toc -->
 ## Key features
@@ -9,7 +9,7 @@
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) & [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based rest client
 * Class style
 * Zero dependencies to ensure the smallest bundle
-* Typescript powered, primary goal >> *strongly-typed*
+* TypeScript powered, primary goal >> *strongly-typed*
 * Centralized config (via constructor) with optional local overrides on http methods
 * Advanced options override tecniques
 * Rest Client Builder (RestOptions API)
@@ -281,7 +281,7 @@ When the value resolved is `undefined` or `null`, the response's body will not b
 
 **body**
 
-Optional request body content, aving one of the following instances: `ArrayBuffer`, `ArrayBufferView`, `Blob`, `File`, `string`, `FormData`, or just a key-value pair object (`{ [key: string]: any }`).
+Optional request body content, having one of the following instances: `ArrayBuffer`, `ArrayBufferView`, `Blob`, `File`, `string`, `FormData`, or just a key-value pair object (`{ [key: string]: any }`).
 
 If the method is `GET`, this value will be set to `undefined`.
 
@@ -301,9 +301,9 @@ interface IQueryParamTransformer {
 }
 ```
 
-...it need to have back the `string` version of your custom type parameter.
+...it needs to have back the `string` version of your custom type parameter.
 
-Have a look at `tests/features.test.ts` to see it in action!
+Check out `tests/features.test.ts` to see it in action!
 
 **queryParamsIncludeEmpty (boolean)**
 
@@ -485,7 +485,7 @@ Properties:
 
 **data (TResponse | null)**
 
-The response body, leaded by `IRequestOptions.responseType` (for runtime type) and `TResponse` (for IDE type checking).
+The response body, leaded by `IRequestOptions.responseType` (runtime type) and `TResponse` (IDE type checking).
 
 Example:
 
@@ -505,7 +505,7 @@ The property `response.data` will infer the `IMyObject` interface.
 
 **throwFilter (IResponseFilter)**
 
-When a `IResponseFilter` match the response, this property will expose it.
+When a `IResponseFilter` matches the response, this property will expose it.
 
 **repeat()**
 
@@ -561,7 +561,7 @@ This internal cache system will never infer the native [Request.cache](https://d
 
 Enabling it, if a cached response for a particular request exists, the library will avoid the fetch call to resolve the `Promise` immediately.
 
-All cache-related methods are `protected` and used internally on every request method if enabled, but you can use it to give more super-powers on your custom rest client.
+All cache-related methods are `protected` and used internally on every request method if enabled, but you can use it to give super-powers on your custom rest client.
 
 Here is the full list:
 
@@ -571,7 +571,7 @@ Evaluate the unique cache-key for a particular request, having the provided `url
 
 Providing the third parameter `customKey`, the string evaluated will change accordingly.
 
-This method, is used internally to complete common cache's taks operations like set, get and clear, see the next methods to understand better.
+This method is used internally to complete common cache's task operations like set, get and clear; see the next methods to understand better.
 
 **cacheSet(response: `IResponse`, customKey?: `string`)**
 
@@ -583,7 +583,7 @@ Retrieve the response object, if exists, from the internal `RestClient` instance
 
 **cacheClearByKey(cacheKey: `string`)**
 
-Clears every cache entry in a `RestClient` instance context, matching withe provided `cacheKey`.
+Clears every cache entry in a `RestClient` instance context, matching with the provided `cacheKey`.
 
 **cacheClear()**
 
@@ -619,7 +619,7 @@ Will return a copy of the option's value.
 
 **set (option, newValue)**
 
-To directly update an option (your Typescript's IDE plugin will warn you about type issues).
+To directly update an option (your TypeScript's IDE plugin will warn you about type issues).
 
 **unset(option)**
 
@@ -643,7 +643,7 @@ Will return a new `RestClient` based on the current options.
 
 **setFactory(factoryClass: typeof `RestClient`)**
 
-Supposing that you created a new Class, that extends the default RestClient (see [Advanced usage](#advanced-usage)), you can override the default factory class with this method.
+Supposing that you created a new Class that extends the default RestClient (see [Advanced usage](#advanced-usage)), you can override the default factory class with this method.
 
 Example:
 
@@ -715,7 +715,7 @@ type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
 
 **isRestError (boolean)**
 
-Always true, it's a simple utility prop that can be usefull to distinguish the standard `Error` from the `RestError`.
+Always true, it's a simple utility prop that can be useful to distinguish the standard `Error` from the `RestError`.
 
 **request (IRequest)**
 
@@ -737,7 +737,7 @@ To develop or testing purposes:
 2. `cd` to the root project folder (`package.json`)
 3. `npm i` or `yarn` to install packages
 
-To execute tests, just execute on project root:
+To run tests, just execute on project root:
 
 `npm run test` or `yarn run test`
 
