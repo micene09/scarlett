@@ -12,7 +12,7 @@
 		"resolveJsonModule": true,
 		"removeComments": true,
 		"lib": [ "ES2021", "dom" ],
-		"types": [ "jest" ]
+		"types": [ "node" ]
 	},
 	"paths": {
 		"@/*": [ "src/*" ]
