@@ -1,7 +1,7 @@
 import RestClient, { RestError, RestOptions } from "../src/index";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { fail, ok } from "assert";
-import { beforeAll, afterAll, describe, test, expect, vi, it } from "vitest";
+import { beforeAll, afterAll, describe, test, expect, vi } from "vitest";
 
 let baseClient: RestClient;
 let baseOptions: RestOptions;
@@ -19,7 +19,7 @@ afterAll(() => {
 });
 
 describe('Features', () => {
-	it("Typed response data (responseType)", async () => {
+	test("Typed response data (responseType)", async () => {
 		const response1 = await baseClient.get<ITestJsonResponse>("/json");
 		expect(response1.data!.fake).toEqual("model");
 		expect(response1.request.options.responseType).toEqual("json");
@@ -53,10 +53,10 @@ describe('Features', () => {
 		expect(typeof response5.error?.data).toEqual("string");
 	});
 	test("Auto-translation for objects on body property", async () => {
-		const obj = { test: 1 };
+		const obj = { test: 1, x: null };
 		const response = await baseClient.post<ITestMirrorResponse>("/mirror", { body: obj });
 		const responseAsText = response.data?.body;
-		expect(responseAsText).toEqual('{"test":1}');
+		expect(responseAsText).toEqual('{"test":1,"x":null}');
 	});
 	test("Object to query string", async () => {
 		const response = await baseClient.get<any>("/mirror", {
