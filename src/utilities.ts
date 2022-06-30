@@ -94,13 +94,13 @@ export function cloneObject (obj: IKeyValue) {
 }
 export function cloneValue (original: IKeyValue, propName: string | number): any {
 	const oldval = original[propName];
-	const type = typeof oldval;
 	if (oldval === null) return null;
+	const type = typeof oldval;
+	if (type === "undefined") return undefined;
 	if (type === "function") return oldval;
 	if (type === "string") return String(oldval);
 	if (type === "number") return Number(oldval);
 	if (type === "boolean") return Boolean(oldval);
-	if (type === "undefined") return undefined;
 	if (globalThis.Headers && oldval instanceof Headers) return new Headers(oldval);
 	if (globalThis.AbortController && oldval instanceof AbortController) return new AbortController();
 	if (globalThis.FormData && oldval instanceof FormData) {
