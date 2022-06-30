@@ -12,9 +12,9 @@ export interface ITestJsonResponse {
 }
 export interface ITestMirrorResponse {
 	queryString: string;
-	queryObject: any;
-	headers: any;
-	body: any;
+	queryObject: Record<string, string>;
+	headers: Record<string, string>;
+	body: string;
 }
 export interface ITestStatusCodeResponse {
 	statusText: "CustomStatusCode",
