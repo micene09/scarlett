@@ -1,6 +1,7 @@
 import RestClient, { RestError, RestOptions } from "../src/index";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { fail, ok } from "assert";
+import { beforeAll, afterAll, describe, test, expect, vi, it } from "vitest";
 
 let baseClient: RestClient;
 let baseOptions: RestOptions;
@@ -18,7 +19,7 @@ afterAll(() => {
 });
 
 describe('Features', () => {
-	test("Typed response data (responseType)", async () => {
+	it("Typed response data (responseType)", async () => {
 		const response1 = await baseClient.get<ITestJsonResponse>("/json");
 		expect(response1.data!.fake).toEqual("model");
 		expect(response1.request.options.responseType).toEqual("json");
@@ -90,7 +91,7 @@ describe('Features', () => {
 	})
 	test("Error will not be thrown, because of the onError callback", async () => {
 
-		const onErrorCallback = jest.fn(err => err)
+		const onErrorCallback = vi.fn(err => err)
 		const baseOptions = new RestOptions()
 			.set("host", host)
 			.set("responseType", "json")
@@ -103,7 +104,7 @@ describe('Features', () => {
 	})
 	test("Throw error disabled, onError() callback will never be called", async () => {
 
-		const onErrorCallback = jest.fn(err => err)
+		const onErrorCallback = vi.fn(err => err)
 		const baseOptions = new RestOptions()
 			.set("host", host)
 			.set("responseType", "json")
@@ -121,7 +122,7 @@ describe('Features', () => {
 	test("Throw error enabled, but will not throw on 'special' requests", async () => {
 
 		const handledStatusCode = 502
-		const onErrorCallback = jest.fn(err => {})
+		const onErrorCallback = vi.fn(err => {})
 		const baseOptions = new RestOptions()
 			.set("host", host)
 			.set("responseType", "json")
@@ -148,7 +149,7 @@ describe('Features', () => {
 			.set("responseType", "json")
 		const client = baseOptions.createRestClient()
 
-		const businessApiCall = jest.fn((body: any) => new Promise<void>(resolve => {
+		const businessApiCall = vi.fn((body: any) => new Promise<void>(resolve => {
 			setTimeout(resolve, 300);
 		}));
 		const businessApiTrigger = 405;
@@ -327,9 +328,9 @@ describe('Features', () => {
 		expect(assigned.data?.queryString).toEqual("c=3"); // << assigned!
 	});
 	test("Global handlers (onRequest, onResponse, onError)", async () => {
-		const onError = jest.fn();
-		const onRequest = jest.fn();
-		const onResponse = jest.fn();
+		const onError = vi.fn();
+		const onRequest = vi.fn();
+		const onResponse = vi.fn();
 		const rest = baseClient.options.clone()
 			.set("responseType", "json")
 			.set("throw", true)
