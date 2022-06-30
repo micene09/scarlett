@@ -67,7 +67,7 @@ export default class RestClient {
 		const target = base ?? this.options.current();
 		if (this.options.get("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
-			return mergeObject(o, overrides ?? {});
+			return mergeObject(o, overrides ?? {}, ["body"]);
 		}
 		else return Object.assign({}, target, overrides ?? {});
 	}

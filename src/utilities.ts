@@ -111,10 +111,14 @@ export function cloneValue (original: IKeyValue, propName: string | number): any
 	if (Array.isArray(oldval)) return oldval.map((v, i) => cloneValue(oldval, i));
 	if (type === 'object') return { ...oldval };
 }
-export function mergeObject (target: IKeyValue, mergeWith: IKeyValue) {
+export function mergeObject (target: IKeyValue, mergeWith: IKeyValue, excludeKeys: string[] = []) {
 	for (let [key] of Object.entries(mergeWith)) {
-		const mergedVal = mergeValue(target, mergeWith, key);
-		target[key] = mergedVal;
+		if (excludeKeys.includes(key))
+			target[key] = mergeWith[key];
+		else {
+			const mergedVal = mergeValue(target, mergeWith, key);
+			target[key] = mergedVal;
+		}
 	}
 	return target;
 }
