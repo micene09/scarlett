@@ -17,7 +17,7 @@
 		"lib/*.*"
 	],
 	"engines": {
-		"node": ">= 16.15 <17"
+		"node": ">= 16.15 <19"
 	},
 	"exports": {
 		".": "./lib/index.js"
