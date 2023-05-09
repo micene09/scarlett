@@ -1,0 +1,10 @@
+{
+	"recommendations": [
+		"vivaxy.vscode-conventional-commits",
+		"editorconfig.editorconfig",
+		"mhutchie.git-graph",
+		"eamodio.gitlens",
+		"zixuanchen.vitest-explorer",
+		"github.vscode-github-actions"
+	]
+}
