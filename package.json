@@ -7,10 +7,10 @@
 	"types": "lib/index.d.ts",
 	"scripts": {
 		"test": "vitest run",
-		"test:watch": "vitest watch",
+		"test-watch": "vitest watch",
 		"build": "rollup --config",
-		"build:es3": "rollup --config --es3",
-		"build:es6": "rollup --config --es6",
+		"build-es3": "rollup --config --es3",
+		"build-es6": "rollup --config --es6",
 		"bump": "bumpp"
 	},
 	"files": [

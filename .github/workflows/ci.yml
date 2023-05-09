@@ -20,6 +20,6 @@ jobs:
           cache: 'npm'
       - run: yarn install --immutable
       - run: yarn build
-      - run: yarn build:es3
-      - run: yarn build:es6
+      - run: yarn build-es3
+      - run: yarn build-es6
       - run: yarn test
