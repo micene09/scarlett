@@ -1,12 +1,10 @@
 name: ci
 
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Reason'
-        required: false
-        default: ''
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
