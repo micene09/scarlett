@@ -7,8 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build_test:
-    name: build & test
+
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,4 +21,15 @@ jobs:
       - run: yarn build
       - run: yarn build-es3
       - run: yarn build-es6
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js v18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - run: yarn install --immutable
       - run: yarn test
