@@ -32,9 +32,9 @@ export interface IRestOptions<TResponse = any, TError = any> extends IRestOption
 	cacheKey: string;
 	throw: boolean;
 	throwExcluding: IResponseFilter<TError>[];
-	onRequest<TLocalResponse = TResponse, TLocalError = TError>(request: IRequest<TLocalResponse, TLocalError>): void | Promise<void>
-	onResponse<TLocalResponse = TResponse, TLocalError = TError>(response: IResponse<TLocalResponse, TLocalError>): void
-	onError<TLocalResponse = TResponse, TLocalError = TError>(error: RestError<TLocalError>, response: TLocalResponse): void
+	onRequest(request: IRequest<TResponse, TError>): void | Promise<void>
+	onResponse(response: IResponse<TResponse, TError>): void
+	onError(error: RestError<TError>, response: TResponse): void
 }
 export interface IRestOptionsGlobals<TResponse, TError> extends IRestOptions<TResponse, TError>, IRestOptionsProtected {}
 export type LocalOverrideStrategy = | "merge" | "assign";

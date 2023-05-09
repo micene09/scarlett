@@ -96,7 +96,7 @@ export default class RestClient<TResponse = any, TError = any> {
 
 		const onRequest = this.options.get("onRequest");
 		if (typeof onRequest == "function") {
-			const result = onRequest(request);
+			const result = onRequest(request as any);
 			if (result instanceof Promise)
 				await result;
 		}
@@ -208,7 +208,7 @@ export default class RestClient<TResponse = any, TError = any> {
 					const onError = this.options.get("onError");
 					if (typeof onError == "function") {
 						onErrorCalled = true;
-						onError(response.error, response);
+						onError(response.error as any, response as any);
 					}
 					else throw response.error;
 				}
@@ -220,7 +220,7 @@ export default class RestClient<TResponse = any, TError = any> {
 		if (!onErrorCalled) {
 			const onResponse = this.options.get("onResponse");
 			if (typeof onResponse == "function")
-				onResponse(response);
+				onResponse(response as any);
 		}
 
 		return response;
