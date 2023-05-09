@@ -2,10 +2,10 @@ import { IRestOptions, IRestOptionsGlobals } from './interfaces';
 import RestClient from '.';
 import { cloneObject, mergeObject, cloneValue } from './utilities';
 
-export default class RestOptions {
-	private _options: Partial<IRestOptionsGlobals>;
+export default class RestOptions<TResponse = any, TError = any> {
+	private _options: Partial<IRestOptionsGlobals<TResponse, TError>>;
 	private _restFactory: typeof RestClient;
-	constructor(options?: Partial<IRestOptionsGlobals>, factoryClass?: typeof RestClient) {
+	constructor(options?: Partial<IRestOptionsGlobals<TResponse, TError>>, factoryClass?: typeof RestClient) {
 		this._options = options ?? {};
 
 		this._restFactory = factoryClass ?? RestClient;
@@ -24,25 +24,25 @@ export default class RestOptions {
 		if (typeof this._options.throw === "undefined" && this._options.throwExcluding && this._options.throwExcluding.length)
 			this._options.throw = true;
 	}
-	public current() {
-		return cloneObject(this._options);
+	public current<TResponse, TError>() {
+		return cloneObject(this._options) as Partial<IRestOptions<TResponse, TError>>;
 	}
 	public setFactory(factoryClass: typeof RestClient) {
 		this._restFactory = factoryClass;
 		return this;
 	}
-	public createRestClient<T extends RestClient>() {
+	public createRestClient<T extends RestClient<TResponse, TError>>(): T {
 		const options = this.clone()._options;
 		return new this._restFactory(options) as T;
 	}
-	public get<K extends keyof IRestOptionsGlobals>(key: K) {
-		return cloneValue(this._options, key) as IRestOptionsGlobals[K];
+	public get<K extends keyof IRestOptionsGlobals<TResponse, TError>>(key: K) {
+		return cloneValue(this._options, key) as IRestOptionsGlobals<TResponse, TError>[K];
 	}
-	public set<K extends keyof IRestOptionsGlobals>(key: K, val: IRestOptionsGlobals[K]) {
+	public set<K extends keyof IRestOptionsGlobals<TResponse, TError>>(key: K, val: IRestOptionsGlobals<TResponse, TError>[K]) {
 		this._options[key] = val;
 		return this;
 	}
-	public unset<K extends keyof IRestOptions>(key: K) {
+	public unset<K extends keyof IRestOptions<TResponse, TError>>(key: K) {
 		delete this._options[key];
 		this.checkAndRestoreDefaults();
 		return this;
@@ -51,11 +51,11 @@ export default class RestOptions {
 		const cloned = cloneObject(this._options);
 		return new RestOptions(cloned);
 	}
-	public merge(obj?: Partial<IRestOptions>) {
+	public merge(obj?: Partial<IRestOptions<TResponse, TError>>) {
 		mergeObject(this._options, obj ?? {});
 		return this;
 	}
-	public assign(obj?: Partial<IRestOptions>) {
+	public assign(obj?: Partial<IRestOptions<TResponse, TError>>) {
 		Object.assign(this._options, obj ?? {});
 		return this;
 	}

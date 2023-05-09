@@ -8,7 +8,7 @@ export function getRequestUrl(host: string = location.origin, basePath: string =
 export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) {
 	const query = options.query;
 	if (!query) return;
-	const transf = options.queryParamsTransormer;
+	const transf = options.queryParamsTransformer;
 	const keys = Object.keys(query);
 	if (typeof transf === "function")
 		keys.forEach(key => {
@@ -38,8 +38,8 @@ export function setUrlParameters(url: URL, options: Partial<IRestOptionsQuery>) 
 			url.searchParams.append(key, value ?? "")
 		});
 }
-export async function transformResponseBody(request: IRequest, fetchResponse: Response | null = null): Promise<HttpResponseFormatResult> {
-	let resultType: HttpResponseFormat = null;
+export async function transformResponseBody<TResponse = any, TError = any>(request: IRequest<TResponse, TError>, fetchResponse: Response | null = null): Promise<HttpResponseFormatResult> {
+	let resultType: HttpResponseFormat<TResponse, TError> = null;
 	if (request.options.responseType && typeof request.options.responseType === "function") {
 		let resolved = request.options.responseType(request, fetchResponse);
 		resultType = resolved instanceof Promise ? await resolved : resolved;

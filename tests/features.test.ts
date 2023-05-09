@@ -69,7 +69,7 @@ describe('Features', () => {
 		const response = await baseClient.get<any>("/mirror", {
 			responseType: "json",
 			query: { a: "1", b: "2", some: ["one", "two"] },
-			queryParamsTransormer: (key, value) => {
+			queryParamsTransformer: (key, value) => {
 				if (key === "some")
 					return value.join(",");
 				return value;

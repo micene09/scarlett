@@ -1,9 +1,9 @@
 import { HTTPStatusCode } from ".";
 import { InternalErrorCode, IRequest, IResponseFilter } from "./interfaces";
 
-export default class RestError<TError> extends Error {
+export default class RestError<TError = any, TResponse = any> extends Error {
 	isRestError = true;
-	request?: IRequest;
+	request?: IRequest<TResponse, TError>;
 	fetchResponse?: Response;
 	code?: InternalErrorCode;
 	statusCode?: HTTPStatusCode;
@@ -14,7 +14,7 @@ export default class RestError<TError> extends Error {
 		this.code = code;
 		this.message = message;
 	}
-	private async filterIsMatching(flt: IResponseFilter): Promise<boolean> {
+	private async filterIsMatching(flt: IResponseFilter<TError>): Promise<boolean> {
 		if (typeof flt === "function") {
 			const result: boolean | Promise<boolean> = flt(this);
 			if (result instanceof Promise)
@@ -31,10 +31,10 @@ export default class RestError<TError> extends Error {
 				&& (!flt.errorCode || Boolean(flt.errorCode === this.code));
 		}
 	}
-	findMatch(filters: IResponseFilter[]) {
-		return new Promise<IResponseFilter | undefined>(async resolve => {
+	findMatch(filters: IResponseFilter<TError>[]) {
+		return new Promise<IResponseFilter<TError> | undefined>(async resolve => {
 			if (!filters || !filters.length) return resolve(undefined);
-			const find = async (index: number = 0): Promise<IResponseFilter | undefined> => {
+			const find = async (index: number = 0): Promise<IResponseFilter<TError> | undefined> => {
 				if (!(index in filters)) return;
 				const isMatching = await this.filterIsMatching(filters[index]);
 				if (isMatching) return filters[index];

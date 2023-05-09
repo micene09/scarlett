@@ -3,10 +3,10 @@ import RestError from "./rest-error";
 import { getRequestUrl, setUrlParameters, resolveAny, transformResponseBody, transformRequestBody, mergeObject, cloneObject } from './utilities';
 import RestOptions from "./rest-options";
 
-export default class RestClient {
-	private _cache = new Map<string, IResponse<any>>();
-	public options: RestOptions;
-	constructor(options?: Partial<IRestOptionsGlobals>) {
+export default class RestClient<TResponse = any, TError = any> {
+	private _cache = new Map<string, IResponse<TResponse, TError>>();
+	public options: RestOptions<TResponse, TError>;
+	constructor(options?: Partial<IRestOptionsGlobals<TResponse, TError>>) {
 		this.options = new RestOptions(options ?? {});
 	}
 	//#region cache
@@ -36,46 +36,46 @@ export default class RestClient {
 			if (key.startsWith(`${cacheKey}|`))
 				this._cache.delete(key);
 	}
-	protected cacheSet(response: IResponse<any>, customKey?: string) {
+	protected cacheSet<TResponse, TError>(response: IResponse<TResponse, TError>, customKey?: string) {
 		const key = this.cacheKey(response.request.url, response.request.method, customKey);
-		this._cache.set(key, response);
+		this._cache.set(key, response as any);
 	}
-	protected cacheGet<TResponse>(url: URL, method: HttpMethod | "*" = "*", customKey?: string) {
+	protected cacheGet<TResponse, TError>(url: URL, method: HttpMethod | "*" = "*", customKey?: string) {
 		const key = this.cacheKey(url, method, customKey);
-		return this._cache.get(key) as IResponse<TResponse> | undefined | null;
+		return this._cache.get(key) as IResponse<TResponse, TError> | undefined;
 	}
 	//#endregion
 	//#region request shortcut
-	public get<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
+	public get<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
 		return this.request<TResponse, TError>("GET", path, overrides);
 	}
-	public delete<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
+	public delete<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
 		return this.request<TResponse, TError>("DELETE", path, overrides);
 	}
-	public post<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
+	public post<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
 		return this.request<TResponse, TError>("POST", path, overrides);
 	}
-	public put<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
+	public put<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
 		return this.request<TResponse, TError>("PUT", path, overrides);
 	}
-	public patch<TResponse, TError = any>(path: string, overrides?: Partial<IRestOptions>) {
+	public patch<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
 		return this.request<TResponse, TError>("PATCH", path, overrides);
 	}
 	//#endregion
 
-	protected optionsOverride(overrides?: Partial<IRestOptions>, base?: Partial<IRestOptions>) {
+	protected optionsOverride<TResponse = any, TError = any>(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>): Partial<IRestOptions<TResponse, TError>> {
 		const target = base ?? this.options.current();
 		if (this.options.get("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
-			return mergeObject(o, overrides ?? {}, ["body"]);
+			return mergeObject(o, overrides ?? {}, ["body"]) as Partial<IRestOptions<TResponse, TError>>;
 		}
 		else return Object.assign({}, target, overrides ?? {});
 	}
-	public async request<TResponse, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions>) : Promise<IResponse<TResponse, TError>> {
+	public async request<TResponse = any, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions<TResponse, TError>>) : Promise<IResponse<TResponse, TError>> {
 		const that = this;
-		const localOptions: Partial<IRestOptions> = requestOptions
-			? this.optionsOverride(requestOptions)
-			: this.options.current()
+		const localOptions = requestOptions
+			? this.optionsOverride<TResponse, TError>(requestOptions)
+			: this.options.current<TResponse, TError>()
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
 		if (localOptions.query && Object.keys(localOptions.query).length)
@@ -83,13 +83,13 @@ export default class RestClient {
 
 		localOptions.cacheKey = localOptions.cacheKey?.trim();
 		if (localOptions.internalCache) {
-			const cachedResponse = this.cacheGet<TResponse>(url, method);
-			if (cachedResponse) return cachedResponse;
+			const cachedResponse = this.cacheGet<TResponse, TError>(url, method);
+			if (cachedResponse) return Promise.resolve(cachedResponse);
 		}
 		if (!localOptions.abortController)
 			localOptions.abortController = new AbortController();
 
-		const request: IRequest = {
+		const request: IRequest<TResponse, TError> = {
 			method, options: localOptions, url,
 			body: localOptions.body
 		};
@@ -157,13 +157,13 @@ export default class RestClient {
 			headers: fetchResponse?.headers,
 			request, data,
 			status: fetchResponse?.status as HTTPStatusCode,
-			repeat(m?: HttpMethod | Partial<IRestOptions>, repeatOptions?: Partial<IRestOptions>) {
+			repeat(m?: HttpMethod | Partial<IRestOptions<TResponse, TError>>, repeatOptions?: Partial<IRestOptions<TResponse, TError>>) {
 				if (arguments.length == 2) {
 					m = (m ? m : method);
 					repeatOptions = (repeatOptions ? repeatOptions : {});
 				}
 				else if (arguments.length == 1) {
-					repeatOptions = (m ? m : {}) as IRestOptions;
+					repeatOptions = (m ? m : {}) as IRestOptions<TResponse, TError>;
 					m = method;
 				}
 				else if (!arguments.length) {
@@ -218,9 +218,9 @@ export default class RestClient {
 			this.cacheSet(response);
 
 		if (!onErrorCalled) {
-			const onReponse = this.options.get("onResponse");
-			if (typeof onReponse == "function")
-				onReponse(response);
+			const onResponse = this.options.get("onResponse");
+			if (typeof onResponse == "function")
+				onResponse(response);
 		}
 
 		return response;

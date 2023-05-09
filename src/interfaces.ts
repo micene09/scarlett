@@ -5,7 +5,7 @@ export interface IKeyValue {
 }
 export interface IRestOptionsQuery {
 	query: IKeyValue;
-	queryParamsTransormer: IQueryParamTransformer;
+	queryParamsTransformer: IQueryParamTransformer;
 	queryParamsIncludeEmpty: boolean;
 }
 export interface IRestOptionsNative {
@@ -22,43 +22,43 @@ export interface IRestOptionsNative {
 export interface IRestOptionsProtected {
 	overrideStrategy: LocalOverrideStrategy;
 }
-export interface IRestOptions extends IRestOptionsQuery, IRestOptionsNative {
+export interface IRestOptions<TResponse = any, TError = any> extends IRestOptionsQuery, IRestOptionsNative {
 	host: string;
 	basePath: string;
-	responseType: HttpResponseFormat;
+	responseType: HttpResponseFormat<TResponse, TError>;
 	body: | ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | IKeyValue;
 	timeout: number;
 	internalCache: boolean;
 	cacheKey: string;
 	throw: boolean;
-	throwExcluding: IResponseFilter[];
-	onRequest(request: IRequest): void | Promise<void>
-	onResponse<TResponse = any, TError = any>(response: IResponse<TResponse, TError>): void
-	onError<TError = any, TResponse = any>(error: RestError<TError>, response: TResponse): void
+	throwExcluding: IResponseFilter<TError>[];
+	onRequest<TLocalResponse = TResponse, TLocalError = TError>(request: IRequest<TLocalResponse, TLocalError>): void | Promise<void>
+	onResponse<TLocalResponse = TResponse, TLocalError = TError>(response: IResponse<TLocalResponse, TLocalError>): void
+	onError<TLocalResponse = TResponse, TLocalError = TError>(error: RestError<TLocalError>, response: TLocalResponse): void
 }
-export interface IRestOptionsGlobals extends IRestOptions, IRestOptionsProtected {}
+export interface IRestOptionsGlobals<TResponse, TError> extends IRestOptions<TResponse, TError>, IRestOptionsProtected {}
 export type LocalOverrideStrategy = | "merge" | "assign";
-export interface IRequest {
-	options: Partial<IRestOptions>;
+export interface IRequest<TResponse, TError> {
+	options: Partial<IRestOptions<TResponse, TError>>;
 	url: URL
 	method: HttpMethod
 	body: any
 }
-export interface IResponse<TResponse, TError = any> {
+export interface IResponse<TResponse, TError> {
 	fetchResponse: Response | null;
-	request: IRequest;
+	request: IRequest<TResponse, TError>;
 	error?: RestError<TError>;
 	status: HTTPStatusCode;
 	headers?: Headers;
 	data: TResponse | null;
-	throwFilter?: IResponseFilter;
+	throwFilter?: IResponseFilter<TError>;
 	repeat: IRepeat<TResponse, TError>;
 }
-export interface IRepeat<TResponse, TError = any> {
-	(method: HttpMethod, requestOptions?: Partial<IRestOptions>): Promise<IResponse<TResponse, TError>>
+export interface IRepeat<TResponse, TError> {
+	(method: HttpMethod, requestOptions?: Partial<IRestOptions<TResponse, TError>>): Promise<IResponse<TResponse, TError>>
 }
-export interface IRepeat<TResponse, TError = any> {
-	(requestOptions?: Partial<IRestOptions>): Promise<IResponse<TResponse, TError>>
+export interface IRepeat<TResponse, TError> {
+	(requestOptions?: Partial<IRestOptions<TResponse, TError>>): Promise<IResponse<TResponse, TError>>
 }
 interface IResponseFilterObject {
 	path?: string;
@@ -66,13 +66,13 @@ interface IResponseFilterObject {
 	statusCode?: HTTPStatusCode;
 	errorCode?: InternalErrorCode;
 }
-interface IResponseFilterHook {
-	(restError: RestError<any>): boolean
+interface IResponseFilterHook<TError> {
+	(restError: RestError<TError>): boolean
 }
-interface IResponseFilterHookAsync {
-	(restError: RestError<any>): Promise<boolean>
+interface IResponseFilterHookAsync<TError> {
+	(restError: RestError<TError>): Promise<boolean>
 }
-export type IResponseFilter = IResponseFilterHook | IResponseFilterHookAsync | IResponseFilterObject;
+export type IResponseFilter<TError> = IResponseFilterHook<TError> | IResponseFilterHookAsync<TError> | IResponseFilterObject;
 export type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
 export interface IQueryParamTransformer {
 	(key: string, value: any, query: any): string
@@ -85,9 +85,9 @@ export interface IResponseAny {
 }
 export type HttpMethod = | 'GET' | 'DELETE' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'LINK';
 export type HttpResponseFormatType = "json" | "text" | "blob" | "arrayBuffer" | "formData" | undefined | null;
-export type HttpResponseFormat = HttpResponseFormatType
-	| { (request: IRequest, fetchResponse: Response | null): HttpResponseFormatType }
-	| { (request: IRequest, fetchResponse: Response | null): Promise<HttpResponseFormatType> };
+export type HttpResponseFormat<TResponse, TError> = HttpResponseFormatType
+	| { (request: IRequest<TResponse, TError>, fetchResponse: Response | null): HttpResponseFormatType }
+	| { (request: IRequest<TResponse, TError>, fetchResponse: Response | null): Promise<HttpResponseFormatType> };
 export const enum HTTPStatusCode {
 	Continue = 100,
 	SwitchingProtocols = 101,
