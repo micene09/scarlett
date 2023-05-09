@@ -5,6 +5,7 @@
 		"mhutchie.git-graph",
 		"eamodio.gitlens",
 		"zixuanchen.vitest-explorer",
-		"github.vscode-github-actions"
+		"github.vscode-github-actions",
+		"yoavbls.pretty-ts-errors"
 	]
 }
