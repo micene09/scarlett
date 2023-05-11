@@ -1,4 +1,4 @@
-import { IRestOptions, IRestOptionsGlobals } from './interfaces';
+import type { IRestOptions, IRestOptionsGlobals } from './interfaces';
 import RestClient from '.';
 import { cloneObject, mergeObject, cloneValue } from './utilities';
 

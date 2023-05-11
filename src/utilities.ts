@@ -1,5 +1,5 @@
-import { HttpResponseFormat, IRequest } from ".";
-import { IRestOptionsQuery, IKeyValue, IResponseAny, HttpResponseFormatResult } from "./interfaces";
+import type { HttpResponseFormat, IRequest } from ".";
+import type { IRestOptionsQuery, IKeyValue, IResponseAny, HttpResponseFormatResult } from "./interfaces";
 import RestError from "./rest-error";
 
 export function getRequestUrl(host: string = location.origin, basePath: string = "/", path: string = "/") {

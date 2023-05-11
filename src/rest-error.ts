@@ -1,5 +1,5 @@
-import { HTTPStatusCode } from ".";
-import { InternalErrorCode, IRequest, IResponseFilter } from "./interfaces";
+import type { HTTPStatusCode } from ".";
+import type { InternalErrorCode, IRequest, IResponseFilter } from "./interfaces";
 
 export default class RestError<TError = any, TResponse = any> extends Error {
 	isRestError = true;

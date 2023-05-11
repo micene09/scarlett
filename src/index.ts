@@ -4,7 +4,7 @@ import RestOptions from './rest-options';
 
 export default RestClient;
 export { RestOptions, RestError };
-export {
+export type {
 	IResponse, IRequest,
 	IRestOptions, IRestOptionsQuery, IRestOptionsProtected, IRestOptionsGlobals, IRestOptionsNative,
 	IQueryParamTransformer, LocalOverrideStrategy, IResponseFilter, InternalErrorCode,
