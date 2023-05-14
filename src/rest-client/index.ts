@@ -1,5 +1,6 @@
 import { IRestOptionsGlobals, IResponse, HttpMethod, IRestOptions, IRequest, HTTPStatusCode } from "../interfaces";
 import RestError from "../rest-error";
+import useRestOptions from "../rest-options";
 import RestOptions from "../rest-options";
 import { cloneObject, getRequestUrl, mergeObject, resolveAny, setUrlParameters, transformRequestBody, transformResponseBody } from "../utilities";
 
@@ -14,16 +15,16 @@ export type RequestMethodFull<TResponse = any, TError = any> = (method: HttpMeth
 
 export default function createRestClient<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>, cache?: Map<string, IResponse<TResponse, TError>>) {
 	const _cache = cache ?? new Map<string, IResponse<TResponse, TError>>();
-	const _options = new RestOptions<TResponse, TError>(options ?? {});
+	const { getOption, currentOptions } = useRestOptions(options ?? {});
 	const cacheKey: CacheKey = (url, method = "*", customKey) => {
-		const cacheKey = customKey?.trim() ? customKey : (_options.get("cacheKey") ?? '');
+		const cacheKey = customKey?.trim() ? customKey : (getOption("cacheKey") ?? '');
 		function formDataToObj(formData: FormData) {
 			let o: any = {};
 			formData.forEach((value, key) => (o[key] = value));
 			return o;
 		}
-		const body = _options.get("body");
-		const responseType = _options.get("responseType");
+		const body = getOption("body");
+		const responseType = getOption("responseType");
 		const inputs = body ? (
 			responseType === "json" ? JSON.stringify(body)
 			: responseType === "text" ? body
@@ -50,8 +51,8 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 		return _cache.get(key) as IResponse<TResponse, TError> | undefined;
 	};
 	const optionsOverride: OptionsOverride<TResponse, TError> = (overrides, base) => {
-		const target = base ?? _options.current();
-		if (_options.get("overrideStrategy") === "merge") {
+		const target = base ?? currentOptions();
+		if (getOption("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
 			return mergeObject(o, overrides ?? {}, ["body"]) as Partial<IRestOptions<TResponse, TError>>;
 		}
@@ -60,7 +61,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 	const requestFull: RequestMethodFull<TResponse, TError> = async (method, path, requestOptions) => {
 		const localOptions = requestOptions
 			? optionsOverride(requestOptions)
-			: _options.current()
+			: currentOptions()
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
 		if (localOptions.query && Object.keys(localOptions.query).length)
@@ -79,7 +80,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 			body: localOptions.body
 		};
 
-		const onRequest = _options.get("onRequest");
+		const onRequest = getOption("onRequest");
 		if (typeof onRequest == "function") {
 			const result = onRequest(request as any);
 			if (result instanceof Promise)
@@ -190,7 +191,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 				if (throwFilterFound)
 					response.throwFilter = throwFilterFound;
 				else {
-					const onError = _options.get("onError");
+					const onError = getOption("onError");
 					if (typeof onError == "function") {
 						onErrorCalled = true;
 						onError(response.error as any, response as any);
@@ -203,7 +204,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 			cacheSet(response);
 
 		if (!onErrorCalled) {
-			const onResponse = _options.get("onResponse");
+			const onResponse = getOption("onResponse");
 			if (typeof onResponse == "function")
 				onResponse(response as any);
 		}
@@ -216,7 +217,6 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 	const patch: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("PATCH", path, overrides);
 	const put: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("PUT", path, overrides);
 	return () => ({
-		options: _options,
 		cacheKey,
 		cacheClear,
 		cacheClearByKey,
