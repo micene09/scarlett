@@ -1,24 +1,29 @@
-import type { IRestOptions, IResponse, IRequest, HttpMethod, HTTPStatusCode, IRestOptionsGlobals } from './interfaces';
-import RestError from "./rest-error";
-import { getRequestUrl, setUrlParameters, resolveAny, transformResponseBody, transformRequestBody, mergeObject, cloneObject } from './utilities';
-import RestOptions from "./rest-options";
+import { IRestOptionsGlobals, IResponse, HttpMethod, IRestOptions, IRequest, HTTPStatusCode } from "../interfaces";
+import RestError from "../rest-error";
+import RestOptions from "../rest-options";
+import { cloneObject, getRequestUrl, mergeObject, resolveAny, setUrlParameters, transformRequestBody, transformResponseBody } from "../utilities";
 
-export default class RestClient<TResponse = any, TError = any> {
-	private _cache = new Map<string, IResponse<TResponse, TError>>();
-	public options: RestOptions<TResponse, TError>;
-	constructor(options?: Partial<IRestOptionsGlobals<TResponse, TError>>) {
-		this.options = new RestOptions(options ?? {});
-	}
-	//#region cache
-	protected cacheKey(url: URL, method: HttpMethod | "*" = "*", customKey?: string) {
-		const cacheKey = customKey?.trim() ? customKey : (this.options.get("cacheKey") ?? '');
+export type CacheKey = (url: URL, method: HttpMethod | "*", customKey?: string) => string;
+export type CacheClear = () => void;
+export type CacheClearByKey = (cacheKey?: string | null) => void;
+export type CacheSet<TResponse, TError> = (response: IResponse<TResponse, TError>, customKey?: string) => void;
+export type CacheGet<TResponse, TError> = (url: URL, method: HttpMethod | "*", customKey?: string) => IResponse<TResponse, TError> | undefined;
+export type OptionsOverride<TResponse, TError> = (overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => Partial<IRestOptions<TResponse, TError>>
+export type RequestMethod<TResponse = any, TError = any> = (path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => Promise<IResponse<TResponse, TError>>;
+export type RequestMethodFull<TResponse = any, TError = any> = (method: HttpMethod, path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => Promise<IResponse<TResponse, TError>>;
+
+export default function createRestClient<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>, cache?: Map<string, IResponse<TResponse, TError>>) {
+	const _cache = cache ?? new Map<string, IResponse<TResponse, TError>>();
+	const _options = new RestOptions<TResponse, TError>(options ?? {});
+	const cacheKey: CacheKey = (url, method = "*", customKey) => {
+		const cacheKey = customKey?.trim() ? customKey : (_options.get("cacheKey") ?? '');
 		function formDataToObj(formData: FormData) {
 			let o: any = {};
 			formData.forEach((value, key) => (o[key] = value));
 			return o;
 		}
-		const body = this.options.get("body");
-		const responseType = this.options.get("responseType");
+		const body = _options.get("body");
+		const responseType = _options.get("responseType");
 		const inputs = body ? (
 			responseType === "json" ? JSON.stringify(body)
 			: responseType === "text" ? body
@@ -26,56 +31,36 @@ export default class RestClient<TResponse = any, TError = any> {
 			: ""
 		) : "";
 		return `${cacheKey}|${url.href}|${method}|${inputs}`;
-	}
-	protected cacheClear() {
-		this._cache.clear();
-	}
-	protected cacheClearByKey(cacheKey?: string | null) {
+	};
+	const cacheClear: CacheClear = () => {
+		_cache.clear();
+	};
+	const cacheClearByKey: CacheClearByKey = cacheKey => {
 		if (!cacheKey) return;
-		for (let key of this._cache.keys())
+		for (let key of _cache.keys())
 			if (key.startsWith(`${cacheKey}|`))
-				this._cache.delete(key);
+				_cache.delete(key);
 	}
-	protected cacheSet<TResponse, TError>(response: IResponse<TResponse, TError>, customKey?: string) {
-		const key = this.cacheKey(response.request.url, response.request.method, customKey);
-		this._cache.set(key, response as any);
-	}
-	protected cacheGet<TResponse, TError>(url: URL, method: HttpMethod | "*" = "*", customKey?: string) {
-		const key = this.cacheKey(url, method, customKey);
-		return this._cache.get(key) as IResponse<TResponse, TError> | undefined;
-	}
-	//#endregion
-	//#region request shortcut
-	public get<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
-		return this.request<TResponse, TError>("GET", path, overrides);
-	}
-	public delete<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
-		return this.request<TResponse, TError>("DELETE", path, overrides);
-	}
-	public post<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
-		return this.request<TResponse, TError>("POST", path, overrides);
-	}
-	public put<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
-		return this.request<TResponse, TError>("PUT", path, overrides);
-	}
-	public patch<TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) {
-		return this.request<TResponse, TError>("PATCH", path, overrides);
-	}
-	//#endregion
-
-	protected optionsOverride<TResponse = any, TError = any>(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>): Partial<IRestOptions<TResponse, TError>> {
-		const target = base ?? this.options.current();
-		if (this.options.get("overrideStrategy") === "merge") {
+	const cacheSet: CacheSet<TResponse, TError> = (response, customKey) => {
+		const key = cacheKey(response.request.url, response.request.method, customKey);
+		_cache.set(key, response as any);
+	};
+	const cacheGet: CacheGet<TResponse, TError> = (url, method = "*", customKey) => {
+		const key = cacheKey(url, method, customKey);
+		return _cache.get(key) as IResponse<TResponse, TError> | undefined;
+	};
+	const optionsOverride: OptionsOverride<TResponse, TError> = (overrides, base) => {
+		const target = base ?? _options.current();
+		if (_options.get("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
 			return mergeObject(o, overrides ?? {}, ["body"]) as Partial<IRestOptions<TResponse, TError>>;
 		}
 		else return Object.assign({}, target, overrides ?? {});
 	}
-	public async request<TResponse = any, TError = any>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions<TResponse, TError>>) : Promise<IResponse<TResponse, TError>> {
-		const that = this;
+	const requestFull: RequestMethodFull<TResponse, TError> = async (method, path, requestOptions) => {
 		const localOptions = requestOptions
-			? this.optionsOverride<TResponse, TError>(requestOptions)
-			: this.options.current<TResponse, TError>()
+			? optionsOverride(requestOptions)
+			: _options.current()
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
 		if (localOptions.query && Object.keys(localOptions.query).length)
@@ -83,7 +68,7 @@ export default class RestClient<TResponse = any, TError = any> {
 
 		localOptions.cacheKey = localOptions.cacheKey?.trim();
 		if (localOptions.internalCache) {
-			const cachedResponse = this.cacheGet<TResponse, TError>(url, method);
+			const cachedResponse = cacheGet(url, method);
 			if (cachedResponse) return Promise.resolve(cachedResponse);
 		}
 		if (!localOptions.abortController)
@@ -94,7 +79,7 @@ export default class RestClient<TResponse = any, TError = any> {
 			body: localOptions.body
 		};
 
-		const onRequest = this.options.get("onRequest");
+		const onRequest = _options.get("onRequest");
 		if (typeof onRequest == "function") {
 			const result = onRequest(request as any);
 			if (result instanceof Promise)
@@ -170,8 +155,8 @@ export default class RestClient<TResponse = any, TError = any> {
 					m = method;
 					repeatOptions = {};
 				}
-				const newOpts = that.optionsOverride(repeatOptions, localOptions);
-				return that.request<TResponse, TError>(m as HttpMethod, path, newOpts);
+				const newOpts = optionsOverride(repeatOptions, localOptions);
+				return requestFull(m as HttpMethod, path, newOpts);
 			}
 		};
 
@@ -205,7 +190,7 @@ export default class RestClient<TResponse = any, TError = any> {
 				if (throwFilterFound)
 					response.throwFilter = throwFilterFound;
 				else {
-					const onError = this.options.get("onError");
+					const onError = _options.get("onError");
 					if (typeof onError == "function") {
 						onErrorCalled = true;
 						onError(response.error as any, response as any);
@@ -215,14 +200,34 @@ export default class RestClient<TResponse = any, TError = any> {
 			}
 		}
 		if (localOptions.internalCache)
-			this.cacheSet(response);
+			cacheSet(response);
 
 		if (!onErrorCalled) {
-			const onResponse = this.options.get("onResponse");
+			const onResponse = _options.get("onResponse");
 			if (typeof onResponse == "function")
 				onResponse(response as any);
 		}
 
 		return response;
-	}
-}
+	};
+	const get: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("GET", path, overrides);
+	const del: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("DELETE", path, overrides);
+	const post: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("POST", path, overrides);
+	const patch: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("PATCH", path, overrides);
+	const put: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("PUT", path, overrides);
+	return () => ({
+		options: _options,
+		cacheKey,
+		cacheClear,
+		cacheClearByKey,
+		cacheSet,
+		cacheGet,
+		optionsOverride,
+		request: requestFull,
+		get,
+		del,
+		post,
+		patch,
+		put
+	})
+};
