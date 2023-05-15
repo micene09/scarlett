@@ -5,19 +5,19 @@ import RestOptions from "../rest-options/index.class";
 
 export default class RestClient<TResponse = any, TError = any> {
 	private _cache: Map<string, IResponse<TResponse, TError>>;
-	protected options: RestOptions<TResponse, TError>;
-	protected cacheKey: CacheKey;
-	protected cacheClear: CacheClear;
-	protected cacheClearByKey: CacheClearByKey;
-	protected cacheSet: CacheSet<TResponse, TError>;
-	protected cacheGet: CacheGet<TResponse, TError>;
-	protected optionsOverride: OptionsOverride<TResponse, TError>;
-	protected get: RequestMethod<TResponse, TError>;
-	protected delete: RequestMethod<TResponse, TError>;
-	protected post: RequestMethod<TResponse, TError>;
-	protected put: RequestMethod<TResponse, TError>;
-	protected patch: RequestMethod<TResponse, TError>;
-	protected request: RequestMethodFull<TResponse, TError>;
+	options: RestOptions<TResponse, TError>;
+	cacheKey: CacheKey;
+	cacheClear: CacheClear;
+	cacheClearByKey: CacheClearByKey;
+	cacheSet: CacheSet;
+	cacheGet: CacheGet;
+	optionsOverride: OptionsOverride;
+	get: RequestMethod;
+	delete: RequestMethod;
+	post: RequestMethod;
+	put: RequestMethod;
+	patch: RequestMethod;
+	request: RequestMethodFull;
 	constructor(options?: Partial<IRestOptionsGlobals<TResponse, TError>>) {
 		this._cache = new Map();
 		const useRestClient = createRestClient(options, this._cache);

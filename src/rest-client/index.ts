@@ -1,17 +1,16 @@
-import { IRestOptionsGlobals, IResponse, HttpMethod, IRestOptions, IRequest, HTTPStatusCode } from "../interfaces";
+import type { IRestOptionsGlobals, IResponse, HttpMethod, IRestOptions, IRequest, HTTPStatusCode } from "../interfaces";
 import RestError from "../rest-error";
 import useRestOptions from "../rest-options";
-import RestOptions from "../rest-options";
 import { cloneObject, getRequestUrl, mergeObject, resolveAny, setUrlParameters, transformRequestBody, transformResponseBody } from "../utilities";
 
 export type CacheKey = (url: URL, method: HttpMethod | "*", customKey?: string) => string;
 export type CacheClear = () => void;
 export type CacheClearByKey = (cacheKey?: string | null) => void;
-export type CacheSet<TResponse, TError> = (response: IResponse<TResponse, TError>, customKey?: string) => void;
-export type CacheGet<TResponse, TError> = (url: URL, method: HttpMethod | "*", customKey?: string) => IResponse<TResponse, TError> | undefined;
-export type OptionsOverride<TResponse, TError> = (overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => Partial<IRestOptions<TResponse, TError>>
-export type RequestMethod<TResponse = any, TError = any> = (path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => Promise<IResponse<TResponse, TError>>;
-export type RequestMethodFull<TResponse = any, TError = any> = (method: HttpMethod, path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => Promise<IResponse<TResponse, TError>>;
+export type CacheSet = <TResponse = any, TError = any>(response: IResponse<TResponse, TError>, customKey?: string) => void;
+export type CacheGet = <TResponse = any, TError = any>(url: URL, method: HttpMethod | "*", customKey?: string) => IResponse<TResponse, TError> | undefined;
+export type OptionsOverride = <TResponse = any, TError = any>(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => Partial<IRestOptions<TResponse, TError>>
+export type RequestMethod = <TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => Promise<IResponse<TResponse, TError>>;
+export type RequestMethodFull = <TResponse = any, TError = any>(method: HttpMethod, path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => Promise<IResponse<TResponse, TError>>;
 
 export default function createRestClient<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>, cache?: Map<string, IResponse<TResponse, TError>>) {
 	const _cache = cache ?? new Map<string, IResponse<TResponse, TError>>();
@@ -42,15 +41,15 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 			if (key.startsWith(`${cacheKey}|`))
 				_cache.delete(key);
 	}
-	const cacheSet: CacheSet<TResponse, TError> = (response, customKey) => {
+	const cacheSet: CacheSet = <TResponse, TError>(response: IResponse<TResponse, TError>, customKey?: string) => {
 		const key = cacheKey(response.request.url, response.request.method, customKey);
 		_cache.set(key, response as any);
 	};
-	const cacheGet: CacheGet<TResponse, TError> = (url, method = "*", customKey) => {
+	const cacheGet: CacheGet = <TResponse, TError>(url: URL, method: HttpMethod | "*" = "*", customKey?: string) => {
 		const key = cacheKey(url, method, customKey);
 		return _cache.get(key) as IResponse<TResponse, TError> | undefined;
 	};
-	const optionsOverride: OptionsOverride<TResponse, TError> = (overrides, base) => {
+	const optionsOverride: OptionsOverride = <TResponse, TError>(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => {
 		const target = base ?? currentOptions();
 		if (getOption("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
@@ -58,10 +57,10 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 		}
 		else return Object.assign({}, target, overrides ?? {});
 	}
-	const requestFull: RequestMethodFull<TResponse, TError> = async (method, path, requestOptions) => {
-		const localOptions = requestOptions
+	const requestFull: RequestMethodFull = async <TResponse, TError>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions<TResponse, TError>>): Promise<IResponse<TResponse, TError>> => {
+		const localOptions = (requestOptions
 			? optionsOverride(requestOptions)
-			: currentOptions()
+			: currentOptions()) as Partial<IRestOptions<TResponse, TError>>
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
 		if (localOptions.query && Object.keys(localOptions.query).length)
@@ -211,11 +210,12 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 
 		return response;
 	};
-	const get: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("GET", path, overrides);
-	const del: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("DELETE", path, overrides);
-	const post: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("POST", path, overrides);
-	const patch: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("PATCH", path, overrides);
-	const put: RequestMethod<TResponse, TError> = (path, overrides) => requestFull("PUT", path, overrides);
+	const get: RequestMethod = <TResponse, TError>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => requestFull<TResponse, TError>("GET", path, overrides);
+	const del: RequestMethod = <TResponse, TError>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => requestFull<TResponse, TError>("DELETE", path, overrides);
+	const post: RequestMethod = <TResponse, TError>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => requestFull<TResponse, TError>("POST", path, overrides);
+	const patch: RequestMethod = <TResponse, TError>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => requestFull<TResponse, TError>("PATCH", path, overrides);
+	const put: RequestMethod = <TResponse, TError>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => requestFull<TResponse, TError>("PUT", path, overrides);
+
 	return () => ({
 		cacheKey,
 		cacheClear,
