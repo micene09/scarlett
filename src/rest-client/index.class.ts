@@ -1,7 +1,7 @@
 import type { CacheClear, CacheClearByKey, CacheGet, CacheKey, CacheSet, OptionsOverride, RequestMethod, RequestMethodFull } from ".";
 import createRestClient from ".";
 import type { IResponse, IRestOptionsGlobals } from "../interfaces";
-import RestOptions from "../rest-options/index.class";
+import RestOptions from "../rest-client-builder/index.class";
 
 export default class RestClient<TResponse = any, TError = any> {
 	private _cache: Map<string, IResponse<TResponse, TError>>;
