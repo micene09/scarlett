@@ -1,11 +1,11 @@
 import type { CacheClear, CacheClearByKey, CacheGet, CacheKey, CacheSet, OptionsOverride, RequestMethod, RequestMethodFull } from ".";
 import createRestClient from ".";
 import type { IResponse, IRestOptionsGlobals } from "../interfaces";
-import RestOptions from "../rest-client-builder/index.class";
+import RestClientBuilder from "../rest-client-builder/index.class";
 
 export default class RestClient<TResponse = any, TError = any> {
 	private _cache: Map<string, IResponse<TResponse, TError>>;
-	options: RestOptions<TResponse, TError>;
+	options: RestClientBuilder<TResponse, TError>;
 	cacheKey: CacheKey;
 	cacheClear: CacheClear;
 	cacheClearByKey: CacheClearByKey;
@@ -22,7 +22,7 @@ export default class RestClient<TResponse = any, TError = any> {
 		this._cache = new Map();
 		const useRestClient = createRestClient(options, this._cache);
 		const client = useRestClient();
-		this.options = new RestOptions(options ?? {});
+		this.options = new RestClientBuilder(options ?? {});
 		this.cacheKey = client.cacheKey;
 		this.cacheClear = client.cacheClear;
 		this.cacheClearByKey = client.cacheClearByKey;
