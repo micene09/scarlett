@@ -4,7 +4,7 @@
 		"target": "ES2021",
 		"module": "ESNext",
 		"moduleResolution": "node",
-		"noImplicitAny": false,
+		"noImplicitAny": true,
 		"skipDefaultLibCheck": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
