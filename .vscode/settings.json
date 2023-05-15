@@ -4,5 +4,8 @@
 	"vitest.commandLine": "yarn test-watch",
 	"vitest.include": [
 		"tests/*.test.ts"
+	],
+	"cSpell.words": [
+		"restoptions"
 	]
 }
