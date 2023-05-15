@@ -1,6 +1,6 @@
 import type { IRestOptionsGlobals, IResponse, HttpMethod, IRestOptions, IRequest, HTTPStatusCode } from "../interfaces";
 import RestError from "../rest-error";
-import useRestOptions from "../rest-options";
+import useRestOptions from "../rest-client-builder";
 import { cloneObject, getRequestUrl, mergeObject, resolveAny, setUrlParameters, transformRequestBody, transformResponseBody } from "../utilities";
 
 export type CacheKey = (url: URL, method: HttpMethod | "*", customKey?: string) => string;

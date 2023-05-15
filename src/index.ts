@@ -1,8 +1,8 @@
 import createRestClient from './rest-client';
 import RestClient from './rest-client/index.class';
 
-import useRestOptions from './rest-options';
-import RestOptions from './rest-options/index.class';
+import useRestOptions from './rest-client-builder';
+import RestOptions from './rest-client-builder/index.class';
 
 import RestError from './rest-error';
 
