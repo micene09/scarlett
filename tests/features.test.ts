@@ -1,4 +1,4 @@
-import RestClient, { RestError, RestOptions } from "../src/index";
+import RestClient, { IResponse, RestError, RestOptions } from "../src/index";
 import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
 import { fail, ok } from "assert";
 import { beforeAll, afterAll, describe, test, expect, vi } from "vitest";
@@ -333,10 +333,11 @@ describe('Features', () => {
 		const onResponse = vi.fn();
 		const rest = baseClient.options.clone()
 			.set("responseType", "json")
+			.set("basePath", 9)
 			.set("throw", true)
-			.set("onRequest", request => onRequest())
-			.set("onResponse", response => onResponse())
-			.set("onError", error => onError())
+			.set("onRequest", () => onRequest())
+			.set("onResponse", () => onResponse())
+			.set("onError", () => onError())
 			.createRestClient();
 
 		try {
@@ -352,7 +353,7 @@ describe('Features', () => {
 		const rest = baseClient.options.clone()
 			.set("responseType", "json")
 			.set("throw", false)
-			.set("onRequest", request => new Promise(resolve => {
+			.set("onRequest", (request: any) => new Promise<void>(resolve => {
 				request.options.headers = new Headers({
 					"X-Example": "1234"
 				});
