@@ -10,7 +10,7 @@ export type UnsetOption<TResponse, TError> = <K extends keyof IRestOptions<TResp
 export type CloneOptions<TResponse, TError> = () => Partial<IRestOptions<TResponse, TError>>
 export type MergeOrAssignOptions<TResponse, TError> = (obj?: Partial<IRestOptions<TResponse, TError>>) => void
 
-export default function useRestOptions<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>) {
+export default function useRestClientBuilder<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>) {
 	const _options: Partial<IRestOptionsGlobals<TResponse, TError>> = options ?? {};
 	const checkAndRestoreDefaults: CheckAndRestoreDefault = () => {
 		if (!_options.overrideStrategy) _options.overrideStrategy = "merge";

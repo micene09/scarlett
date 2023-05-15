@@ -1,6 +1,6 @@
 import type { IRestOptionsGlobals, IResponse, HttpMethod, IRestOptions, IRequest, HTTPStatusCode } from "../interfaces";
 import RestError from "../rest-error";
-import useRestOptions from "../rest-client-builder";
+import useRestClientBuilder from "../rest-client-builder";
 import { cloneObject, getRequestUrl, mergeObject, resolveAny, setUrlParameters, transformRequestBody, transformResponseBody } from "../utilities";
 
 export type CacheKey = (url: URL, method: HttpMethod | "*", customKey?: string) => string;
@@ -14,7 +14,7 @@ export type RequestMethodFull = <TResponse = any, TError = any>(method: HttpMeth
 
 export default function createRestClient<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>, cache?: Map<string, IResponse<TResponse, TError>>) {
 	const _cache = cache ?? new Map<string, IResponse<TResponse, TError>>();
-	const { getOption, currentOptions } = useRestOptions(options ?? {});
+	const { getOption, currentOptions } = useRestClientBuilder(options ?? {});
 	const cacheKey: CacheKey = (url, method = "*", customKey) => {
 		const cacheKey = customKey?.trim() ? customKey : (getOption("cacheKey") ?? '');
 		function formDataToObj(formData: FormData) {
