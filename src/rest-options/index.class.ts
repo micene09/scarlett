@@ -37,8 +37,8 @@ export default class RestOptions<TResponse = any, TError = any> {
 			return this;
 		};
 		this.clone = (...args) => {
-			restOpts.cloneOptions(...args);
-			return this;
+			const options = restOpts.cloneOptions(...args);
+			return new RestOptions(options, this._restFactory);
 		};
 		this.merge = (...args) => {
 			restOpts.mergeOptions(...args);
