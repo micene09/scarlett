@@ -333,7 +333,6 @@ describe('Features', () => {
 		const onResponse = vi.fn();
 		const rest = baseClient.options.clone()
 			.set("responseType", "json")
-			.set("basePath", 9)
 			.set("throw", true)
 			.set("onRequest", () => onRequest())
 			.set("onResponse", () => onResponse())
