@@ -14,7 +14,7 @@ export type RequestMethodFull = <TResponse = any, TError = any>(method: HttpMeth
 
 export default function createRestClient<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>, cache?: Map<string, IResponse<TResponse, TError>>) {
 	const _cache = cache ?? new Map<string, IResponse<TResponse, TError>>();
-	const { getOption, currentOptions } = useRestClientBuilder(options ?? {});
+	const { getOption, setOption, currentOptions, cloneOptions } = useRestClientBuilder(options ?? {});
 	const cacheKey: CacheKey = (url, method = "*", customKey) => {
 		const cacheKey = customKey?.trim() ? customKey : (getOption("cacheKey") ?? '');
 		function formDataToObj(formData: FormData) {
@@ -223,6 +223,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 		cacheSet,
 		cacheGet,
 		optionsOverride,
+		getOption, setOption, currentOptions, cloneOptions,
 		request: requestFull,
 		get,
 		del,
