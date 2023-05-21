@@ -5,7 +5,7 @@ import RestClientBuilder from "../rest-client-builder/index.class";
 
 export default class RestClient<TResponse = any, TError = any> {
 	private _cache: Map<string, IResponse<TResponse, TError>>;
-	options: RestClientBuilder<TResponse, TError>;
+	options: RestClientBuilder<TResponse, TError, typeof this>;
 	cacheKey: CacheKey;
 	cacheClear: CacheClear;
 	cacheClearByKey: CacheClearByKey;
