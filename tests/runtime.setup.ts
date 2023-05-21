@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import AbortController from "abort-controller"
 import fastify from "fastify";
-import { createRestClient } from '../src';
+import RestClient, { createRestClient } from '../src';
 
 (globalThis as any).fetch = fetch;
 (globalThis as any).Headers = (fetch as any).Headers;
@@ -21,7 +21,7 @@ interface ITestStatusCodeResponse {
 	statusText: "CustomStatusCode",
 	statusCode: number
 }
-export async function startWebServer() {
+export async function useTestServer() {
 	testServer
 		.all("/json", (req, res) => {
 			res.header("Content-type", "application/json");
@@ -58,18 +58,21 @@ export async function startWebServer() {
 				res.send("ok");
 			}, +(req.params as any).ms);
 		});
-	await testServer.listen({
+	const host = await testServer.listen({
 		host: "localhost",
-		port: 3000
+		port: 0
 	});
-}
-export function stopWebServer() {
-	testServer?.close();
+	return {
+		host,
+		stop() {
+			testServer.close()
+		}
+	}
 }
 
-export function useTestRestClient() {
+export function useTestRestClient(host: string) {
 	const useRestClient = createRestClient({
-		host: "http://localhost:3000",
+		host,
 		responseType: "json",
 		throw: true
 	});
@@ -100,5 +103,38 @@ export function useTestRestClient() {
 				...overrides
 			});
 		}
+	};
+}
+export class TestRestClient extends RestClient {
+	constructor(host: string) {
+		super({
+			host,
+			responseType: "json",
+			throw: true
+		});
+	}
+	requestJson(method: Parameters<RestClient["request"]>[0], overrides: Parameters<RestClient["request"]>[2]) {
+		return this.request<ITestJsonResponse, null>(method, "/json", overrides);
+	}
+	requestText(method: Parameters<RestClient["request"]>[0], overrides: Parameters<RestClient["request"]>[2]) {
+		return this.request<string, null>(method, "/text", {
+			responseType: "text",
+			...overrides
+		});
+	}
+	getStatusCode(statusCode: number) {
+		return this.get<ITestStatusCodeResponse, ITestStatusCodeResponse>(`/status-code/${statusCode}`);
+	}
+	getStatusCodeEmpty(statusCode: number) {
+		return this.get<null, null>(`/status-code/${statusCode}/empty`, { responseType: undefined });
+	}
+	mirror(method: Parameters<RestClient["request"]>[0], overrides: Parameters<RestClient["request"]>[2]) {
+		return this.request<ITestMirrorResponse, ITestMirrorResponse>(method, "/mirror", overrides);
+	}
+	delayedResponse(milliseconds: number, overrides: Parameters<RestClient["request"]>[2]) {
+		return this.get<string, null>(`/reply-in/${milliseconds}/milliseconds`, {
+			responseType: "text",
+			...overrides
+		});
 	}
 }
