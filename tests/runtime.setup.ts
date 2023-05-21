@@ -1,26 +1,27 @@
 import fetch from 'node-fetch';
 import AbortController from "abort-controller"
 import fastify from "fastify";
+import { createRestClient } from '../src';
 
 (globalThis as any).fetch = fetch;
 (globalThis as any).Headers = (fetch as any).Headers;
 (globalThis as any).AbortController = AbortController;
 
 let testServer = fastify({ logger: false });
-export interface ITestJsonResponse {
+interface ITestJsonResponse {
 	fake: "model"
 }
-export interface ITestMirrorResponse {
+interface ITestMirrorResponse {
 	queryString: string;
 	queryObject: Record<string, string>;
 	headers: Record<string, string>;
 	body: string;
 }
-export interface ITestStatusCodeResponse {
+interface ITestStatusCodeResponse {
 	statusText: "CustomStatusCode",
 	statusCode: number
 }
-export async function startWebServer(port: number = 3000) {
+export async function startWebServer() {
 	testServer
 		.all("/json", (req, res) => {
 			res.header("Content-type", "application/json");
@@ -57,9 +58,47 @@ export async function startWebServer(port: number = 3000) {
 				res.send("ok");
 			}, +(req.params as any).ms);
 		});
-	await testServer.listen(port);
-	return `http://localhost:${port}`;
+	await testServer.listen({
+		host: "localhost",
+		port: 3000
+	});
 }
 export function stopWebServer() {
 	testServer?.close();
+}
+
+export function useTestRestClient() {
+	const useRestClient = createRestClient({
+		host: "http://localhost:3000",
+		responseType: "json",
+		throw: true
+	});
+	const { setOption, request, get } = useRestClient()
+	return {
+		setOption,
+		requestJson(method: Parameters<typeof request>[0], overrides: Parameters<typeof request>[2]) {
+			return request<ITestJsonResponse, null>(method, "/json", overrides);
+		},
+		requestText(method: Parameters<typeof request>[0], overrides: Parameters<typeof request>[2]) {
+			return request<string, null>(method, "/text", {
+				responseType: "text",
+				...overrides
+			});
+		},
+		getStatusCode(statusCode: number) {
+			return get<ITestStatusCodeResponse, ITestStatusCodeResponse>(`/status-code/${statusCode}`);
+		},
+		getStatusCodeEmpty(statusCode: number) {
+			return get<null, null>(`/status-code/${statusCode}/empty`, { responseType: undefined });
+		},
+		mirror(method: Parameters<typeof request>[0], overrides: Parameters<typeof request>[2]) {
+			return request<ITestMirrorResponse, ITestMirrorResponse>(method, "/mirror", overrides);
+		},
+		delayedResponse(milliseconds: number, overrides: Parameters<typeof request>[2]) {
+			return get<string, null>(`/reply-in/${milliseconds}/milliseconds`, {
+				responseType: "text",
+				...overrides
+			});
+		}
+	}
 }
