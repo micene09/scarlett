@@ -12,7 +12,7 @@ beforeAll(async () => {
 afterAll(() => stopWebServer());
 
 describe('Rest Client Builder using Functional API', () => {
-	test("Rest client using builder", async () => {
+	test("Create a rest client using builder", async () => {
 
 		const builder1 = useRestClientBuilder({
 			host: testServer,
@@ -48,7 +48,7 @@ describe('Rest Client Builder using Functional API', () => {
 	});
 });
 describe('Rest Client Builder using Class API', () => {
-	test("Rest client using builder", async () => {
+	test("Create a rest client using builder", async () => {
 
 		const builder1 = new RestClientBuilder<any, any, TestRestClient>({
 			host: testServer,
@@ -84,5 +84,24 @@ describe('Rest Client Builder using Class API', () => {
 		expect(resp1.data?.headers["x-restoptions"]).toEqual("1");
 		expect(resp2.data?.headers["x-restoptions"]).toEqual("2");
 		expect(resp3.data?.headers["x-restoptions"]).toEqual("3");
+	});
+	test("Create a rest client using a custom builder class", async () => {
+
+		class TestRestBuilder extends RestClientBuilder<any, any, TestRestClient> {
+			constructor(host: string, ...options: ConstructorParameters<typeof RestClientBuilder>) {
+				super({
+					...(options ?? {}),
+					host,
+					responseType: "json",
+					throw: true
+				});
+				this.setFactory(TestRestClient);
+			}
+		}
+		const builder = new TestRestBuilder(testServer);
+		builder.set("headers", new Headers({ "x-restoptions": "1" }));
+		const restOpts = builder.createRestClient<typeof TestRestClient>(testServer)
+		const resp1 = await restOpts.mirror("GET");
+		expect(resp1.data?.headers["x-restoptions"]).toEqual("1");
 	});
 });
