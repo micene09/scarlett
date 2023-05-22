@@ -22,7 +22,8 @@ export default class RestClient<TResponse = any, TError = any> {
 		this._cache = new Map();
 		const useRestClient = createRestClient<TResponse, TError>(options, this._cache);
 		const client = useRestClient();
-		this.options = new RestClientBuilder(options ?? {});
+		this.options = new RestClientBuilder<TResponse, TError, any>(options ?? {});
+		this.options.setFactory(this.constructor as any);
 		this.cacheKey = client.cacheKey;
 		this.cacheClear = client.cacheClear;
 		this.cacheClearByKey = client.cacheClearByKey;
