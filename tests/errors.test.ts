@@ -1,4 +1,3 @@
-import type { RestError } from "../src/index";
 import { useTestServer, useTestRestClient, TestRestClient } from "./runtime.setup";
 import { beforeAll, afterAll, describe, test, expect, vi } from "vitest";
 import { fail, ok } from "assert";
