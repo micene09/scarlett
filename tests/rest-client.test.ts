@@ -1,4 +1,4 @@
-import { useRestClientBuilder } from "../src";
+import { RestClientBuilder, useRestClientBuilder } from "../src";
 import { TestRestBuilder, TestRestClient, useTestRestClient, useTestServer } from "./runtime.setup";
 import { beforeAll, afterAll, describe, test, expect, vi } from "vitest";
 
@@ -111,16 +111,32 @@ describe('Rest Client using Functional API', () => {
 describe('Rest Client using Class API', () => {
 	test("Rest client using builder", async () => {
 
-		const builder = new TestRestBuilder(testServer);
-		const restOpts1 = builder.createRestClient<typeof TestRestClient>(testServer)
-		restOpts1.options.set("headers", new Headers({ "x-restoptions": "1" }));
+		const builder1 = new RestClientBuilder<any, any, TestRestClient>({
+			host: testServer,
+			responseType: "json",
+			throw: true
+		});
+		builder1.setFactory(TestRestClient);
+		builder1.set("headers", new Headers({ "x-restoptions": "1" }));
+		const restOpts1 = builder1.createRestClient<typeof TestRestClient>(testServer)
 
-		const restOpts2 = builder.createRestClient<typeof TestRestClient>(testServer);
-		restOpts2.options.set("headers", new Headers({ "x-restoptions": "2" }));
+		const builder2 = new RestClientBuilder<any, any, TestRestClient>({
+			host: testServer,
+			responseType: "json",
+			throw: true
+		});
+		builder2.set("headers", new Headers({ "x-restoptions": "2" }));
+		builder2.setFactory(TestRestClient);
+		const restOpts2 = builder2.createRestClient<typeof TestRestClient>(testServer);
 
-
-		const restOpts3 = builder.createRestClient<typeof TestRestClient>(testServer);
-		restOpts3.options.set("headers", new Headers({ "x-restoptions": "3" }));
+		const builder3 = new RestClientBuilder<any, any, TestRestClient>({
+			host: testServer,
+			responseType: "json",
+			throw: true
+		});
+		builder3.set("headers", new Headers({ "x-restoptions": "3" }));
+		builder3.setFactory(TestRestClient);
+		const restOpts3 = builder3.createRestClient(testServer);
 
 		const resp1 = await restOpts1.mirror("GET");
 		const resp2 = await restOpts2.mirror("GET");
