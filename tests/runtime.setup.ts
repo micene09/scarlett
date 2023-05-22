@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import AbortController from "abort-controller"
 import fastify from "fastify";
-import RestClient, { createRestClient } from '../src';
+import RestClient, { RestClientBuilder, createRestClient } from '../src';
 
 (globalThis as any).fetch = fetch;
 (globalThis as any).Headers = (fetch as any).Headers;
@@ -76,9 +76,11 @@ export function useTestRestClient(host: string) {
 		responseType: "json",
 		throw: true
 	});
-	const { setOption, request, get } = useRestClient()
+	const { setOption, optionsOverride, request, get, currentOptions } = useRestClient()
 	return {
 		setOption,
+		currentOptions,
+		optionsOverride,
 		requestJson(method: Parameters<typeof request>[0], overrides: Parameters<typeof request>[2]) {
 			return request<ITestJsonResponse, null>(method, "/json", overrides);
 		},
@@ -94,7 +96,7 @@ export function useTestRestClient(host: string) {
 		getStatusCodeEmpty(statusCode: number) {
 			return get<null, null>(`/status-code/${statusCode}/empty`, { responseType: undefined });
 		},
-		mirror(method: Parameters<typeof request>[0], overrides: Parameters<typeof request>[2]) {
+		mirror(method: Parameters<typeof request>[0], overrides?: Parameters<typeof request>[2]) {
 			return request<ITestMirrorResponse, ITestMirrorResponse>(method, "/mirror", overrides);
 		},
 		delayedResponse(milliseconds: number, overrides: Parameters<typeof request>[2]) {
@@ -137,5 +139,16 @@ export class TestRestClient extends RestClient {
 			responseType: "text",
 			...overrides
 		});
+	}
+}
+export class TestRestBuilder extends RestClientBuilder<any, any, TestRestClient> {
+	constructor(host: string, ...options: ConstructorParameters<typeof RestClientBuilder>) {
+		super({
+			...(options ?? {}),
+			host,
+			responseType: "json",
+			throw: true
+		});
+		this.setFactory(TestRestClient as any);
 	}
 }
