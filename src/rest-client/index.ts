@@ -55,7 +55,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 			let o = cloneObject(target);
 			return mergeObject(o, overrides ?? {}, ["body"]) as Partial<IRestOptions<TResponse, TError>>;
 		}
-		else return Object.assign({}, target, overrides ?? {});
+		else return Object.assign(target, overrides ?? {});
 	}
 	const requestFull: RequestMethodFull = async <TResponse, TError>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions<TResponse, TError>>): Promise<IResponse<TResponse, TError>> => {
 		const localOptions = (requestOptions

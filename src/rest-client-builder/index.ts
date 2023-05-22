@@ -27,7 +27,7 @@ export default function useRestClientBuilder<TResponse = any, TError = any>(opti
 	}
 	const currentOptions: CurrentOptions<TResponse, TError> = () => cloneObject(_options);
 	const createRestClientFromOptions = () => {
-		const options = cloneObject(_options);
+		const options = cloneOptions();
 		return createRestClient(options);
 	};
 	const getOption: GetOption<TResponse, TError> = key => cloneValue(_options, key);
