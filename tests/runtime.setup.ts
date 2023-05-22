@@ -106,8 +106,9 @@ export function useTestRestClient(host: string) {
 	};
 }
 export class TestRestClient extends RestClient {
-	constructor(host: string) {
+	constructor(host: string, ...options: ConstructorParameters<typeof RestClient>) {
 		super({
+			...(options ?? {}),
 			host,
 			responseType: "json",
 			throw: true
@@ -128,7 +129,7 @@ export class TestRestClient extends RestClient {
 	getStatusCodeEmpty(statusCode: number) {
 		return this.get<null, null>(`/status-code/${statusCode}/empty`, { responseType: undefined });
 	}
-	mirror(method: Parameters<RestClient["request"]>[0], overrides: Parameters<RestClient["request"]>[2]) {
+	mirror(method: Parameters<RestClient["request"]>[0], overrides?: Parameters<RestClient["request"]>[2]) {
 		return this.request<ITestMirrorResponse, ITestMirrorResponse>(method, "/mirror", overrides);
 	}
 	delayedResponse(milliseconds: number, overrides: Parameters<RestClient["request"]>[2]) {
