@@ -49,11 +49,13 @@ export default class RestClientBuilder<TResponse = any, TError = any, TRestClien
 			return this;
 		};
 	}
-	public setFactory(factoryClass: TRestClient) {
-		this._restFactory = factoryClass;
+	public setFactory<TRestClient extends new (...args: any) => any>(factoryClass: TRestClient) {
+		this._restFactory = factoryClass as any;
 		return this;
 	}
 	public createRestClient<T extends new (...args: any) => any>(...args: ConstructorParameters<T>): TRestClient {
-		return new (this._restFactory as any)(args);
+		const inst = new (this._restFactory as any)(args) as RestClient;
+		inst.options.assign(this._options);
+		return inst as any;
 	}
 }
