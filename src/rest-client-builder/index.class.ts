@@ -3,7 +3,7 @@ import type { CheckAndRestoreDefault, CloneOptions, CurrentOptions, GetOption, M
 import useRestClientBuilder from '.';
 import RestClient from '../rest-client/index.class';
 
-export default class RestClientBuilder<TResponse = any, TError = any, TRestClient = RestClient<TResponse, TError>> {
+export default class RestClientBuilder<TResponse = any, TError = any, TRestClient extends RestClient = RestClient> {
 	private _options: Partial<IRestOptionsGlobals<TResponse, TError>>;
 	private _restFactory: TRestClient;
 	checkAndRestoreDefaults: CheckAndRestoreDefault;
@@ -17,7 +17,7 @@ export default class RestClientBuilder<TResponse = any, TError = any, TRestClien
 
 	constructor(options?: Partial<IRestOptionsGlobals<TResponse, TError>>, factoryClass?: TRestClient) {
 		this._options = options ?? {};
-		this._restFactory = factoryClass ?? RestClient as TRestClient;
+		this._restFactory = factoryClass ?? RestClient as any;
 		const restOpts = useRestClientBuilder<TResponse, TError>(this._options);
 		this.checkAndRestoreDefaults = restOpts.checkAndRestoreDefaults;
 		this.current = () => {
@@ -53,8 +53,7 @@ export default class RestClientBuilder<TResponse = any, TError = any, TRestClien
 		this._restFactory = factoryClass;
 		return this;
 	}
-	public createRestClient(): TRestClient {
-		const options = this.clone()._options;
-		return new (this._restFactory as any)(options);
+	public createRestClient<T extends new (...args: any) => any>(...args: ConstructorParameters<T>): TRestClient {
+		return new (this._restFactory as any)(args);
 	}
 }
