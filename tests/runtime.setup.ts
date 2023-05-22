@@ -158,14 +158,3 @@ export class TestRestClient extends RestClient {
 		});
 	}
 }
-export class TestRestBuilder extends RestClientBuilder<any, any, TestRestClient> {
-	constructor(host: string, ...options: ConstructorParameters<typeof RestClientBuilder>) {
-		super({
-			...(options ?? {}),
-			host,
-			responseType: "json",
-			throw: true
-		});
-		this.setFactory(TestRestClient);
-	}
-}
