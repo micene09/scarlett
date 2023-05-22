@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import AbortController from "abort-controller"
 import fastify from "fastify";
-import RestClient, { RestClientBuilder, createRestClient } from '../src';
+import RestClient, { RestClientBuilder, createRestClient, useRestClientBuilder } from '../src';
 
 (globalThis as any).fetch = fetch;
 (globalThis as any).Headers = (fetch as any).Headers;
@@ -107,6 +107,23 @@ export function useTestRestClient(host: string) {
 		}
 	};
 }
+export function useTestRestBuilder(host: string) {
+	const { setOption, cloneOptions, currentOptions } = useRestClientBuilder({
+		host,
+		responseType: "json",
+		throw: true
+	});
+	return {
+		setOption,
+		currentOptions,
+		createRestClient() {
+			const rest = useTestRestClient(host);
+			const currentOptions = cloneOptions()
+			rest.optionsOverride(undefined, currentOptions);
+			return rest;
+		}
+	};
+}
 export class TestRestClient extends RestClient {
 	constructor(host: string, ...options: ConstructorParameters<typeof RestClient>) {
 		super({
@@ -149,6 +166,6 @@ export class TestRestBuilder extends RestClientBuilder<any, any, TestRestClient>
 			responseType: "json",
 			throw: true
 		});
-		this.setFactory(TestRestClient as any);
+		this.setFactory(TestRestClient);
 	}
 }
