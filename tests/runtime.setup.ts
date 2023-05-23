@@ -133,17 +133,17 @@ export class TestRestClient extends RestClient {
 			throw: true
 		});
 	}
-	requestJson(method: Parameters<RestClient["request"]>[0], overrides: Parameters<RestClient["request"]>[2]) {
+	requestJson(method: Parameters<RestClient["request"]>[0], overrides?: Parameters<RestClient["request"]>[2]) {
 		return this.request<ITestJsonResponse, null>(method, "/json", overrides);
 	}
-	requestText(method: Parameters<RestClient["request"]>[0], overrides: Parameters<RestClient["request"]>[2]) {
+	requestText(method: Parameters<RestClient["request"]>[0], overrides?: Parameters<RestClient["request"]>[2]) {
 		return this.request<string, null>(method, "/text", {
 			responseType: "text",
 			...overrides
 		});
 	}
-	getStatusCode(statusCode: number) {
-		return this.get<ITestStatusCodeResponse, ITestStatusCodeResponse>(`/status-code/${statusCode}`);
+	getStatusCode(statusCode: number, overrides?: Parameters<RestClient["request"]>[2]) {
+		return this.get<ITestStatusCodeResponse, ITestStatusCodeResponse>(`/status-code/${statusCode}`, overrides);
 	}
 	getStatusCodeEmpty(statusCode: number) {
 		return this.get<null, null>(`/status-code/${statusCode}/empty`, { responseType: undefined });
