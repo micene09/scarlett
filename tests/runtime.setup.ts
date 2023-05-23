@@ -81,17 +81,17 @@ export function useTestRestClient(host: string) {
 		setOption,
 		currentOptions,
 		optionsOverride,
-		requestJson(method: Parameters<typeof request>[0], overrides: Parameters<typeof request>[2]) {
+		requestJson(method: Parameters<typeof request>[0], overrides?: Parameters<typeof request>[2]) {
 			return request<ITestJsonResponse, null>(method, "/json", overrides);
 		},
-		requestText(method: Parameters<typeof request>[0], overrides: Parameters<typeof request>[2]) {
+		requestText(method: Parameters<typeof request>[0], overrides?: Parameters<typeof request>[2]) {
 			return request<string, null>(method, "/text", {
 				responseType: "text",
 				...overrides
 			});
 		},
-		getStatusCode(statusCode: number) {
-			return get<ITestStatusCodeResponse, ITestStatusCodeResponse>(`/status-code/${statusCode}`);
+		getStatusCode(statusCode: number, overrides?: Parameters<typeof request>[2]) {
+			return get<ITestStatusCodeResponse, ITestStatusCodeResponse>(`/status-code/${statusCode}`, overrides);
 		},
 		getStatusCodeEmpty(statusCode: number) {
 			return get<null, null>(`/status-code/${statusCode}/empty`, { responseType: undefined });
@@ -99,7 +99,7 @@ export function useTestRestClient(host: string) {
 		mirror(method: Parameters<typeof request>[0], overrides?: Parameters<typeof request>[2]) {
 			return request<ITestMirrorResponse, ITestMirrorResponse>(method, "/mirror", overrides);
 		},
-		delayedResponse(milliseconds: number, overrides: Parameters<typeof request>[2]) {
+		delayedResponse(milliseconds: number, overrides?: Parameters<typeof request>[2]) {
 			return get<string, null>(`/reply-in/${milliseconds}/milliseconds`, {
 				responseType: "text",
 				...overrides
