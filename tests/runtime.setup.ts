@@ -151,7 +151,7 @@ export class TestRestClient extends RestClient {
 	mirror(method: Parameters<RestClient["request"]>[0], overrides?: Parameters<RestClient["request"]>[2]) {
 		return this.request<ITestMirrorResponse, ITestMirrorResponse>(method, "/mirror", overrides);
 	}
-	delayedResponse(milliseconds: number, overrides: Parameters<RestClient["request"]>[2]) {
+	delayedResponse(milliseconds: number, overrides?: Parameters<RestClient["request"]>[2]) {
 		return this.get<string, null>(`/reply-in/${milliseconds}/milliseconds`, {
 			responseType: "text",
 			...overrides

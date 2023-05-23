@@ -1,51 +1,41 @@
-import RestClient, { RestError, RestOptions } from "../src/index";
-import { startWebServer, stopWebServer, ITestStatusCodeResponse, ITestJsonResponse, ITestMirrorResponse } from "./runtime.setup";
-import { fail, ok } from "assert";
-import { beforeAll, afterAll, describe, test, expect, vi } from "vitest";
+import { TestRestClient, useTestServer } from "./runtime.setup";
+import { beforeAll, afterAll, describe, test, expect } from "vitest";
 
-let baseClient: RestClient;
-let baseOptions: RestOptions;
-let host: string = "";
+let stopWebServer = () => {};
+let testServer = "";
 beforeAll(async () => {
-	host = await startWebServer();
-	baseOptions = new RestOptions()
-		.set("host", host)
-		.set("responseType", "json")
-		.set("throw", true);
-	baseClient = baseOptions.createRestClient();
+	const { host, stop } = await useTestServer();
+	testServer = host as string
+	stopWebServer = stop;
 });
-afterAll(() => {
-	stopWebServer();
-});
+afterAll(() => stopWebServer());
 
-describe('Timeout support', () => {
+describe('Timeout support using Class API', () => {
 	test("Supported timeout on requests", async () => {
-		const ms = 2000;
-		const response = await baseClient.get<string>(`/reply-in/${ms}/milliseconds`, {
+
+		const delay = 100;
+		const baseClient = new TestRestClient(testServer);
+		const response = await baseClient.delayedResponse(delay, {
 			responseType: "text",
-			timeout: 100,
+			timeout: delay / 2,
 			throw: false
 		});
 		expect(response.status).toBeUndefined()
 		expect(response.error?.code).toEqual("Timeout")
 	})
 	test("Timeout can also be disabled", async () => {
-		const rest = baseClient.options.clone()
-			.set("responseType", "text")
-			.set("throw", false)
-			.set("timeout", 0)
-			.createRestClient();
-		const response = await rest.get<string>(`/reply-in/1000/milliseconds`);
+
+		const baseClient = new TestRestClient(testServer);
+		const response = await baseClient.delayedResponse(100, { timeout: 0 });
 		expect(response.error).toBeFalsy();
 	})
 	test("Timeout error handling", async () => {
-		const rest = baseClient.options.clone()
-			.set("responseType", "text")
-			.set("timeout", 100)
-			.set("throwExcluding", [{ errorCode: "Timeout" }])
-			.createRestClient();
 
-		const response = await rest.get<string>(`/reply-in/1000/milliseconds`);
+		const baseClient = new TestRestClient(testServer);
+		const response = await baseClient.delayedResponse(150, {
+			timeout: 50,
+			throwExcluding: [{ errorCode: "Timeout" }]
+		});
 		expect(response.error?.code).toEqual("Timeout");
 	})
 });
