@@ -1,0 +1,13 @@
+{
+	"name": "scarlett",
+	"entryPoints": [
+		"src/index.ts"
+	],
+	"out": "lib-docs",
+	"theme": "github-wiki-theme",
+	"pluginPages": {
+		"pages": [
+			{ "name": "Test", "source": "test.md" }
+		]
+	}
+}
