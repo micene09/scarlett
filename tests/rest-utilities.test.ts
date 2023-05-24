@@ -76,7 +76,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 	});
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
-		const ms = 1000;
+		const ms = 200;
 		const { delayedResponse } = useTestRestClient(testServer);
 		async function repliedIn() {
 			const starting = Date.now();
@@ -96,10 +96,10 @@ describe('Request utilities and shortcuts using Functional API', () => {
 		const { setOption, delayedResponse } = useTestRestClient(testServer);
 		setOption("responseType", "text");
 		setOption("throw", false);
-		const milliseconds = 10000;
+		const milliseconds = 200;
 
 		let requestedAt = Date.now()
-		setTimeout(() => abortController.abort(), 200)
+		setTimeout(() => abortController.abort(), milliseconds / 2)
 		await delayedResponse(milliseconds, { abortController })
 		let elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(milliseconds)
@@ -197,7 +197,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 	});
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
-		const ms = 1000;
+		const ms = 200;
 		const baseClient = new TestRestClient(testServer);
 		async function repliedIn() {
 			const starting = Date.now();
@@ -217,10 +217,10 @@ describe('Request utilities and shortcuts using Class API', () => {
 		const rest = new TestRestClient(testServer);
 		rest.options.set("responseType", "text");
 		rest.options.set("throw", false);
-		const milliseconds = 10000;
+		const milliseconds = 200;
 
 		let requestedAt = Date.now()
-		setTimeout(() => abortController.abort(), 200)
+		setTimeout(() => abortController.abort(), milliseconds / 2)
 		await rest.delayedResponse(milliseconds, { abortController })
 		let elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(milliseconds)

@@ -1,4 +1,4 @@
-import { TestRestClient, useTestServer } from "./runtime.setup";
+import { TestRestClient, useTestRestClient, useTestServer } from "./runtime.setup";
 import { beforeAll, afterAll, describe, test, expect } from "vitest";
 
 let stopWebServer = () => {};
@@ -10,6 +10,35 @@ beforeAll(async () => {
 });
 afterAll(() => stopWebServer());
 
+describe('Timeout support using Functional API', () => {
+	test("Supported timeout on requests", async () => {
+
+		const delay = 100;
+		const { delayedResponse } = useTestRestClient(testServer);
+		const response = await delayedResponse(delay, {
+			responseType: "text",
+			timeout: delay / 2,
+			throw: false
+		});
+		expect(response.status).toBeUndefined()
+		expect(response.error?.code).toEqual("Timeout")
+	})
+	test("Timeout can also be disabled", async () => {
+
+		const { delayedResponse } = useTestRestClient(testServer);
+		const response = await delayedResponse(100, { timeout: 0 });
+		expect(response.error).toBeFalsy();
+	})
+	test("Timeout error handling", async () => {
+
+		const { delayedResponse } = useTestRestClient(testServer);
+		const response = await delayedResponse(150, {
+			timeout: 50,
+			throwExcluding: [{ errorCode: "Timeout" }]
+		});
+		expect(response.error?.code).toEqual("Timeout");
+	})
+});
 describe('Timeout support using Class API', () => {
 	test("Supported timeout on requests", async () => {
 
