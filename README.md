@@ -8,7 +8,7 @@
 
 ## 👋 Welcome to scarlett
 
-A strongly typed, TypeScript powered, with zero dependencies, rest client library based on Fetch API.
+A strongly typed with zero dependencies, rest client library based on Fetch API.
 
 Checkout the [documentation](https://github.com/Micene09/scarlett/wiki/Wiki-Home).
 
@@ -17,15 +17,14 @@ Checkout the [documentation](https://github.com/Micene09/scarlett/wiki/Wiki-Home
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) & [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based rest client
 * Both Functional and Class API style
 * Zero dependencies to ensure the smallest bundle
-* TypeScript powered, primary goal >> *strongly-typed*
-* Centralized config (via constructor) with optional local overrides on http methods
-* Advanced options override techniques
-* Rest Client Builder (RestOptions API)
+* TypeScript powered and strongly-typed
 * Response body auto-parser/converter
+* Fully typed response body for both success and failures
+* Centralized config with optional local overrides on http methods
+* Built-in in-memory or [standard cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache) system
+* Requests can `throw` errors on failures
+* Catch and filter expected errors preventing the app throwing errors
+* Timeout supported
+* Request repeater
 * Query-string utilities
-* Built-in cache system (optional) to improve performance on recurring requests
-* Response and Error object's intellisense, even with different interfaces
-* Throw errors (optional) on request failures
-* Catch/filters to handle expected errors even when throw global error is enabled
-* Support for timeout
-* Easy request repeater
+* Rest Client Builder
