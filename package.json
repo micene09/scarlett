@@ -12,7 +12,7 @@
 		"build": "rollup --config",
 		"build-es3": "rollup --config --es3",
 		"build-es6": "rollup --config --es6",
-		"doc-build-tsdoc": "typedoc",
+		"docs-build-tsdoc": "typedoc",
 		"bump": "bumpp"
 	},
 	"files": [
