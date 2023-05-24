@@ -19,13 +19,13 @@ Checkout the [documentation](https://github.com/Micene09/scarlett/wiki/Wiki-Home
 * Zero dependencies to ensure the smallest bundle
 * TypeScript powered, primary goal >> *strongly-typed*
 * Centralized config (via constructor) with optional local overrides on http methods
-* Advanced options override tecniques
+* Advanced options override techniques
 * Rest Client Builder (RestOptions API)
 * Response body auto-parser/converter
 * Query-string utilities
 * Built-in cache system (optional) to improve performance on recurring requests
 * Response and Error object's intellisense, even with different interfaces
 * Throw errors (optional) on request failures
-* Catch/filters to handle expected errors even when throw gloval error is enabled
+* Catch/filters to handle expected errors even when throw global error is enabled
 * Support for timeout
 * Easy request repeater
