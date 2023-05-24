@@ -23,7 +23,7 @@ Checkout the [documentation](https://github.com/Micene09/scarlett/wiki/Wiki-Home
 * Centralized config with optional local overrides on http methods
 * Built-in in-memory or [standard cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache) system
 * Requests can `throw` errors on failures
-* Catch and filter expected errors preventing `throw` errors
+* Catch and filter expected errors preventing `throw`
 * Timeout supported
 * Request repeater
 * Query-string utilities
