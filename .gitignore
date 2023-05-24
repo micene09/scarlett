@@ -66,6 +66,7 @@ typings/
 .next
 
 lib*/
+docs/types
 test-results/
 Sources.tar*
 Sources.zip
