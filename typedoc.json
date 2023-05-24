@@ -4,10 +4,16 @@
 		"src/index.ts"
 	],
 	"out": "lib-docs",
-	"theme": "github-wiki-theme",
 	"pluginPages": {
 		"pages": [
-			{ "name": "Test", "source": "test.md" }
+			{ "name": "Getting Started", "source": "getting-started.md" },
+			{
+				"name": "API in depth", "source": "api.md", "children": [
+					{ "name": "Class API", "source": "api-functional.md" },
+					{ "name": "Class API", "source": "api-class.md" }
+				]
+			},
+			{ "name": "Examples", "source": "usage.md" }
 		]
 	}
 }
