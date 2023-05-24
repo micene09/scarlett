@@ -12,6 +12,7 @@
 		"build": "rollup --config",
 		"build-es3": "rollup --config --es3",
 		"build-es6": "rollup --config --es6",
+		"doc": "typedoc",
 		"bump": "bumpp"
 	},
 	"files": [
@@ -42,6 +43,7 @@
 		"rollup-plugin-terser": "^7.0.2",
 		"rollup-plugin-typescript2": "^0.34.1",
 		"tslib": "^2.5.0",
+		"typedoc": "^0.24.7",
 		"typescript": "^5.0.4",
 		"vitest": "^0.31.0"
 	},
