@@ -10,6 +10,10 @@ export default RestClient;
 export { RestClient, createRestClient }
 export { useRestClientBuilder, RestClientBuilder, RestError };
 export { RestClientBuilder as RestOptions };
+export { CacheKey, CacheClear, CacheClearByKey, CacheSet, CacheGet,
+	OptionsOverride,
+	RequestMethod,
+	RequestMethodFull } from "./rest-client"
 export type {
 	IResponse, IRequest,
 	IRestOptions, IRestOptionsQuery, IRestOptionsProtected, IRestOptionsGlobals, IRestOptionsNative,
