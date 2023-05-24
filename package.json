@@ -1,7 +1,7 @@
 {
 	"name": "scarlett",
 	"type": "module",
-	"version": "1.5.0",
+	"version": "2.0.0",
 	"description": "A strongly typed, Typescript powered, rest client library based on Fetch API.",
 	"browser": "lib/index.umd.js",
 	"module": "lib/index.js",
