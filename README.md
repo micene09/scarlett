@@ -23,8 +23,17 @@ Checkout the [documentation](https://github.com/Micene09/scarlett/wiki/Wiki-Home
 * Centralized config with optional local overrides on http methods
 * Built-in in-memory or [standard cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache) system
 * Requests can `throw` errors on failures
-* Catch and filter expected errors preventing the app throwing errors
+* Catch and filter expected errors preventing `throw` errors
 * Timeout supported
 * Request repeater
 * Query-string utilities
 * Rest Client Builder
+
+## 🌟 Inspired by
+
+* [axios](https://github.com/axios/axios)
+* DotNet Core's [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests#typed-clients)
+
+## 😬 Why this name?
+
+Maybe I'm a huge fan of that beautiful American actress...
