@@ -70,3 +70,6 @@ docs/types
 test-results/
 Sources.tar*
 Sources.zip
+
+.vitepress/dist
+.vitepress/cache

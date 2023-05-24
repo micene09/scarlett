@@ -6,8 +6,12 @@
 		"tests/*.test.ts"
 	],
 	"cSpell.words": [
+		"bumpp",
 		"fastify",
+		"Micene",
 		"restoptions",
-		"scarlett"
+		"scarlett",
+		"tsdoc",
+		"vitepress"
 	]
 }
