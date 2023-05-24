@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
 	title: "scarlett",
 	description: "A strongly typed with zero dependencies, rest client library based on Fetch API.",
+	outDir: "../lib-docs",
 	themeConfig: {
 		// https://vitepress.dev/reference/default-theme-config
 		nav: [
