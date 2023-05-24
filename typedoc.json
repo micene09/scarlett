@@ -1,18 +1,6 @@
 {
 	"name": "scarlett",
-	"entryPoints": [
-		"src/index.ts"
-	],
-	"out": "lib-docs",
-	"pluginPages": {
-		"pages": [
-			{ "name": "Getting Started", "source": "getting-started.md" },
-			{
-				"name": "API in depth", "source": "api.md", "children": [
-					{ "name": "Functional API", "source": "api-functional.md" },
-					{ "name": "Class API", "source": "api-class.md" }
-				]
-			}
-		]
-	}
+	"entryPoints": ["src/index.ts"],
+	"out": "docs/types",
+	"plugin": ["typedoc-plugin-markdown"]
 }
