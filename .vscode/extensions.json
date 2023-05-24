@@ -6,6 +6,7 @@
 		"eamodio.gitlens",
 		"zixuanchen.vitest-explorer",
 		"github.vscode-github-actions",
-		"yoavbls.pretty-ts-errors"
+		"yoavbls.pretty-ts-errors",
+		"oouo-diogo-perdigao.docthis"
 	]
 }
