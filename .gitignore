@@ -71,5 +71,5 @@ test-results/
 Sources.tar*
 Sources.zip
 
-.vitepress/dist
-.vitepress/cache
+docs/.vitepress/dist
+docs/.vitepress/cache
