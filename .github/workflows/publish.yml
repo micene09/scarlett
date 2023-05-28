@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'Reason'
+        description: 'reason'
         required: false
         default: ''
 
