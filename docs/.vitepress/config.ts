@@ -1,30 +1,51 @@
 import { defineConfig } from 'vitepress'
+import { version } from "../../package.json"
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
 	title: "scarlett",
 	description: "A strongly typed with zero dependencies, rest client library based on Fetch API.",
 	outDir: "../lib-docs",
 	base: "/scarlett/",
 	themeConfig: {
-		// https://vitepress.dev/reference/default-theme-config
 		nav: [
-			{ text: 'Home', link: '/' },
-			{ text: 'Examples', link: '/markdown-examples' }
-		],
-
-		sidebar: [
 			{
-				text: 'Examples',
+				text: 'API',
+				link: '/api'
+			},
+			{
+				text: 'Usage',
+				link: '/usage'
+			},
+			{
+				text: version,
 				items: [
-					{ text: 'Markdown Examples', link: '/markdown-examples' },
-					{ text: 'Runtime API Examples', link: '/api-examples' }
+					{
+						text: 'Releases',
+						link: 'https://github.com/Micene09/scarlett/releases'
+					},
+					{
+						text: 'Contributing',
+						link: '/contribute'
+					}
 				]
 			}
 		],
-
+		sidebar: {
+			"/api": [
+				{ text: "Class API", link: "/api/class" },
+				{ text: "Functional API", link: "/api/functional" }
+			],
+			"/usage": [
+				{ text: "Class API", link: "/usage/class" },
+				{ text: "Functional API", link: "/usage/functional" }
+			]
+		},
 		socialLinks: [
-			{ icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-		]
+			{ icon: 'github', link: 'https://github.com/Micene09/scarlett' }
+		],
+		footer: {
+			message: 'Released under the MIT License.',
+			copyright: 'Copyright © 2020-present micene09',
+		}
 	}
 })

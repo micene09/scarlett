@@ -1,13 +1,12 @@
 
-## API in depth
 
-### RestClient
+# RestClient
 
-#### Instance
+## Instance
 
 To create a new instance, you need to provide `IRequestOptionsGlobals` object as first parameter:
 
-```typescript
+```ts
 const client = new RestClient({
 	host: `https://server.com`,
 	responseType: `text`
@@ -20,13 +19,13 @@ Every option will be accessible/updatable using the public **options** property,
 
 You can also override every options providing a `IRequestOptions` object as last parameter to the request method:
 
-```typescript
+```ts
 const response = await client.get<any>(`/controller`, { responseType: `json` })
 ```
 
 In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
 
-#### IRequestOptionsGlobals
+### IRequestOptionsGlobals
 
 The following native properties from original [Fetch's Request Object](https://developer.mozilla.org/en-US/docs/Web/API/Request) are supported:
 
@@ -194,7 +193,7 @@ Keep in mind that, if you set the `throw` option as true, or any of your `throwE
 
 Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
 
-#### request()
+## request()
 
 *Parameters*:
 
@@ -208,23 +207,23 @@ Global handler, running on your `RestClient`'s instance context, called everytim
 
 *Usage*:
 
-```typescript
+```ts
 const client = new RestClient({
 	host: `https://server.com`,
 	basePath: "/controller",
 	responseType: `text`
 })
-const response = await client.request<string>(`GET`, `/action`);
+const response = await client.request<string>("GET", "/action");
 ```
 
 Note that the `path` property will be combined with `host` and `basePath`:
 
-```typescript
-const response = await client.request<string>(`GET`, `/action`);
-console.log(response.request.url.href); // -> "https://server.com/controller/action"
+```ts
+const response = await client.request<string>("GET", "/action");
+console.log(response.request.url.href);
 ```
 
-#### HttpMethod shortcut methods
+## HttpMethod shortcut methods
 
 Every RestClient instance has all the http methods as a lower case named method as shortcut:
 
@@ -246,7 +245,7 @@ const response = await client.get<string>(`/action`);
 
 Note: every shortcut method will internally call the `request()` method.
 
-#### optionsOverride() method
+## optionsOverride() method
 
 Having the following definition:
 
@@ -257,7 +256,7 @@ optionsOverride(overrides?: Partial<IRestOptions>, base?: Partial<IRestOptions>)
 
 The optional `base` parameter defaults to the current rest client options object.
 
-#### Response Object
+## Response Object
 
 Properties:
 
@@ -317,7 +316,7 @@ const first = await restClient.get<any>("/action");
 const second = await first.repeat();
 ```
 
-#### request
+## request
 
 The request object used to get the response, including options, url, method and body.
 
@@ -331,7 +330,7 @@ The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance eva
 
 The optional body used, tipically when HttpMethod is `PUT` or `POST`.
 
-### Built-in in-memory Cache System
+## Built-in in-memory Cache System
 
 A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based cache, disabled by default and triggered by the `internalCache` flag.
 
@@ -457,7 +456,7 @@ const builder = new RestOptions()
 const restClient = builder.createRestClient()
 ```
 
-### RestError
+# RestError
 
 This class extends the default JavaScript's Error, it requires a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
 
@@ -478,7 +477,7 @@ import { RestError } from "scarlett";
 const err = new RestError<IBackendError>("The Error Message");
 ```
 
-#### The `constructor`:
+## The `constructor`:
 ```typescript
 constructor(message: string, statusCode?: HTTPStatusCode, code?: InternalErrorCode)
 ```
@@ -499,7 +498,7 @@ An internal error code:
 type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
 ```
 
-#### Instance properties:
+## Instance properties:
 
 **isRestError (boolean)**
 
@@ -516,15 +515,3 @@ Always true, it's a simple utility prop that can be useful to distinguish the st
 **data (TError)**
 
 The error object parsed from response body content.
-
-## Testing
-
-To develop or testing purposes:
-
-1. `git clone [repo_url]`
-2. `cd` to the root project folder (`package.json`)
-3. `npm i` or `yarn` to install packages
-
-To run tests, just execute on project root:
-
-`npm run test` or `yarn run test`

@@ -1,4 +1,4 @@
-<img src="https://github.com/Micene09/scarlett/raw/main/.github/assets/hero.jpg">
+<img src="https://github.com/Micene09/scarlett/raw/main/docs/assets/hero.jpg">
 
 [![build](https://github.com/Micene09/scarlett/actions/workflows/build.yml/badge.svg)](https://github.com/Micene09/scarlett/actions/workflows/build.yml)
 [![tests](https://github.com/Micene09/scarlett/actions/workflows/tests.yml/badge.svg)](https://github.com/Micene09/scarlett/actions/workflows/tests.yml)
