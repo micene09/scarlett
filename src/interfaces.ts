@@ -28,7 +28,7 @@ export interface IRestOptions<TResponse = any, TError = any> extends IRestOption
 	responseType: HttpResponseFormat<TResponse, TError>;
 	body: | ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | IKeyValue;
 	timeout: number;
-	internalCache: boolean;
+	cacheInMemory: boolean;
 	cacheKey: string;
 	cacheExpireAt: Date | number;
 	throw: boolean;

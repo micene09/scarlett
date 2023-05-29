@@ -82,7 +82,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 		async function repliedIn(ms: number) {
 			const starting = Date.now();
 			await delayedResponse(ms, {
-				internalCache: true,
+				cacheInMemory: true,
 				cacheKey
 			});
 			return Date.now() - starting;
@@ -98,7 +98,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 
 		const { getTimestamp } = useTestRestClient(testServer);
 		const cacheExpireAt = Date.now() + 500;
-		const response = await getTimestamp({ internalCache: true, cacheExpireAt });
+		const response = await getTimestamp({ cacheInMemory: true, cacheExpireAt });
 		const cachedTimestamp = response.data ?? "";
 
 		const firstTs = (await response.repeat()).data ?? "";
@@ -221,7 +221,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 		async function repliedIn(ms: number) {
 			const starting = Date.now();
 			await rest.delayedResponse(ms, {
-				internalCache: true,
+				cacheInMemory: true,
 				cacheKey
 			});
 			return Date.now() - starting;
@@ -237,7 +237,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 
 		const rest = new TestRestClient(testServer);
 		const cacheExpireAt = Date.now() + 500;
-		const response = await rest.getTimestamp({ internalCache: true, cacheExpireAt });
+		const response = await rest.getTimestamp({ cacheInMemory: true, cacheExpireAt });
 		const cachedTimestamp = response.data ?? "";
 
 		const firstTs = (await response.repeat()).data ?? "";

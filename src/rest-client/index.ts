@@ -75,7 +75,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 			setUrlParameters(url, localOptions);
 
 		localOptions.cacheKey = localOptions.cacheKey?.trim();
-		if (localOptions.internalCache) {
+		if (localOptions.cacheInMemory) {
 			const cachedResponse = cacheGet<TResponse, TError>(url, method, localOptions.cacheKey);
 			if (cachedResponse) return Promise.resolve(cachedResponse.response);
 		}
@@ -207,7 +207,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 				}
 			}
 		}
-		if (localOptions.internalCache)
+		if (localOptions.cacheInMemory)
 			cacheSet(response, localOptions.cacheKey, localOptions.cacheExpireAt ?? 0);
 
 		if (!onErrorCalled) {
