@@ -6,14 +6,17 @@ import { cloneObject, getRequestUrl, mergeObject, resolveAny, setUrlParameters, 
 export type CacheKey = (url: URL, method: HttpMethod | "*", customKey?: string) => string;
 export type CacheClear = () => void;
 export type CacheClearByKey = (cacheKey?: string | null) => void;
-export type CacheSet = <TResponse = any, TError = any>(response: IResponse<TResponse, TError>, customKey?: string) => void;
-export type CacheGet = <TResponse = any, TError = any>(url: URL, method: HttpMethod | "*", customKey?: string) => IResponse<TResponse, TError> | undefined;
+export type CacheSet = <TResponse = any, TError = any>(response: IResponse<TResponse, TError>, customKey?: string, expireAt?: Date | number) => void;
+export type CacheGet = <TResponse = any, TError = any>(url: URL, method: HttpMethod | "*", customKey?: string) => {
+	response: IResponse<TResponse, TError>,
+	expireAt: Date | number
+} | undefined;
 export type OptionsOverride = <TResponse = any, TError = any>(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => Partial<IRestOptions<TResponse, TError>>
 export type RequestMethod = <TResponse = any, TError = any>(path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => Promise<IResponse<TResponse, TError>>;
 export type RequestMethodFull = <TResponse = any, TError = any>(method: HttpMethod, path: string, overrides?: Partial<IRestOptions<TResponse, TError>>) => Promise<IResponse<TResponse, TError>>;
 
-export default function createRestClient<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>, cache?: Map<string, IResponse<TResponse, TError>>) {
-	const _cache = cache ?? new Map<string, IResponse<TResponse, TError>>();
+export default function createRestClient<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>) {
+	const _cache = new Map<string, { response: IResponse<any, any>, expireAt: Date | number }>();
 	const { getOption, setOption, currentOptions, cloneOptions } = useRestClientBuilder(options ?? {});
 	const cacheKey: CacheKey = (url, method = "*", customKey) => {
 		const cacheKey = customKey?.trim() ? customKey : (getOption("cacheKey") ?? '');
@@ -41,13 +44,18 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 			if (key.startsWith(`${cacheKey}|`))
 				_cache.delete(key);
 	}
-	const cacheSet: CacheSet = <TResponse, TError>(response: IResponse<TResponse, TError>, customKey?: string) => {
+	const cacheSet: CacheSet = <TResponse, TError>(response: IResponse<TResponse, TError>, customKey?: string, expireAt: Date | number = 0) => {
 		const key = cacheKey(response.request.url, response.request.method, customKey);
-		_cache.set(key, response as any);
+		_cache.set(key, { response, expireAt });
 	};
-	const cacheGet: CacheGet = <TResponse, TError>(url: URL, method: HttpMethod | "*" = "*", customKey?: string) => {
+	const cacheGet: CacheGet = (url: URL, method: HttpMethod | "*" = "*", customKey?: string) => {
 		const key = cacheKey(url, method, customKey);
-		return _cache.get(key) as IResponse<TResponse, TError> | undefined;
+		const cached = _cache.get(key);
+		if (cached?.expireAt && +cached.expireAt <= +new Date()) {
+			cacheClearByKey(key);
+			return;
+		};
+		return cached;
 	};
 	const optionsOverride: OptionsOverride = <TResponse, TError>(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => {
 		const target = base ?? currentOptions();
@@ -68,8 +76,8 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 
 		localOptions.cacheKey = localOptions.cacheKey?.trim();
 		if (localOptions.internalCache) {
-			const cachedResponse = cacheGet(url, method);
-			if (cachedResponse) return Promise.resolve(cachedResponse);
+			const cachedResponse = cacheGet<TResponse, TError>(url, method, localOptions.cacheKey);
+			if (cachedResponse) return Promise.resolve(cachedResponse.response);
 		}
 		if (!localOptions.abortController)
 			localOptions.abortController = new AbortController();
@@ -200,7 +208,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 			}
 		}
 		if (localOptions.internalCache)
-			cacheSet(response);
+			cacheSet(response, localOptions.cacheKey, localOptions.cacheExpireAt ?? 0);
 
 		if (!onErrorCalled) {
 			const onResponse = getOption("onResponse");

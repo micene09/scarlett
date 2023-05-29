@@ -1,3 +1,4 @@
+import { setTimeout } from "timers/promises";
 import { TestRestClient, useTestRestClient, useTestServer } from "./runtime.setup";
 import { beforeAll, afterAll, describe, test, expect } from "vitest";
 
@@ -47,6 +48,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 		expect(typeof response5.error?.data).toEqual("string");
 	});
 	test("Auto-translation for objects on body property", async () => {
+
 		const obj = { test: 1, x: null };
 		const { mirror } = useTestRestClient(testServer);
 		const response = await mirror("POST", { body: obj });
@@ -76,20 +78,38 @@ describe('Request utilities and shortcuts using Functional API', () => {
 	});
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
-		const ms = 200;
-		const { delayedResponse } = useTestRestClient(testServer);
-		async function repliedIn() {
+		const { delayedResponse, cacheClearByKey } = useTestRestClient(testServer);
+		async function repliedIn(ms: number) {
 			const starting = Date.now();
 			await delayedResponse(ms, {
-				responseType: "text",
 				internalCache: true,
 				cacheKey
 			});
 			return Date.now() - starting;
 		}
-		const t1 = await repliedIn();
-		const t2 = await repliedIn();
-		expect(t2).toBeLessThan(t1);
+		const t1 = await repliedIn(300);
+		const t2 = await repliedIn(300);
+		expect(t2).toBeLessThan(300);
+		cacheClearByKey(cacheKey);
+		const t3 = await repliedIn(400);
+		expect(t3).toBeGreaterThan(t1);
+	});
+	test("Cache responses using expire mechanism", async () => {
+
+		const { getTimestamp } = useTestRestClient(testServer);
+		const cacheExpireAt = Date.now() + 500;
+		const response = await getTimestamp({ internalCache: true, cacheExpireAt });
+		const cachedTimestamp = response.data ?? "";
+
+		const firstTs = (await response.repeat()).data ?? "";
+		expect(firstTs).toEqual(cachedTimestamp);
+
+		const secondTs = (await response.repeat()).data ?? "";
+		expect(secondTs).toEqual(cachedTimestamp);
+
+		await setTimeout(500);
+		const thirdTs = (await response.repeat()).data ?? "";
+		expect(thirdTs).not.toEqual(cachedTimestamp);
 	});
 	test("Abort request supported", async () => {
 		let abortController = new AbortController()
@@ -99,7 +119,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 		const milliseconds = 200;
 
 		let requestedAt = Date.now()
-		setTimeout(() => abortController.abort(), milliseconds / 2)
+		setTimeout(milliseconds / 2).then(() => abortController.abort());
 		await delayedResponse(milliseconds, { abortController })
 		let elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(milliseconds)
@@ -197,20 +217,38 @@ describe('Request utilities and shortcuts using Class API', () => {
 	});
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
-		const ms = 200;
-		const baseClient = new TestRestClient(testServer);
-		async function repliedIn() {
+		const rest = new TestRestClient(testServer);
+		async function repliedIn(ms: number) {
 			const starting = Date.now();
-			await baseClient.delayedResponse(ms, {
-				responseType: "text",
+			await rest.delayedResponse(ms, {
 				internalCache: true,
 				cacheKey
 			});
 			return Date.now() - starting;
 		}
-		const t1 = await repliedIn();
-		const t2 = await repliedIn();
-		expect(t2).toBeLessThan(t1);
+		const t1 = await repliedIn(300);
+		const t2 = await repliedIn(300);
+		expect(t2).toBeLessThan(300);
+		rest.cacheClearByKey(cacheKey);
+		const t3 = await repliedIn(400);
+		expect(t3).toBeGreaterThan(t1);
+	});
+	test("Cache responses using expire mechanism", async () => {
+
+		const rest = new TestRestClient(testServer);
+		const cacheExpireAt = Date.now() + 500;
+		const response = await rest.getTimestamp({ internalCache: true, cacheExpireAt });
+		const cachedTimestamp = response.data ?? "";
+
+		const firstTs = (await response.repeat()).data ?? "";
+		expect(firstTs).toEqual(cachedTimestamp);
+
+		const secondTs = (await response.repeat()).data ?? "";
+		expect(secondTs).toEqual(cachedTimestamp);
+
+		await setTimeout(500);
+		const thirdTs = (await response.repeat()).data ?? "";
+		expect(thirdTs).not.toEqual(cachedTimestamp);
 	});
 	test("Abort request supported", async () => {
 		let abortController = new AbortController()
@@ -220,7 +258,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 		const milliseconds = 200;
 
 		let requestedAt = Date.now()
-		setTimeout(() => abortController.abort(), milliseconds / 2)
+		setTimeout(milliseconds / 2).then(() => abortController.abort())
 		await rest.delayedResponse(milliseconds, { abortController })
 		let elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(milliseconds)
