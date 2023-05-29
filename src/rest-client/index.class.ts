@@ -20,7 +20,7 @@ export default class RestClient<TResponse = any, TError = any> {
 	request: RequestMethodFull;
 	constructor(options?: Partial<IRestOptionsGlobals<TResponse, TError>>) {
 		this._cache = new Map();
-		const useRestClient = createRestClient<TResponse, TError>(options, this._cache);
+		const useRestClient = createRestClient<TResponse, TError>(options);
 		const client = useRestClient();
 		this.options = new RestClientBuilder<TResponse, TError, any>(options ?? {});
 		this.options.setFactory(this.constructor as any);
