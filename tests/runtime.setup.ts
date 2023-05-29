@@ -57,6 +57,10 @@ export async function useTestServer() {
 			setTimeout(() => {
 				res.send("ok");
 			}, +(req.params as any).ms);
+		})
+		.get("/timestamp", (req, res) => {
+			res.header("Content-type", "text/plain");
+			res.send(Date.now() + "");
 		});
 	const host = await testServer.listen({
 		host: "localhost",
@@ -76,11 +80,12 @@ export function useTestRestClient(host: string) {
 		responseType: "json",
 		throw: true
 	});
-	const { setOption, optionsOverride, request, get, currentOptions } = useRestClient()
+	const { setOption, optionsOverride, request, get, currentOptions, cacheClearByKey } = useRestClient()
 	return {
 		setOption,
 		currentOptions,
 		optionsOverride,
+		cacheClearByKey,
 		requestJson(method: Parameters<typeof request>[0], overrides?: Parameters<typeof request>[2]) {
 			return request<ITestJsonResponse, null>(method, "/json", overrides);
 		},
@@ -104,6 +109,9 @@ export function useTestRestClient(host: string) {
 				responseType: "text",
 				...overrides
 			});
+		},
+		getTimestamp(overrides?: Parameters<RestClient["request"]>[2]) {
+			return get<string, null>(`/timestamp`, { responseType: "text", ...overrides });
 		}
 	};
 }
@@ -156,5 +164,8 @@ export class TestRestClient extends RestClient {
 			responseType: "text",
 			...overrides
 		});
+	}
+	getTimestamp(overrides?: Parameters<RestClient["request"]>[2]) {
+		return this.get<string, null>(`/timestamp`, { responseType: "text", ...overrides });
 	}
 }
