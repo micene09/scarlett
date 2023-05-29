@@ -10,7 +10,7 @@
 
 A strongly typed with zero dependencies, rest client library based on Fetch API.
 
-Checkout the [documentation](https://github.com/Micene09/scarlett/wiki/Wiki-Home).
+Checkout the [documentation](https://github.com/Micene09/scarlett).
 
 ## 💎 Key features
 
