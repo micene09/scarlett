@@ -70,13 +70,13 @@ export async function useTestServer() {
 	}
 }
 
+const useRestClient = createRestClient({
+	responseType: "json",
+	throw: true
+});
 export function useTestRestClient(host: string) {
-	const useRestClient = createRestClient({
-		host,
-		responseType: "json",
-		throw: true
-	});
 	const { setOption, optionsOverride, request, get, currentOptions } = useRestClient()
+	setOption("host", host);
 	return {
 		setOption,
 		currentOptions,
