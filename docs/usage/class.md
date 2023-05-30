@@ -75,7 +75,7 @@ builder.clone().set("basePath", "/api-custom");
 const rest2 = builder.createRestClient();
 ```
 
-## Cache System
+## In-Memory Cache System
 
 ```typescript
 import RestClient from `scarlett`
@@ -85,7 +85,7 @@ class AdvanceCache extends RestClient {
 		super({
 			host: "https://mybackend.com",
 			basePath: "/my-controller",
-			internalCache: true,
+			cacheInMemory: true,
 			cacheKey: "my_key_all_requests"
 		});
 	}
