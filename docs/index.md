@@ -4,10 +4,8 @@ layout: home
 hero:
   name: scarlett
   text: A strongly typed rest client
-  tagline: Zero dependencies, tiny, fast and multi-paradigm.
+  tagline: Zero dependencies, tiny, fast and strongly typed.
   image:
-    src: /assets/logo.svg
-    alt: scarlett
   actions:
     - theme: brand
       text: Get Started
@@ -17,16 +15,13 @@ hero:
       link: https://github.com/Micene09/scarlett
 
 features:
-  - icon: 🛠️
-    title: Simple and minimal, always
-    details: Lorem ipsum...
-  - icon:
-      src: /cool-feature-icon.svg
-    title: Another cool feature
-    details: Lorem ipsum...
-  - icon:
-      dark: /dark-feature-icon.svg
-      light: /light-feature-icon.svg
-    title: Another cool feature
-    details: Lorem ipsum...
+  - icon: a
+    title: Class and Functional APIs
+    details: Both APIs to find the best fit to your project
+  - icon: a
+    title: Typescript powered
+    details: Success and Error response objects with intellisense covered
+  - icon: a
+    title: Rest Utilities
+    details: Supported timeout, in-memory cache, throw errors on failures and more!
 ---

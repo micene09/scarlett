@@ -6,7 +6,36 @@ or
 
 `yarn add scarlett`
 
-### Required Polyfills
+## Basic Usage
+
+Using Functional API:
+
+```typescript
+import createRestClient from `scarlett`
+
+const useRestClient = createRestClient({
+	host: `https://server.com`,
+	responseType: `text`
+})
+const { get } = useRestClient()
+const response = await get<string>(`path`)
+console.log(response.data) // << string or undefined
+```
+
+Using Class API:
+
+```typescript
+import RestClient from `scarlett`
+
+const client = new RestClient({
+	host: `https://server.com`,
+	responseType: `text`
+})
+const response = await client.get<string>(`path`)
+console.log(response.data) // << string or undefined
+```
+
+## Required Polyfills
 
 As `tsconfig.json`, sources are compiled to`ES2021`, keep in mind that **polyfills are not included**.
 
@@ -20,7 +49,7 @@ Scarlett will require the following APIs:
 * [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
 * [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 
-### Different builds
+## Different builds
 
 In the `lib/` folder of the package you will find different build files:
 
