@@ -16,8 +16,8 @@ hero:
 
 features:
   - icon: a
-    title: Class and Functional APIs
-    details: Both APIs to find the best fit to your project
+    title: Multi API Styles
+    details: Available Class and Functional API to find the best fit to your project
   - icon: a
     title: Typescript powered
     details: Success and Error response objects with intellisense covered
