@@ -51,7 +51,7 @@ Scarlett will require the following APIs:
 
 ## Different builds
 
-In the `lib/` folder of the package you will find different build files:
+In the `lib/` folder of the package you will find different build files, choose the right one to include in your project:
 
 | Format                    | Filename              |
 | ------------------------- | --------------------- |
