@@ -37,6 +37,7 @@ export default defineConfig({
 				{ text: "Functional API", link: "/api/functional" }
 			],
 			"/usage": [
+				{ text: "Intro", link: "/usage" },
 				{ text: "Class API", link: "/usage/class" },
 				{ text: "Functional API", link: "/usage/functional" }
 			]
