@@ -12,15 +12,15 @@ Once installed, the package includes different modules to ensure the best compat
 
 Keep in mind that the default one is the most modern: ES Module.
 
-Here is the list of modules included into the `lib/` folder:
+Here is the list of modules included:
 
-| Format                    | Filename              |
-| ------------------------- | --------------------- |
-| **ES Module** *(default)* | `index.js`            |
-| **UMD**                   | `index.umd.js`        |
-| **CommonJs**              | `index.common.js`     |
-| **CommonJs ES3**          | `index.es3.common.js` |
-| **CommonJs ES6**          | `index.es6.common.js` |
+| Format                    | Filename                  |
+|---------------------------|---------------------------|
+| **ES Module** *(default)* | `lib/index.js`            |
+| **UMD**                   | `lib/index.umd.js`        |
+| **CommonJs**              | `lib/index.common.js`     |
+| **CommonJs ES3**          | `lib/index.es3.common.js` |
+| **CommonJs ES6**          | `lib/index.es6.common.js` |
 
 
 Sources are compiled to`ES2021` for every module format, keep in mind that **polyfills are not included**.
