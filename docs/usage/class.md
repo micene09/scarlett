@@ -1,4 +1,4 @@
-# Basic Usage
+# Class API Usage
 
 1. Import the library:
 

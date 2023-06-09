@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /getting-started
+      link: /usage/getting-started
     - theme: alt
       text: View on GitHub
       link: https://github.com/Micene09/scarlett
