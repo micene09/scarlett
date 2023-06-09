@@ -1,10 +1,40 @@
-## Installation
+# Getting Started
 
-`npm i scarlett`
+1. Install it using `npm i scarlett` or `yarn add scarlett`
+1. Import it in your project, here is an example using ESM Module:
+	```typescript
+	import { RestClient } from "scarlett"
+	```
 
-or
+## Different builds
 
-`yarn add scarlett`
+Once installed, the package includes different modules to ensure the best compatibility to your module bundler/importer, you need to choose the right one depending on your project setup.
+
+Keep in mind that the default one is the most modern: ES Module.
+
+Here is the list of modules included into the `lib/` folder:
+
+| Format                    | Filename              |
+| ------------------------- | --------------------- |
+| **ES Module** *(default)* | `index.js`            |
+| **UMD**                   | `index.umd.js`        |
+| **CommonJs**              | `index.common.js`     |
+| **CommonJs ES3**          | `index.es3.common.js` |
+| **CommonJs ES6**          | `index.es6.common.js` |
+
+
+Sources are compiled to`ES2021` for every module format, keep in mind that **polyfills are not included**.
+
+### Runtime required APIs
+
+* [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+* [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+* [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+* [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
+* [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers)
+* [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
+* [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+
 
 ## Basic Usage
 
@@ -38,29 +68,3 @@ console.log(response.data) // << string or undefined
 For more details about the usage of both APIs, just visit:
 * [Class API](/usage/class)
 * [Functional API](/usage/functional)
-
-## Required Polyfills
-
-As `tsconfig.json`, sources are compiled to`ES2021`, keep in mind that **polyfills are not included**.
-
-Scarlett will require the following APIs:
-
-* [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-* [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-* [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
-* [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
-* [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers)
-* [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
-* [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
-
-## Different builds
-
-In the `lib/` folder of the package you will find different build files, choose the right one to include in your project:
-
-| Format                    | Filename              |
-| ------------------------- | --------------------- |
-| **ES Module** *(default)* | `index.js`            |
-| **UMD**                   | `index.umd.js`        |
-| **CommonJs**              | `index.common.js`     |
-| **CommonJs ES3**          | `index.es3.common.js` |
-| **CommonJs ES6**          | `index.es6.common.js` |
