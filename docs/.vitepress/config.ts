@@ -32,6 +32,7 @@ export default defineConfig({
 		],
 		sidebar: {
 			"/api": [
+				{ text: "Intro", link: "/api" },
 				{ text: "Class API", link: "/api/class" },
 				{ text: "Functional API", link: "/api/functional" }
 			],
