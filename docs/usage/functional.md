@@ -87,7 +87,22 @@ const { data } = await getItemsList();
 
 ## RestClientBuilder
 
-TODO: rest client build functional api
+In very complex scenarios, you can build different rest clients using the `useRestClientBuilder()` API method:
+
+```typescript
+const builder = useRestClientBuilder({
+	host: testServer,
+	responseType: "json",
+	throw: true
+});
+builder.setOption("headers", new Headers({ "x-restoptions": "1" }));
+const useRest = builder.createRestClient();
+
+const options = builder.cloneOptions(); // Get a cloned version of current options object
+options.throw = false;
+const builderNoThrow = useRestClientBuilder(options);
+
+```
 
 ## In-Memory Cache System
 
