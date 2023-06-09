@@ -32,7 +32,7 @@ export default defineConfig({
 		],
 		sidebar: {
 			"/api": [
-				{ text: "API Styles Intro", link: "/api" },
+				{ text: "APIs Intro", link: "/api" },
 				{ text: "Class API", link: "/api/class" },
 				{ text: "Functional API", link: "/api/functional" }
 			],
