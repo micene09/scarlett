@@ -1,4 +1,4 @@
-# Basic Usage
+# Functional API Usage
 
 1. Import the library:
 

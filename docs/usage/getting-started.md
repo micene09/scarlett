@@ -35,6 +35,10 @@ const response = await client.get<string>(`path`)
 console.log(response.data) // << string or undefined
 ```
 
+For more details about the usage of both APIs, just visit:
+* [Class API](/usage/class)
+* [Functional API](/usage/functional)
+
 ## Required Polyfills
 
 As `tsconfig.json`, sources are compiled to`ES2021`, keep in mind that **polyfills are not included**.

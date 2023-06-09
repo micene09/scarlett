@@ -14,7 +14,7 @@ export default defineConfig({
 			},
 			{
 				text: 'Usage',
-				link: '/usage'
+				link: '/usage/getting-started'
 			},
 			{
 				text: version,
@@ -32,14 +32,14 @@ export default defineConfig({
 		],
 		sidebar: {
 			"/api": [
-				{ text: "Intro", link: "/api" },
+				{ text: "API Styles Intro", link: "/api" },
 				{ text: "Class API", link: "/api/class" },
 				{ text: "Functional API", link: "/api/functional" }
 			],
 			"/usage": [
-				{ text: "Intro", link: "/usage" },
-				{ text: "Class API", link: "/usage/class" },
-				{ text: "Functional API", link: "/usage/functional" }
+				{ text: "Getting Started", link: "/usage/getting-started" },
+				{ text: "Class API Usage", link: "/usage/class" },
+				{ text: "Functional API Usage", link: "/usage/functional" }
 			]
 		},
 		socialLinks: [
