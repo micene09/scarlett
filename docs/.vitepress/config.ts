@@ -9,12 +9,12 @@ export default defineConfig({
 	themeConfig: {
 		nav: [
 			{
-				text: 'API',
-				link: '/api'
-			},
-			{
 				text: 'Usage',
 				link: '/usage/getting-started'
+			},
+			{
+				text: 'API',
+				link: '/api'
 			},
 			{
 				text: version,

@@ -65,6 +65,4 @@ const response = await client.get<string>(`path`)
 console.log(response.data) // << string or undefined
 ```
 
-For more details about the usage of both APIs, just visit:
-* [Class API](/usage/class)
-* [Functional API](/usage/functional)
+For more details about the usage of both styles, just visit the [API](/api) section.
