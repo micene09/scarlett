@@ -1,12 +1,10 @@
-
-
 # RestClient
 
 ## Instance
 
 To create a new instance, you need to provide `IRequestOptionsGlobals` object as first parameter:
 
-```ts
+```typescript
 const client = new RestClient({
 	host: `https://server.com`,
 	responseType: `text`
@@ -19,7 +17,7 @@ Every option will be accessible/updatable using the public **options** property,
 
 You can also override every options providing a `IRequestOptions` object as last parameter to the request method:
 
-```ts
+```typescript
 const response = await client.get<any>(`/controller`, { responseType: `json` })
 ```
 
@@ -41,11 +39,15 @@ The following native properties from original [Fetch's Request Object](https://d
 
 One of the library's goals is to extend the native capabilities, so here is a list of additional properties:
 
-**host (string)**
+#### host
 
-Defaults to localhost.href .
+`string`
 
-**basePath (string)**
+Defaults to `localhost.href`.
+
+#### basePath
+
+`string`
 
 The base path to use on every request, defaults to `/`, combined with the `host` option.
 
@@ -57,11 +59,11 @@ It can be defined as:
 1. `HttpResponseFormatType` typed value: `undefined` (default), `null`, `json`, `text`, `blob`, `arrayBuffer`, `formData`
 2. A sync method returning a `HttpResponseFormatType`
    ```typescript
-   (request: IRequest, fetchResponse: Response | null) => HttpResponseFormatType
+   (request: IRequest, fetchResponse: Response | null) = HttpResponseFormatType
    ```
 3. An async method resolving a `HttpResponseFormatType`
    ```typescript
-   (request: IRequest, fetchResponse: Response | null) => Promise<HttpResponseFormatType>
+   (request: IRequest, fetchResponse: Response | null) = Promise<HttpResponseFormatType>
    ```
 
 When the value resolved is `undefined` or `null`, the response's body will not be parsed.
@@ -191,7 +193,7 @@ Keep in mind that, if you set the `throw` option as true, or any of your `throwE
 
 **onError(error: RestError, response: IResponse): void**
 
-Global handler, running on your `RestClient`'s instance context, called everytime an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
+Global handler, running on your `RestClient`'s instance context, called every time an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
 
 ## request()
 
@@ -205,9 +207,7 @@ Global handler, running on your `RestClient`'s instance context, called everytim
  * `TResponse` is the `response.data` type (typescript intellisense)
  * `TError` is the **optional** `response.error.data` type
 
-*Usage*:
-
-```ts
+```typescript
 const client = new RestClient({
 	host: `https://server.com`,
 	basePath: "/controller",
@@ -218,7 +218,7 @@ const response = await client.request<string>("GET", "/action");
 
 Note that the `path` property will be combined with `host` and `basePath`:
 
-```ts
+```typescript
 const response = await client.request<string>("GET", "/action");
 console.log(response.request.url.href);
 ```
