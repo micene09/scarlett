@@ -369,7 +369,7 @@ The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance eva
 
 **body**
 
-The optional body used, tipically when HttpMethod is `PUT` or `POST`.
+The optional body used, typically when HttpMethod is `PUT` or `POST`.
 
 ## Built-in in-memory Cache System
 
