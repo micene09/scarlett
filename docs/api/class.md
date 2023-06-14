@@ -72,7 +72,7 @@ When the value resolved is `undefined` or `null`, the response's body will not b
 
 ## body
 
-`Object` (es: `{ [key: string]: any }`) | `string` | `ArrayBuffer` | `ArrayBufferView` | `Blob` | `File` | `FormData` | `undefined`
+`Object` (ex: `{ [key: string]: any }`) | `string` | `ArrayBuffer` | `ArrayBufferView` | `Blob` | `File` | `FormData` | `undefined`
 
 Optional request body content, if the method is `GET`, this value will be set to `undefined`.
 
