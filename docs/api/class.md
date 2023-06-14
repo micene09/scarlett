@@ -405,7 +405,7 @@ This method is used internally to complete common cache's task operations like s
 
 Store the response object provided to the internal `RestClient` instance's cache.
 
-## cacheGet<TResponse>
+## cacheGet
 
 `(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
 
