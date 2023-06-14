@@ -6,8 +6,8 @@ To create a new instance, you need to provide `IRequestOptionsGlobals` object as
 
 ```typescript
 const client = new RestClient({
-	host: `https://server.com`,
-	responseType: `text`
+	host: "https://server.com",
+	responseType: "text"
 })
 ```
 
@@ -18,7 +18,7 @@ Every option will be accessible/updatable using the public **options** property,
 You can also override every options providing a `IRequestOptions` object as last parameter to the request method:
 
 ```typescript
-const response = await client.get<any>(`/controller`, { responseType: `json` })
+const response = await client.get<any>("/controller", { responseType: "json" })
 ```
 
 In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
@@ -78,7 +78,7 @@ Optional request body content, if the method is `GET`, this value will be set to
 
 ## query
 
-``{ [key: string]: any }``
+`{ [key: string]: any }`
 
 Optional key-value pair, this will be converted (and appended) to the request URI.
 
@@ -104,11 +104,7 @@ Check out `tests/features.test.ts` to see it in action!
 
 `boolean`
 
-If true, it will include falsy values as empty, example:
-
-```
-/example/?a=&b=
-```
+If true, it will include falsy values as empty, example: `/example/?a=&b=`.
 
 Defaults to false.
 
@@ -155,12 +151,12 @@ You can do this providing an array of `IResponseFilter`.
 A filter can be defined as object:
 
 ```typescript
-await client.get(`/example`, {
+await client.get("/example", {
 	throwExcluding: [{ // every prop here is optional
 		path: "/example", // filter based on url path
 		method: "GET",
 		statusCode: 404,
-		errorCode: "Timeout", // the internal error code
+		errorCode: "Timeout" // the internal error code
 	}]
 })
 ```
@@ -168,7 +164,7 @@ await client.get(`/example`, {
 ...or as sync/async method returning `true` to prevent the `throw`:
 
 ```typescript
-await client.get(`/example`, {
+await client.get("/example", {
 	throwExcluding: [
 		async (err) => {
 			let willPreventError = true;
@@ -187,7 +183,7 @@ Setting throwExcluding will also set `throw` option to `true`.
 
 ## overrideStrategy
 
-`"merge" | "assign"`
+`merge` | `assign`
 
 On every request method, you can override any option just providing it as parameter.
 
@@ -234,9 +230,9 @@ Global handler, running on your `RestClient`'s instance context, called every ti
 
 ```typescript
 const client = new RestClient({
-	host: `https://server.com`,
+	host: "https://server.com",
 	basePath: "/controller",
-	responseType: `text`
+	responseType: "text"
 })
 const response = await client.request<string>("GET", "/action");
 ```
@@ -265,7 +261,7 @@ Every RestClient instance has all the http methods as a lower case named method 
 Example:
 
 ```typescript
-const response = await client.get<string>(`/action`);
+const response = await client.get<string>("/action");
 ```
 
 Note: every shortcut method will internally call the `request()` method.
@@ -293,7 +289,7 @@ The optional `base` parameter defaults to the current rest client options object
 
 ### error
 
-`([RestError](#resterror)`<TError>`)`
+`([RestError](#resterror)<TError>)`
 
 ### status
 
@@ -317,11 +313,11 @@ interface IMyObject {
 	test: string
 }
 const client = new RestClient({
-	host: `https://server.com`,
+	host: "https://server.com",
 	basePath: "/controller",
-	responseType: `json`
+	responseType: "json"
 })
-const response = await client.get<IMyObject>(`/action`);
+const response = await client.get<IMyObject>("/action");
 ```
 
 The property `response.data` will infer the `IMyObject` interface.
@@ -395,7 +391,7 @@ Here is the full list:
 
 ## cacheKey
 
-`(url: `URL`, method: `HttpMethod` | "*" = "*", customKey?: `string`)`
+`(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
 
 Evaluate the unique cache-key for a particular request, having the provided `url`, (optional) `method`, combining this couple with the `cacheKey` option.
 
@@ -405,19 +401,19 @@ This method is used internally to complete common cache's task operations like s
 
 ## cacheSet
 
-`(response: `IResponse`, customKey?: `string`)`
+`(response: IResponse, customKey?: string)`
 
 Store the response object provided to the internal `RestClient` instance's cache.
 
 ## cacheGet<TResponse>
 
-`(url: `URL`, method: `HttpMethod` | "*" = "*", customKey?: `string`)`
+`(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
 
 Retrieve the response object, if exists, from the internal `RestClient` instance's cache.
 
 ## cacheClearByKey
 
-`(cacheKey: `string`)`
+`(cacheKey: string)`
 
 Clears every cache entry in a `RestClient` instance context, matching with the provided `cacheKey`.
 
@@ -439,9 +435,9 @@ To create a new instance, just pass an `IRequestOptionsGlobals` object (optional
 import { RestOptions } from "scarlett"
 
 const opts = new RestOptions({
-	host: `https://server.com`,
+	host: "https://server.com",
 	basePath: "/controller",
-	responseType: `json`
+	responseType: "json"
 })
 ```
 
@@ -479,13 +475,13 @@ Will return a new cloned instance of `RestOptions` .
 
 ## merge
 
-`(options: `IRequestOptions`)`
+`(options: IRequestOptions)`
 
 Override with *options* using the `merge` strategy.
 
 ## assign
 
-`(options: `IRequestOptions`)`
+`(options: IRequestOptions)`
 
 Override with *options* using the `assign` strategy.
 
@@ -497,7 +493,7 @@ Will return a new `RestClient` based on the current options.
 
 ## setFactory
 
-`(factoryClass: `RestClient`)`
+`(factoryClass: RestClient)`
 
 Supposing that you created a new Class that extends the default RestClient (see [Advanced usage](#advanced-usage)), you can override the default factory class with this method.
 
