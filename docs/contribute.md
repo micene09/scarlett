@@ -1,4 +1,4 @@
-## How to contribute
+# How to contribute
 
 1. Fork this repo
 1. `npm i` or `yarn` to install packages

@@ -18,8 +18,6 @@
 
 Every request method will return a `Promise<IResponse<TResponse>>`.
 
-# Advanced usage
-
 ## Extending
 
 You can extend the base class for your specific needs as follows:
