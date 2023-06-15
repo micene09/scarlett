@@ -32,8 +32,8 @@ export default defineConfig({
 		],
 		sidebar: {
 			"/why": [
-				{ text: "API Intro", link: "/api" },
-				{ text: "Getting Started", link: "/usage/getting-started" }
+				{ text: "Getting Started", link: "/usage/getting-started" },
+				{ text: "API Intro", link: "/api" }
 			],
 			"/api": [
 				{ text: "API Intro", link: "/api" },
