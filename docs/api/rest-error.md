@@ -45,7 +45,7 @@ type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
 
 An internal error code to track unexpected behaviors based on request settings.
 
-## Instance properties:
+## Instance properties
 
 ### isRestError
 
