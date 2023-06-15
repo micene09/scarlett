@@ -83,7 +83,7 @@ const { getItemsList } = useCustomRestClient(...)
 const { data } = await getItemsList();
 ```
 
-## RestClientBuilder
+## Rest Client Builder function
 
 In very complex scenarios, you can build different rest clients using the `useRestClientBuilder()` API method:
 
