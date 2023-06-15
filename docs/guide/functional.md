@@ -24,6 +24,14 @@
 
 Every request method will return a `Promise<IResponse<TResponse>>`.
 
+You can even provide a type for the response's error:
+```typescript
+type ApiError = { code: string, message: string }
+const response = await get<string, ApiError>("/status-code/412");
+const data = response.data;         // << response.data property will be null because of the error
+const error = response.error?.data; // << error.data property will infer ApiError interface
+```
+
 ## Initiator and custom options
 
 You can structure a custom initiator with options:
