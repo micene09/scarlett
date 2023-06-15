@@ -1,16 +1,6 @@
-<img src="https://github.com/Micene09/scarlett/raw/main/docs/assets/hero.jpg">
-
-[![build](https://github.com/Micene09/scarlett/actions/workflows/build.yml/badge.svg)](https://github.com/Micene09/scarlett/actions/workflows/build.yml)
-[![tests](https://github.com/Micene09/scarlett/actions/workflows/tests.yml/badge.svg)](https://github.com/Micene09/scarlett/actions/workflows/tests.yml)
-[![version](https://img.shields.io/npm/v/scarlett?label=version)](https://www.npmjs.com/package/scarlett)
-[![downloads](https://img.shields.io/npm/dm/scarlett)](https://www.npmjs.com/package/scarlett)
+# Why
 
 
-## 👋 Welcome to scarlett
-
-A strongly typed with zero dependencies, rest client library based on Fetch API.
-
-Checkout the [documentation](https://micene09.github.io/scarlett).
 
 ## 💎 Key features
 
@@ -37,4 +27,4 @@ Checkout the [documentation](https://micene09.github.io/scarlett).
 
 ## 😬 Why this name?
 
-Maybe I'm a huge fan of that beautiful American actress...
+Yeah, I'm a huge fan of that beautiful American actress...
