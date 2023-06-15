@@ -108,7 +108,7 @@ Check out `tests/features.test.ts` to see it in action!
 
 If true, it will include falsy values as empty, example: `/example/?a=&b=`.
 
-Defaults to false.
+Defaults to `false`.
 
 ### cacheInMemory
 
@@ -120,7 +120,15 @@ Every entry for this cache, will use a compound-key containing the `cacheKey`, i
 
 See the [cache section](#built-in-cache-system) for more details.
 
-Defaults to false.
+Defaults to `false`.
+
+### cacheExpireAt
+
+`Date` | `number` | `undefined`
+
+Defining it you declare an expire `Date` (or timestamp) for the cache items.
+
+Defaults to `undefined`.
 
 ### cacheKey
 
@@ -128,7 +136,7 @@ Defaults to false.
 
 An optional alias reference to the current request, useful if you are using `cacheInMemory` parameter as true.
 
-Defaults to empty string.
+Defaults to `""`.
 
 ### throw
 
@@ -140,7 +148,7 @@ If true, when the standard [fetch -> Response.ok](https://developer.mozilla.org/
 
 The error object will be an instance of [RestError](#RestError) class.
 
-Defaults to false.
+Defaults to `false`.
 
 ### throwExcluding
 
