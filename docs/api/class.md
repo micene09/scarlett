@@ -1,6 +1,8 @@
-# RestClient
+# Class API
 
-## Instance
+## RestClient
+
+### Instance
 
 To create a new instance, you need to provide `IRequestOptionsGlobals` object as first parameter:
 
@@ -23,7 +25,7 @@ const response = await client.get<any>("/controller", { responseType: "json" })
 
 In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
 
-### IRequestOptionsGlobals
+#### IRequestOptionsGlobals
 
 The following native properties from original [Fetch's Request Object](https://developer.mozilla.org/en-US/docs/Web/API/Request) are supported:
 
@@ -39,19 +41,19 @@ The following native properties from original [Fetch's Request Object](https://d
 
 One of the library's goals is to extend the native capabilities, so here is a list of additional properties:
 
-#### host
+##### host
 
 `string`
 
 Defaults to `localhost.href`.
 
-#### basePath
+##### basePath
 
 `string`
 
 The base path to use on every request, defaults to `/`, combined with the `host` option.
 
-## responseType
+### responseType
 
 `HttpResponseFormat`
 
@@ -70,19 +72,19 @@ It can be defined as:
 
 When the value resolved is `undefined` or `null`, the response's body will not be parsed.
 
-## body
+### body
 
 `Object` (ex: `{ [key: string]: any }`) | `string` | `ArrayBuffer` | `ArrayBufferView` | `Blob` | `File` | `FormData` | `undefined`
 
 Optional request body content, if the method is `GET`, this value will be set to `undefined`.
 
-## query
+### query
 
 `{ [key: string]: any }`
 
 Optional key-value pair, this will be converted (and appended) to the request URI.
 
-## queryParamsTransformer
+### queryParamsTransformer
 
 `IQueryParamTransformer`
 
@@ -100,7 +102,7 @@ interface IQueryParamTransformer {
 
 Check out `tests/features.test.ts` to see it in action!
 
-## queryParamsIncludeEmpty
+### queryParamsIncludeEmpty
 
 `boolean`
 
@@ -108,7 +110,7 @@ If true, it will include falsy values as empty, example: `/example/?a=&b=`.
 
 Defaults to false.
 
-## cacheInMemory
+### cacheInMemory
 
 `boolean`
 
@@ -120,7 +122,7 @@ See the [cache section](#built-in-cache-system) for more details.
 
 Defaults to false.
 
-## cacheKey
+### cacheKey
 
 `string`
 
@@ -128,7 +130,7 @@ An optional alias reference to the current request, useful if you are using `cac
 
 Defaults to empty string.
 
-## throw
+### throw
 
 `boolean`
 
@@ -140,7 +142,7 @@ The error object will be an instance of [RestError](#RestError) class.
 
 Defaults to false.
 
-## throwExcluding
+### throwExcluding
 
 `IResponseFilter[]`
 
@@ -181,7 +183,7 @@ You will find the matched filter on [Response Object](#response-object).throwFil
 
 Setting throwExcluding will also set `throw` option to `true`.
 
-## overrideStrategy
+### overrideStrategy
 
 `merge` | `assign`
 
@@ -194,7 +196,7 @@ Internally, the library supports the following strategies to update the request 
 
 Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestOptions API](#RestOptions).
 
-## onRequest
+### onRequest
 
 `(request: IRequest): void | Promise`
 
@@ -202,20 +204,20 @@ Global handler, running on your `RestClient`'s instance context, called at every
 
 If the return value is a `Promise`'s instance, the request will `await` for it before starting.
 
-## onResponse
+### onResponse
 
 `(response: IResponse): void`
 
 Global handler, running on your `RestClient`'s instance context, called at every successful response received.
 Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
 
-## onError
+### onError
 
 `(error: RestError, response: IResponse): void`
 
 Global handler, running on your `RestClient`'s instance context, called every time an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
 
-## request()
+### request()
 
 `<TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<IRequestOptions>): Promise<IResponse<TResponse, TError>>`
 
@@ -244,7 +246,7 @@ const response = await client.request<string>("GET", "/action");
 console.log(response.request.url.href);
 ```
 
-## HttpMethod shortcut methods
+### HttpMethod shortcut methods
 
 Every RestClient instance has all the http methods as a lower case named method as shortcut:
 
@@ -266,7 +268,7 @@ const response = await client.get<string>("/action");
 
 Note: every shortcut method will internally call the `request()` method.
 
-## optionsOverride() method
+### optionsOverride() method
 
 Having the following definition:
 
@@ -277,29 +279,29 @@ optionsOverride(overrides?: Partial<IRestOptions>, base?: Partial<IRestOptions>)
 
 The optional `base` parameter defaults to the current rest client options object.
 
-## Response Object
+### Response Object
 
-### fetchResponse
+#### fetchResponse
 
 `([Response](https://developer.mozilla.org/en-US/docs/Web/API/Response))`
 
-### request
+#### request
 
 `([Request (sent) Object](#request-sent-object))`
 
-### error
+#### error
 
 `([RestError](#resterror)<TError>)`
 
-### status
+#### status
 
 `(exported enum => HTTPStatusCode)`
 
-### headers
+#### headers
 
 `([Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers))`
 
-### data
+#### data
 
 `(TResponse | null)`
 
@@ -322,13 +324,13 @@ const response = await client.get<IMyObject>("/action");
 
 The property `response.data` will infer the `IMyObject` interface.
 
-## throwFilter
+### throwFilter
 
 `IResponseFilter`
 
 When a `IResponseFilter` matches the response, this property will expose it.
 
-## repeat
+### repeat
 
 `(): Promise<IResponse<TResponse, TError>>`
 
@@ -351,7 +353,7 @@ const first = await restClient.get<any>("/action");
 const second = await first.repeat();
 ```
 
-## request
+### request
 
 The request object used to get the response, including options, url, method and body.
 
@@ -359,7 +361,7 @@ The request object used to get the response, including options, url, method and 
 
 The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using `host`, `basePath` and the request `path`.
 
-## method
+### method
 
 `HttpMethod`
 
@@ -367,7 +369,7 @@ The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance eva
 
 The optional body used, typically when HttpMethod is `PUT` or `POST`.
 
-## Built-in in-memory Cache System
+### Built-in in-memory Cache System
 
 A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based cache, disabled by default and triggered by the `cacheInMemory` flag.
 
@@ -389,7 +391,7 @@ All cache-related methods are `protected` and used internally on every request m
 
 Here is the full list:
 
-## cacheKey
+### cacheKey
 
 `(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
 
@@ -399,31 +401,31 @@ Providing the third parameter `customKey`, the string evaluated will change acco
 
 This method is used internally to complete common cache's task operations like set, get and clear; see the next methods to understand better.
 
-## cacheSet
+### cacheSet
 
 `(response: IResponse, customKey?: string)`
 
 Store the response object provided to the internal `RestClient` instance's cache.
 
-## cacheGet
+### cacheGet
 
 `(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
 
 Retrieve the response object, if exists, from the internal `RestClient` instance's cache.
 
-## cacheClearByKey
+### cacheClearByKey
 
 `(cacheKey: string)`
 
 Clears every cache entry in a `RestClient` instance context, matching with the provided `cacheKey`.
 
-## cacheClear
+### cacheClear
 
 `(): void`
 
 Clears every cache entry in a `RestClient` instance context.
 
-### RestOptions
+#### RestOptions
 
 Every instance of RestClient will have a public property named **options**, this is just an instance of `RestOptions`.
 
@@ -443,55 +445,55 @@ const opts = new RestOptions({
 
 Here is the full list of available instance's methods:
 
-## current
+### current
 
 `(): IRequestOptions`
 
 Will return a copy of the current `IRequestOptions`.
 
-## get
+### get
 
 `option`
 
 Will return a copy of the option's value.
 
-## set
+### set
 
 `option, newValue`
 
 To directly update an option (your TypeScript's IDE plugin will warn you about type issues).
 
-## unset
+### unset
 
 `(option)`
 
 Will internally restore the default value.
 
-## clone
+### clone
 
 `(): RestOptions`
 
 Will return a new cloned instance of `RestOptions` .
 
-## merge
+### merge
 
 `(options: IRequestOptions)`
 
 Override with *options* using the `merge` strategy.
 
-## assign
+### assign
 
 `(options: IRequestOptions)`
 
 Override with *options* using the `assign` strategy.
 
-## createRestClient
+### createRestClient
 
 `(): RestClient`
 
 Will return a new `RestClient` based on the current options.
 
-## setFactory
+### setFactory
 
 `(factoryClass: RestClient)`
 
@@ -521,7 +523,7 @@ const builder = new RestOptions()
 const restClient = builder.createRestClient()
 ```
 
-# RestError
+## RestError
 
 This class extends the default JavaScript's Error, it requires a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
 
@@ -547,19 +549,19 @@ import { RestError } from "scarlett";
 const err = new RestError<IBackendError>("The Error Message");
 ```
 
-## message
+### message
 
 `string`
 
 A human-friendly error message.
 
-## statusCode
+### statusCode
 
 `HTTPStatusCode`
 
 The standard http status code.
 
-## code
+### code
 
 `InternalErrorCode`
 
@@ -569,31 +571,31 @@ An internal error code:
 type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
 ```
 
-## Instance properties:
+### Instance properties:
 
-## isRestError
+### isRestError
 
 `boolean`
 
 Always true, it's a simple utility prop that can be useful to distinguish the standard `Error` from the `RestError`.
 
-## request
+### request
 
 `IRequest`
 
-## fetchResponse
+### fetchResponse
 
 `[Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)`
 
-## code
+### code
 
 `InternalErrorCode`
 
-## statusCode
+### statusCode
 
 `HTTPStatusCode`
 
-## data
+### data
 
 `TError`
 

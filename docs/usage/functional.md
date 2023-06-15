@@ -24,8 +24,6 @@
 
 Every request method will return a `Promise<IResponse<TResponse>>`.
 
-# Advanced usage
-
 ## Initiator and custom options
 
 You can structure a custom initiator with options:
