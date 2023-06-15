@@ -1,6 +1,9 @@
 ---
 layout: home
 
+title: Scarlett
+titleTemplate: Do you wanna Fetch with me?
+
 hero:
   name: Scarlett
   text: Do you wanna Fetch with me?
@@ -18,16 +21,16 @@ hero:
       link: https://github.com/Micene09/scarlett
 
 features:
-  - icon: a
+  - icon: 🖌️
     title: Multi API Styles
     details: Available Class and Functional API to find the best fit to your project
-  - icon: a
-    title: Typescript powered
+  - icon: 💪
+    title: Fully Typed
     details: Success and Error response objects with intellisense covered
-  - icon: a
+  - icon: 📦
     title: Tiny
     details: Zero dependencies to ensure the smallest bundle
-  - icon: a
-    title: Rest Utilities
+  - icon: 🚀
+    title: Feature Rich
     details: Supported timeout, in-memory cache, throw errors on failures and more!
 ---
