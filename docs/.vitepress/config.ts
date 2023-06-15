@@ -9,8 +9,8 @@ export default defineConfig({
 	themeConfig: {
 		nav: [
 			{
-				text: 'Usage',
-				link: '/usage/getting-started'
+				text: 'Guide',
+				link: '/guide/getting-started'
 			},
 			{
 				text: 'API',
@@ -31,20 +31,17 @@ export default defineConfig({
 			}
 		],
 		sidebar: {
-			"/why": [
-				{ text: "Getting Started", link: "/usage/getting-started" },
-				{ text: "API Intro", link: "/api" }
-			],
 			"/api": [
 				{ text: "API Intro", link: "/api" },
 				{ text: "Class API", link: "/api/class" },
 				{ text: "Functional API", link: "/api/functional" },
 				{ text: "Rest Error", link: "/api/rest-error" }
 			],
-			"/usage": [
-				{ text: "Getting Started", link: "/usage/getting-started" },
-				{ text: "Class API Usage", link: "/usage/class" },
-				{ text: "Functional API Usage", link: "/usage/functional" }
+			"/guide": [
+				{ text: "Why", link: "/guide/why" },
+				{ text: "Getting Started", link: "/guide/getting-started" },
+				{ text: "Class API Usage", link: "/guide/class" },
+				{ text: "Functional API Usage", link: "/guide/functional" }
 			]
 		},
 		socialLinks: [

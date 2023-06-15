@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /usage/getting-started
+      link: /guide/getting-started
     - theme: alt
       text: Why Scarlett?
-      link: /why
+      link: /guide/why
     - theme: alt
       text: View on GitHub
       link: https://github.com/Micene09/scarlett
