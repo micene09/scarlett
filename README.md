@@ -29,12 +29,3 @@ Checkout the [documentation](https://micene09.github.io/scarlett).
 * Request repeater
 * Query-string utilities
 * Rest Client Builder
-
-## 🌟 Inspired by
-
-* [axios](https://github.com/axios/axios)
-* DotNet Core's [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests#typed-clients)
-
-## 😬 Why this name?
-
-Maybe I'm a huge fan of that beautiful American actress...
