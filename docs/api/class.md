@@ -134,6 +134,13 @@ Defaults to `undefined`.
 
 An optional alias reference to the current request, useful if you are using `cacheInMemory` parameter as true.
 
+Keep in mind that when the in-memory cache is activated, a base cacheKey will be evaluated and used to get/set internal operations on cache store. The base cacheKey is basically a compound key having the following serialized info:
+* Absolute url
+* HTTP Method
+* Serialized inputs (for POST and PUT requests)
+
+Defining this parameter doesn't override the entire overall base cacheKey, your cacheKey string will be prepended to the base one, in this way Scarlett grants cache items isolation per request.
+
 Defaults to `""`.
 
 ### throw
