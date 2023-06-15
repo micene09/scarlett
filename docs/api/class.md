@@ -120,11 +120,11 @@ See the [cache section](#built-in-cache-system) for more details.
 
 Defaults to `false`.
 
-### cacheExpireAt
+### cacheExpireIn
 
-`Date` | `number` | `undefined`
+`number` | `undefined`
 
-Defining it you declare an expire `Date` (or timestamp) for the cache items.
+Define the cache duration for a response in milliseconds.
 
 Defaults to `undefined`.
 

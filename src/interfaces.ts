@@ -30,7 +30,7 @@ export interface IRestOptions<TResponse = any, TError = any> extends IRestOption
 	timeout: number;
 	cacheInMemory: boolean;
 	cacheKey: string;
-	cacheExpireAt: Date | number;
+	cacheExpireIn: number;
 	throw: boolean;
 	throwExcluding: IResponseFilter<TError>[];
 	onRequest(request: IRequest<TResponse, TError>): void | Promise<void>
