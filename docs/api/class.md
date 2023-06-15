@@ -2,8 +2,6 @@
 
 ## RestClient
 
-### Instance
-
 To create a new instance, you need to provide `IRequestOptionsGlobals` object as first parameter:
 
 ```typescript
@@ -530,81 +528,3 @@ const builder = new RestOptions()
 
 const restClient = builder.createRestClient()
 ```
-
-## RestError
-
-This class extends the default JavaScript's Error, it requires a template on constructor to qualify a response body, usually provided by backend API's handled exceptions.
-
-The `constructor`:
-```typescript
-constructor(message: string, statusCode?: HTTPStatusCode, code?: InternalErrorCode)
-```
-
-When a request's response has an error, you will find an instance of `RestError` as a property named **error** on `IResponse` object. If the `throw` flag is enabled, or the `throwExcluding` fails to filter an error, the library will internally `throw` it.
-
-If you expect a model for your error, you can provide its interface as follows:
-
-```typescript
-const response = await restClient.get<any, IBackendError>("/status-code/412");
-const data = response.data;         // << response.data property will be null because of the error
-const error = response.error?.data; // << error.data property will infer IBackendError interface
-```
-
-You can event import it and create an instance to extend your business logic:
-
-```typescript
-import { RestError } from "scarlett";
-const err = new RestError<IBackendError>("The Error Message");
-```
-
-### message
-
-`string`
-
-A human-friendly error message.
-
-### statusCode
-
-`HTTPStatusCode`
-
-The standard http status code.
-
-### code
-
-`InternalErrorCode`
-
-An internal error code:
-
-```typescript
-type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
-```
-
-### Instance properties:
-
-### isRestError
-
-`boolean`
-
-Always true, it's a simple utility prop that can be useful to distinguish the standard `Error` from the `RestError`.
-
-### request
-
-`IRequest`
-
-### fetchResponse
-
-`[Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)`
-
-### code
-
-`InternalErrorCode`
-
-### statusCode
-
-`HTTPStatusCode`
-
-### data
-
-`TError`
-
-The error object parsed from response body content.
