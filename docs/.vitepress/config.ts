@@ -34,7 +34,8 @@ export default defineConfig({
 			"/api": [
 				{ text: "APIs Intro", link: "/api" },
 				{ text: "Class API", link: "/api/class" },
-				{ text: "Functional API", link: "/api/functional" }
+				{ text: "Functional API", link: "/api/functional" },
+				{ text: "Rest Error", link: "/api/rest-error" }
 			],
 			"/usage": [
 				{ text: "Getting Started", link: "/usage/getting-started" },
