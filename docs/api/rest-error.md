@@ -4,11 +4,6 @@ Independently of the chosen API Style, probably you will have to deal with error
 
 It is used internally to track and better qualify the error thrown.
 
-The `constructor`:
-```typescript
-constructor(message: string, statusCode?: HTTPStatusCode, code?: InternalErrorCode)
-```
-
 Sometimes, a success response body differs from error response body, for this reason you can specify generic types qualify the response provided by backend API's handled exceptions:
 ```typescript
 const response = await restClient.get<any, IBackendError>("/status-code/412");
@@ -22,6 +17,12 @@ You can event import it and create an instance to extend your business logic:
 ```typescript
 import { RestError } from "scarlett";
 const err = new RestError<IBackendError>("The Error Message");
+```
+
+## The constructor
+
+```typescript
+constructor(message: string, statusCode?: HTTPStatusCode, code?: InternalErrorCode)
 ```
 
 ### message
@@ -38,15 +39,13 @@ The standard http status code.
 
 ### code
 
-`InternalErrorCode`
-
-An internal error code:
-
 ```typescript
 type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
 ```
 
-### Instance properties:
+An internal error code to track unexpected behaviors based on request settings.
+
+## Instance properties:
 
 ### isRestError
 
