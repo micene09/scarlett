@@ -78,13 +78,11 @@ describe('Request utilities and shortcuts using Functional API', () => {
 	});
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
-		const { delayedResponse, cacheClearByKey } = useTestRestClient(testServer);
+		const { delayedResponse, cacheClearByKey, setOption } = useTestRestClient(testServer);
+		setOption("cacheInMemory", true);
 		async function repliedIn(ms: number) {
 			const starting = Date.now();
-			await delayedResponse(ms, {
-				cacheInMemory: true,
-				cacheKey
-			});
+			await delayedResponse(ms, { cacheKey });
 			return Date.now() - starting;
 		}
 		const t1 = await repliedIn(300);
@@ -97,8 +95,8 @@ describe('Request utilities and shortcuts using Functional API', () => {
 	test("Cache responses using expire mechanism", async () => {
 
 		const { getTimestamp } = useTestRestClient(testServer);
-		const cacheExpireAt = Date.now() + 500;
-		const response = await getTimestamp({ cacheInMemory: true, cacheExpireAt });
+		const cacheExpireIn = 500;
+		const response = await getTimestamp({ cacheInMemory: true, cacheExpireIn });
 		const cachedTimestamp = response.data ?? "";
 
 		const firstTs = (await response.repeat()).data ?? "";
@@ -218,12 +216,10 @@ describe('Request utilities and shortcuts using Class API', () => {
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
 		const rest = new TestRestClient(testServer);
+		rest.options.set("cacheInMemory", true);
 		async function repliedIn(ms: number) {
 			const starting = Date.now();
-			await rest.delayedResponse(ms, {
-				cacheInMemory: true,
-				cacheKey
-			});
+			await rest.delayedResponse(ms, { cacheKey });
 			return Date.now() - starting;
 		}
 		const t1 = await repliedIn(300);
@@ -236,8 +232,8 @@ describe('Request utilities and shortcuts using Class API', () => {
 	test("Cache responses using expire mechanism", async () => {
 
 		const rest = new TestRestClient(testServer);
-		const cacheExpireAt = Date.now() + 500;
-		const response = await rest.getTimestamp({ cacheInMemory: true, cacheExpireAt });
+		const cacheExpireIn = 500;
+		const response = await rest.getTimestamp({ cacheInMemory: true, cacheExpireIn });
 		const cachedTimestamp = response.data ?? "";
 
 		const firstTs = (await response.repeat()).data ?? "";
