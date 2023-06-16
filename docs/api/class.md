@@ -13,7 +13,7 @@ const client = new RestClient({
 
 Any provided option will be considered the default for every subsequent request of the new instance.
 
-Every option will be accessible/updatable using the public **options** property, an instance of [RestOptions](#RestOptions) class.
+Every option will be accessible/updatable using the public **options** property, an instance of [RestClientBuilder](#RestClientBuilder) class.
 
 You can also override every options providing a `IRequestOptions` object as last parameter to the request method:
 
@@ -23,7 +23,7 @@ const response = await client.get<any>("/controller", { responseType: "json" })
 
 In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
 
-#### IRequestOptionsGlobals
+### IRequestOptionsGlobals
 
 The following native properties from original [Fetch's Request Object](https://developer.mozilla.org/en-US/docs/Web/API/Request) are supported:
 
@@ -39,13 +39,13 @@ The following native properties from original [Fetch's Request Object](https://d
 
 One of the library's goals is to extend the native capabilities, so here is a list of additional properties:
 
-##### host
+### host
 
 `string`
 
 Defaults to `localhost.href`.
 
-##### basePath
+### basePath
 
 `string`
 
@@ -61,11 +61,11 @@ It can be defined as:
 1. `HttpResponseFormatType` typed value: `undefined` (default), `null`, `json`, `text`, `blob`, `arrayBuffer`, `formData`
 2. A sync method returning a `HttpResponseFormatType`
    ```typescript
-   (request: IRequest, fetchResponse: Response | null) = HttpResponseFormatType
+   (request: IRequest, fetchResponse: Response | null) => HttpResponseFormatType
    ```
 3. An async method resolving a `HttpResponseFormatType`
    ```typescript
-   (request: IRequest, fetchResponse: Response | null) = Promise<HttpResponseFormatType>
+   (request: IRequest, fetchResponse: Response | null) => Promise<HttpResponseFormatType>
    ```
 
 When the value resolved is `undefined` or `null`, the response's body will not be parsed.
@@ -116,7 +116,7 @@ If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/d
 
 Every entry for this cache, will use a compound-key containing the `cacheKey`, if provided.
 
-See the [cache section](#built-in-cache-system) for more details.
+See the [cache section](/api/in-memory-cache) for more details.
 
 Defaults to `false`.
 
@@ -192,7 +192,7 @@ await client.get("/example", {
 
 If a failed request match one of the objects provided, your rest client instance will not throw any error.
 
-You will find the matched filter on [Response Object](#response-object).throwFilter property.
+You will find the matched filter on [Response Object](/api/response-object).throwFilter property.
 
 Setting throwExcluding will also set `throw` option to `true`.
 
@@ -207,7 +207,7 @@ Internally, the library supports the following strategies to update the request 
 * *merge* (default), every simple primitive type (like strings, and numbers) will be overwritten, while Headers, Object-like and Array-like options will be merged.
 * *assign*, every value will be overwritten using [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 
-Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestOptions API](#RestOptions).
+Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestClientBuilder API](#RestClientBuilder).
 
 ### onRequest
 
@@ -286,170 +286,24 @@ Note: every shortcut method will internally call the `request()` method.
 Having the following definition:
 
 ```typescript
-optionsOverride(overrides?: Partial<IRestOptions>, base?: Partial<IRestOptions>)
+optionsOverride(overrides?: Partial<IRestClientBuilder>, base?: Partial<IRestClientBuilder>)
 ```
 ...will provide a copy of the `IRequestOptions` updated using the `overrideStrategy` option.
 
 The optional `base` parameter defaults to the current rest client options object.
 
-### Response Object
+## RestClientBuilder
 
-#### fetchResponse
-
-`([Response](https://developer.mozilla.org/en-US/docs/Web/API/Response))`
-
-#### request
-
-`([Request (sent) Object](#request-sent-object))`
-
-#### error
-
-`([RestError](#resterror)<TError>)`
-
-#### status
-
-`(exported enum => HTTPStatusCode)`
-
-#### headers
-
-`([Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers))`
-
-#### data
-
-`(TResponse | null)`
-
-
-The response body, leaded by `IRequestOptions.responseType` (runtime type) and `TResponse` (IDE type checking).
-
-Example:
-
-```typescript
-interface IMyObject {
-	test: string
-}
-const client = new RestClient({
-	host: "https://server.com",
-	basePath: "/controller",
-	responseType: "json"
-})
-const response = await client.get<IMyObject>("/action");
-```
-
-The property `response.data` will infer the `IMyObject` interface.
-
-### throwFilter
-
-`IResponseFilter`
-
-When a `IResponseFilter` matches the response, this property will expose it.
-
-### repeat
-
-`(): Promise<IResponse<TResponse, TError>>`
-
-A useful shortcut to repeat the request sent, having the following interface:
-
-```typescript
-export interface IRepeat<TResponse, TError = any> {
-	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
-}
-export interface IRepeat<TResponse, TError = any> {
-	(requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
-}
-```
-
-Every parameter is optional and you can override every option as usual.
-
-*Usage*
-```typescript
-const first = await restClient.get<any>("/action");
-const second = await first.repeat();
-```
-
-### request
-
-The request object used to get the response, including options, url, method and body.
-
-**url**
-
-The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using `host`, `basePath` and the request `path`.
-
-### method
-
-`HttpMethod`
-
-**body**
-
-The optional body used, typically when HttpMethod is `PUT` or `POST`.
-
-### Built-in in-memory Cache System
-
-A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based cache, disabled by default and triggered by the `cacheInMemory` flag.
-
-If, for any reason, you want to avoid the complexity of the standard [Request.cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache), this is the right way to go.
-
-The `IRequestOptions.cacheKey` is the default used to store response objects, it can be...
-
- * provided during the `RestClient` initialization
- * updated via `RestClient.options` property (`RestOptions` methods)
- * overridden on any local `request` method (or any equivalent http shortcut)
-
-See [Advanced usage](#advanced-usage) to get an example.
-
-This internal cache system will never infer the native [Request.cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache) property's behavior.
-
-Enabling it, if a cached response for a particular request exists, the library will avoid the fetch call to resolve the `Promise` immediately.
-
-All cache-related methods are `protected` and used internally on every request method if enabled, but you can use it to give super-powers on your custom rest client.
-
-Here is the full list:
-
-### cacheKey
-
-`(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
-
-Evaluate the unique cache-key for a particular request, having the provided `url`, (optional) `method`, combining this couple with the `cacheKey` option.
-
-Providing the third parameter `customKey`, the string evaluated will change accordingly.
-
-This method is used internally to complete common cache's task operations like set, get and clear; see the next methods to understand better.
-
-### cacheSet
-
-`(response: IResponse, customKey?: string)`
-
-Store the response object provided to the internal `RestClient` instance's cache.
-
-### cacheGet
-
-`(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
-
-Retrieve the response object, if exists, from the internal `RestClient` instance's cache.
-
-### cacheClearByKey
-
-`(cacheKey: string)`
-
-Clears every cache entry in a `RestClient` instance context, matching with the provided `cacheKey`.
-
-### cacheClear
-
-`(): void`
-
-Clears every cache entry in a `RestClient` instance context.
-
-#### RestOptions
-
-Every instance of RestClient will have a public property named **options**, this is just an instance of `RestOptions`.
+Every instance of `RestClient` will have a public property named **options**, this is just an instance of `RestClientBuilder`.
 
 You can access and modify the global options of your rest client instance using his methods.
 
 To create a new instance, just pass an `IRequestOptionsGlobals` object (optional) as first parameter:
 
 ```typescript
-import { RestOptions } from "scarlett"
+import { RestClientBuilder } from "scarlett"
 
-const opts = new RestOptions({
+const opts = new RestClientBuilder({
 	host: "https://server.com",
 	basePath: "/controller",
 	responseType: "json"
@@ -484,9 +338,9 @@ Will internally restore the default value.
 
 ### clone
 
-`(): RestOptions`
+`(): RestClientBuilder`
 
-Will return a new cloned instance of `RestOptions` .
+Will return a new cloned instance of `RestClientBuilder` .
 
 ### merge
 
@@ -517,7 +371,7 @@ Example:
 ```typescript
 class MyRest extends RestClient { ... }
 
-const rest = new RestOptions().setFactory(MyRest).createRestClient()
+const rest = new RestClientBuilder().setFactory(MyRest).createRestClient()
 console.log(rest instanceof MyRest) // >> true
 ```
 
@@ -526,9 +380,9 @@ Note: Keep in mind that custom classes having extra/custom parameters are **not 
 **Usage:**
 
 ```typescript
-import { RestOptions } from "scarlett"
+import { RestClientBuilder } from "scarlett"
 
-const builder = new RestOptions()
+const builder = new RestClientBuilder()
 	.set("host", "https://example.com")
 	.set("basePath", "/api")
 	.set("responseType", "json")
