@@ -21,7 +21,7 @@ The request object used to get the response, including options, url, method and 
 
 `URL`
 
-The URL instance evaluated using host, basePath and the request path.
+The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using host, basePath and the request path.
 
 ### method
 
