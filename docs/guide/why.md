@@ -33,6 +33,8 @@ In Scarlett you have the following options:
 2. Never throw error
 3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false` but exclude from throwing with custom local options or custom callbacks on the response context, checking for status codes or details on the (typed) error body
 
+Check out [the documentation](/api/functional#throwexcluding) for more details about it.
+
 ### Customization Layers enabled
 
 It's a common practice to have global and common settings for every rest client initialized in your web app, but what if you have just a few specializations in one or two request methods?

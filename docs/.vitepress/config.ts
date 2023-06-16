@@ -45,6 +45,8 @@ export default defineConfig({
 				{ text: "API Intro", link: "/api" },
 				{ text: "Class API", link: "/api/class" },
 				{ text: "Functional API", link: "/api/functional" },
+				{ text: "In-Memory Cache", link: "/api/in-memory-cache" },
+				{ text: "Response Object", link: "/api/response-object" },
 				{ text: "Rest Error", link: "/api/rest-error" }
 			],
 			"/guide": [
