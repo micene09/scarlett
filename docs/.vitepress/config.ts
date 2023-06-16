@@ -2,6 +2,9 @@ import { defineConfig } from 'vitepress'
 import { version } from "../../package.json"
 
 export default defineConfig({
+	vite: {
+		server: { host: "0.0.0.0" }
+	},
 	title: "scarlett",
 	description: "A strongly typed with zero dependencies, rest client library based on Fetch API.",
 	outDir: "../lib-docs",
