@@ -5,7 +5,7 @@ title: Scarlett
 titleTemplate: Do you wanna Fetch with me?
 
 hero:
-  name: Scarlett
+  name: scarlett
   text: Do you wanna Fetch with me?
   tagline: A rest client library that actually covers high complexity scenarios...for real!
   image:

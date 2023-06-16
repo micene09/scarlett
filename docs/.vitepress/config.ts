@@ -6,7 +6,17 @@ export default defineConfig({
 	description: "A strongly typed with zero dependencies, rest client library based on Fetch API.",
 	outDir: "../lib-docs",
 	base: "/scarlett/",
+	head: [
+	  ['link', { rel: 'icon', type: 'image/svg+xml', href: '...to define...' }],
+	  ['meta', { property: 'og:type', content: 'website' }],
+	  ['meta', { property: 'og:title', content: "scarlett" }],
+	  ['meta', { property: 'og:image', content: "...to define..." }],
+	  ['meta', { property: 'og:url', content: "" }],
+	  ['meta', { property: 'og:description', content: "A strongly typed with zero dependencies, rest client library based on Fetch API." }],
+	  ['meta', { name: 'theme-color', content: '#646cff' }]
+	],
 	themeConfig: {
+		logo: undefined,
 		nav: [
 			{
 				text: 'Guide',
