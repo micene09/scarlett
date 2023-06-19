@@ -9,7 +9,7 @@
 1. Create a base rest client initiator:
 
 	```typescript
-	const useRest =  createRestClient({
+	const useRestClient = createRestClient({
 		host: `https://server.com`,
 		responseType: `text`
 	} /* >> IRequestOptions  */)
