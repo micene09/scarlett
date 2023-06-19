@@ -76,14 +76,12 @@ const response = await client.get<string>("/action");
 
 Note: every shortcut method will internally call the `request()` method.
 
-### optionsOverride() method
-
-Having the following definition:
+### optionsOverride
 
 ```typescript
-optionsOverride(overrides?: Partial<IRestClientBuilder>, base?: Partial<IRestClientBuilder>)
+(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => Partial<IRestOptions<TResponse, TError>>
 ```
-...will provide a copy of the `IRequestOptions` updated using the `overrideStrategy` option.
+Provide a copy of the `IRequestOptions` updated using the `overrideStrategy` option.
 
 The optional `base` parameter defaults to the current rest client options object.
 
@@ -109,51 +107,51 @@ Here is the full list of available instance's methods:
 
 ### current
 
-`(): IRequestOptions`
+`() => Partial<IRestOptions<TResponse, TError>>`
 
 Will return a copy of the current `IRequestOptions`.
 
 ### get
 
-`option`
+`(key: K) => value`
 
 Will return a copy of the option's value.
 
 ### set
 
-`option, newValue`
+`(key: K, val: value) => void`
 
 To directly update an option (your TypeScript's IDE plugin will warn you about type issues).
 
 ### unset
 
-`(option)`
+`(key: K) => void`
 
 Will internally restore the default value.
 
 ### clone
 
-`(): RestClientBuilder`
+`() => RestClientBuilder`
 
 Will return a new cloned instance of `RestClientBuilder` .
 
 ### merge
 
-`(options: IRequestOptions)`
+`(options?: Partial<IRestOptions<TResponse, TError>>) => void`
 
 Override with *options* using the `merge` strategy.
 
 ### assign
 
-`(options: IRequestOptions)`
+`(options?: Partial<IRestOptions<TResponse, TError>>) => void`
 
 Override with *options* using the `assign` strategy.
 
 ### createRestClient
 
-`(): RestClient`
+`(..params: any[]) => RestClient`
 
-Will return a new `RestClient` based on the current options.
+Will return a new `RestClient` based on the current options, using the params from your factory class.
 
 ### setFactory
 
@@ -170,7 +168,7 @@ const rest = new RestClientBuilder().setFactory(MyRest).createRestClient()
 console.log(rest instanceof MyRest) // >> true
 ```
 
-Note: Keep in mind that custom classes having extra/custom parameters are **not supported**, the only way to make it work is a class having the same RestClient's constructor.
+Custom classes having extra/custom parameters are supported.
 
 **Usage:**
 
