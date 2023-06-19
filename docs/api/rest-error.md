@@ -63,7 +63,7 @@ Always true, it's a simple utility prop that can be useful to distinguish the st
 
 ### code
 
-`InternalErrorCode`
+The same on the constructor parameter.
 
 ### statusCode
 
