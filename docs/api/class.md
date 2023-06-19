@@ -15,7 +15,7 @@ Any provided option will be considered the default for every subsequent request 
 
 Every option will be accessible/updatable using the public **options** property, an instance of [RestClientBuilder](#RestClientBuilder) class.
 
-You can also override every options providing a `IRequestOptions` object as last parameter to the request method:
+You can also override an options object as last parameter to the request method:
 
 ```typescript
 const response = await client.get<any>("/controller", { responseType: "json" })
@@ -27,12 +27,12 @@ For more details about the options object, visit the [Rest Client Options](/api/
 
 ### request()
 
-`<TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<IRequestOptions>): Promise<IResponse<TResponse, TError>>`
+`<TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<Options>): Promise<IResponse<TResponse, TError>>`
 
 *Parameters*:
 * HttpMethod (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
 * path *(string)*, the request path relative to `host`+`basePath`
-* requestOptions *(IRequestOptions | undefined)*, local request options that will override the global options provided via constructor.
+* requestOptions *(Options | undefined)*, local request options that will override the global options provided via constructor.
 
 *Returns* `Promise<IResponse<TResponse, TError>>`, where:
  * `TResponse` is the `response.data` type (typescript intellisense)
@@ -66,7 +66,7 @@ Every RestClient instance has all the http methods as a lower case named method 
 ...having the following, simplified, parameters:
 
 * path *(string)*
-* requestOptions *(IRequestOptions | undefined)
+* requestOptions *(Options | undefined)
 
 Example:
 
@@ -81,7 +81,7 @@ Note: every shortcut method will internally call the `request()` method.
 ```typescript
 (overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => Partial<IRestOptions<TResponse, TError>>
 ```
-Provide a copy of the `IRequestOptions` updated using the `overrideStrategy` option.
+Provide a copy of the options object updated using the `overrideStrategy` option.
 
 The optional `base` parameter defaults to the current rest client options object.
 
@@ -91,7 +91,7 @@ Every instance of `RestClient` will have a public property named **options**, th
 
 You can access and modify the global options of your rest client instance using his methods.
 
-To create a new instance, just pass an `IRequestOptionsGlobals` object (optional) as first parameter:
+To create a new instance, just pass an options object (optional) as first parameter:
 
 ```typescript
 import { RestClientBuilder } from "scarlett"
@@ -107,9 +107,9 @@ Here is the full list of available instance's methods:
 
 ### current
 
-`() => Partial<IRestOptions<TResponse, TError>>`
+`() => Partial<Options>`
 
-Will return a copy of the current `IRequestOptions`.
+Will return a copy of the current options object.
 
 ### get
 
