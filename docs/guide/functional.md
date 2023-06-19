@@ -32,28 +32,6 @@ const data = response.data;         // << response.data property will be null be
 const error = response.error?.data; // << error.data property will infer ApiError interface
 ```
 
-## Initiator and custom options
-
-You can structure a custom initiator with options:
-
-```typescript
-const useRest =  createRestClient({
-	host: `https://server.com`,
-	responseType: `text`
-})
-type Customs = { host: string, path: string }
-export default function useCustomRestClient(opts: Customs) {
-	const rest = useRest();
-
-	// use the setOption api to handle custom options
-	rest.setOption("host", opts.host);
-	rest.setOption("path", opts.path);
-
-	// return the initiator
-	return rest;
-}
-```
-
 ## Expose just your logics
 
 Structuring a custom initiator can come in handy when you want to hide the scarlett's internal methods and exposing just your own functions:
@@ -89,6 +67,21 @@ import useCustomRestClient from "custom-rest.ts"
 
 const { getItemsList } = useCustomRestClient(...)
 const { data } = await getItemsList();
+```
+
+## Initiator and custom parameters
+
+You can structure a custom initiator with custom parameters:
+
+```typescript
+export default function createMyRestClient(token: string) {
+	const useMyRest = createRestClient({
+		host: `https://server.com`,
+		responseType: `text`
+	})
+	// ...your logic with custom parameter(s)
+	return useMyRest;
+}
 ```
 
 ## Rest Client Builder function
