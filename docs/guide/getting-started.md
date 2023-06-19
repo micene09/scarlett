@@ -3,7 +3,7 @@
 1. Install it using `npm i scarlett` or `yarn add scarlett`
 1. Import it in your project, here is an example using ESM Module:
 	```typescript
-	import { RestClient } from "scarlett"
+	import { createRestClient } from "scarlett"
 	```
 
 ## Different builds
@@ -41,7 +41,7 @@ Sources are compiled to`ES2021` for every module format, keep in mind that **pol
 Using Functional API:
 
 ```typescript
-import createRestClient from `scarlett`
+import { createRestClient } from `scarlett`
 
 const useRestClient = createRestClient({
 	host: `https://server.com`,
@@ -55,7 +55,7 @@ console.log(response.data) // << string or undefined
 Using Class API:
 
 ```typescript
-import RestClient from `scarlett`
+import { RestClient } from `scarlett`
 
 const client = new RestClient({
 	host: `https://server.com`,
