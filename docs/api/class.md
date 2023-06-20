@@ -68,6 +68,10 @@ Provide a copy of the options object updated using the `overrideStrategy` option
 
 The optional `base` parameter defaults to the current rest client options object.
 
+### Built-in Cache System
+
+On a `RestClient` class instance, you will find every cache capability available as public method, for more details visit the [Built-in Cache System](/api/in-memory-cache) section.
+
 ## RestClientBuilder
 
 Every instance of `RestClient` will have a public property named **options**, this is just an instance of `RestClientBuilder`.

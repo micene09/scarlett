@@ -64,7 +64,7 @@ export default defineConfig({
 						{ text: "Class API", link: "/api/class" },
 						{ text: "Options", link: "/api/rest-client-options" },
 						{ text: "Response Object", link: "/api/response-object" },
-						{ text: "In-Memory Cache", link: "/api/in-memory-cache" },
+						{ text: "Built-in Cache System", link: "/api/in-memory-cache" },
 						{ text: "Rest Error", link: "/api/rest-error" }
 					]
 				}
