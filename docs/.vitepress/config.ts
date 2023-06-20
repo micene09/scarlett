@@ -57,7 +57,7 @@ export default defineConfig({
 					]
 				},
 				{
-					text: "APIs",
+					text: "API",
 					items: [
 						{ text: "Styles", link: "/api/styles" },
 						{ text: "Functional API", link: "/api/functional" },
