@@ -29,9 +29,9 @@ But not all `4xx` or `5xx` can be considered Fatal errors, think about the follo
 * [404 Not Found](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404), think about an e-commerce, in which you are trying to resume a Cart using your cached Cart Id, but the Cart expired and API is returning `404`, it cannot be a Fatal error because the case can be handled providing a UX like "*Sorry, your cart expired, please continue shopping with us...*".
 
 In scarlett you have the following options:
-1. Throw always an error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false`
+1. Throw always an error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false` or a network error occurs
 2. Never throw error
-3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false` but exclude from throwing with custom local options or custom callbacks on the response context, checking for status codes or details on the (typed) error body
+3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false`, a network error occurs...but exclude from throwing with custom local options or custom callbacks on the response context, checking for status codes or details on the (typed) error body
 
 Check out [the documentation](/api/functional#throwexcluding) for more details about it.
 
