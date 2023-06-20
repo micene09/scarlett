@@ -37,15 +37,15 @@ Check out [the documentation](/api/functional#throwexcluding) for more details a
 
 ### 3. Different customization layers
 
-It's a common practice to have global and common settings for every rest client initialized in your web app, but what if you have just a few specializations in one or two request methods?
+It's a common practice to have global and common options for every rest client initialized in your web app, but what if you have just a few specializations in one or two request methods?
 
-In scarlett you will have two layers of settings:
+In scarlett you will have two layers of rest options:
 * The global layer, that will be shared to every request method defined in your rest client
-* The local layer, a specific context in your request method that will override one or more settings from the global layer
+* The local layer, a specific context in your request method that will override one or more rest options from the global layer
 
-Another key mechanism is the override strategy, in which you can define how to override prop settings on global or local.
+Another key mechanism is the override strategy, in which you can define how to override props on rest options object, on global or local layer.
 
-Check out [the documentation](/api/functional#overridestrategy) for more details about it.
+Check out [override strategy guide](/api/rest-client-options#overridestrategy) for more details about it.
 
 ## 💎 Key features
 
