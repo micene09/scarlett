@@ -1,36 +1,34 @@
 # Functional API Usage
 
-1. Import the library:
+The Functional API use this strategy to better handle types inference, basically consists on a method called `createRestClient` that acts as wrapper for the real `useRestClient` function, that finally expose everything you need to perform your request or modify behaviors of your rest client, keeping the strongly typed fashion and options isolation.
 
-	```typescript
-	import { createRestClient } from `scarlett`
-	```
+Create a base rest client using the initiator:
 
-1. Create a base rest client initiator:
-
-	```typescript
-	const useRestClient = createRestClient({
-		host: `https://server.com`,
-		responseType: `text`
-	} /* >> IRequestOptions  */)
-	```
-
-1. Use the initiator and rest methods, with destructuring object:
-
-	```typescript
-	const { get } = useRest()
-	await get<string>(`path`)
-	```
-
-Every request method will return a `Promise<IResponse<TResponse>>`.
-
-You can even provide a type for the response's error:
 ```typescript
-type ApiError = { code: string, message: string }
-const response = await get<string, ApiError>("/status-code/412");
-const data = response.data;         // << response.data property will be null because of the error
-const error = response.error?.data; // << error.data property will infer ApiError interface
+const useRestClient = createRestClient({
+	host: `https://server.com`,
+	responseType: `text`
+})
 ```
+
+Use rest methods with destructuring pattern:
+
+```typescript
+const { get } = useRestClient()
+const { data, status } = await get<string>(`path`)
+```
+
+Any provided option on `createRestClient` will be considered the default for every subsequent requests for any method behind `useRestClient`, for more details about the options object, visit the [Rest Client Options](/api/rest-client-options) section.
+
+You can also override an options object as last parameter to the request method:
+
+```typescript
+const response = await get<string>("/example", { responseType: "json" })
+```
+
+In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
+
+Every request method will return a `Promise<IResponse<TResponse>>`, for more details about the response object, visit the [Response Object](/api/response-object) section.
 
 ## Expose just your logics
 

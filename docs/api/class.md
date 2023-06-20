@@ -2,26 +2,7 @@
 
 ## RestClient
 
-To create a new instance, you need to provide an options object as first parameter:
-
-```typescript
-const client = new RestClient({
-	host: "https://server.com",
-	responseType: "text"
-})
-```
-
-Any provided option will be considered the default for every subsequent request of the new instance.
-
-Every option will be accessible/updatable using the public **options** property, an instance of [RestClientBuilder](#RestClientBuilder) class.
-
-You can also override an options object as last parameter to the request method:
-
-```typescript
-const response = await client.get<any>("/controller", { responseType: "json" })
-```
-
-In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
+`constructor(options)`
 
 For more details about the options object, visit the [Rest Client Options](/api/rest-client-options) section.
 

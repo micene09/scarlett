@@ -1,30 +1,27 @@
 # Class API Usage
 
-1. Import the library:
+To create a new instance, you need to provide an options object as first parameter:
 
-	```typescript
-	import { RestClient } from `scarlett`
-	```
-
-2. Create a rest client in stance providing an object of interface `IRequestOptions`.
-
-	```typescript
-	const client = new RestClient({
-		host: `https://server.com`,
-		responseType: `text`
-	} /* >> IRequestOptions  */)
-	const response = await client.get<string>(`path`)
-	```
-
-Every request method will return a `Promise<IResponse<TResponse>>`.
-
-You can even provide a type for the response's error:
 ```typescript
-type ApiError = { code: string, message: string }
-const response = await client.get<string, ApiError>("/status-code/412");
-const data = response.data;         // << response.data property will be null because of the error
-const error = response.error?.data; // << error.data property will infer ApiError interface
+const client = new RestClient({
+	host: "https://server.com",
+	responseType: "text"
+})
 ```
+
+Any provided option will be considered the default for every subsequent request of the new instance, for more details about the options object, visit the [Rest Client Options](/api/rest-client-options) section.
+
+Every option will be accessible/updatable using the public **options** property, an instance of [RestClientBuilder](#RestClientBuilder) class.
+
+You can also override an options object as last parameter to the request method:
+
+```typescript
+const response = await client.get<string>("/example", { responseType: "text" })
+```
+
+In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.
+
+Every request method will return a `Promise<IResponse<TResponse>>`, for more details about the response object, visit the [Response Object](/api/response-object) section.
 
 ## Extending
 
