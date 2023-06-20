@@ -697,15 +697,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-basic-ssl@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@vitejs/plugin-basic-ssl@npm:1.0.1"
-  peerDependencies:
-    vite: ^3.0.0 || ^4.0.0
-  checksum: 9060dd9b02b51f48f9e655d920214879157db5b8bea9681465ab199e1be4f207cc968393410f93935a0443f8c2b302cef2a3ac0a69087af68fb33a8795e1e203
-  languageName: node
-  linkType: hard
-
 "@vitejs/plugin-vue@npm:^4.2.3":
   version: 4.2.3
   resolution: "@vitejs/plugin-vue@npm:4.2.3"
@@ -3305,7 +3296,6 @@ __metadata:
     "@rollup/plugin-typescript": ^11.1.0
     "@types/node": ^20.1.1
     "@types/node-fetch": ^2.6.3
-    "@vitejs/plugin-basic-ssl": ^1.0.1
     abort-controller: ^3.0.0
     bumpp: ^9.1.0
     fastify: ^4.17.0

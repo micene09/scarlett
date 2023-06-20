@@ -38,7 +38,6 @@
 		"@rollup/plugin-typescript": "^11.1.0",
 		"@types/node": "^20.1.1",
 		"@types/node-fetch": "^2.6.3",
-		"@vitejs/plugin-basic-ssl": "^1.0.1",
 		"abort-controller": "^3.0.0",
 		"bumpp": "^9.1.0",
 		"fastify": "^4.17.0",

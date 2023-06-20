@@ -1,11 +1,9 @@
 import { defineConfig } from 'vitepress'
-import basicSsl from '@vitejs/plugin-basic-ssl'
 import { version } from "../../package.json"
 
 export default defineConfig({
 	vite: {
-		server: { host: "0.0.0.0", https: true },
-		plugins: [basicSsl()]
+		server: { host: "0.0.0.0" }
 	},
 	title: "scarlett",
 	description: "A strongly typed with zero dependencies, rest client library based on Fetch API.",
