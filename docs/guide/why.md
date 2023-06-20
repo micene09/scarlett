@@ -24,7 +24,7 @@ In a real world web app, there are two kind of errors:
 
 Most of the `5xx` HTTP Status Codes from the server can be considered Fatal Error that should be thrown in the main thread, "blocking" the UX with a proper message for the user. When a Fatal error occurs, means that the user, you and your team are experiencing an unexpected error, not handled by any logic on both client and server, basically a bug.
 
-Naturally, not all `4xx` or `5xx` can be considered Fatal errors, think about the following examples of Handled Errors:
+But not all `4xx` or `5xx` can be considered Fatal errors, think about the following examples of Handled Errors:
 * [503 Service Unavailable](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503), if you are integrating with a third party API, you can easily expect that the service could be temporary unavailable, a smart move is considering it as an expected response, that if occurs can be handled with a proper UX.
 * [404 Not Found](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404), think about an e-commerce, in which you are trying to resume a Cart using your cached Cart Id, but the Cart expired and API is returning 404, it cannot be a Fatal error because for your app is an expected behavior, so it should be handled to provide a UX like "Sorry, your cart expired, please go to home and start again".
 
