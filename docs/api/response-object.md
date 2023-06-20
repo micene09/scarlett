@@ -3,11 +3,17 @@
 
 Once that rest client was defined, you can proceed to execute your REST calls, the response object obtained aims to cover every details needed by a complex application.
 
-```typescript
-const response = await client.get<any>("/controller", { responseType: "json" })
-```
+The return type of every REST method is basically a `Promise`, wrapping `IResponse<TResponse, TError>`, where:
+ * `TResponse`, that will infer the `response.data` type
+ * `TError` (optional), that will infer the `response.error.data` type
 
-In this section you will read about
+To start the inference just use Typescript Generics on the REST method:
+```typescript
+const response = await client.get<MyObject, MyError>("/path")
+```
+...then you will have different types depending on request success or failure (`fetchResponse.ok` as `true` or `false`):
+ * `response.data` typed as `MyObject` on success, or `undefined` on failure
+ * `response.error.data` typed as `MyError` on failure, or `undefined` on success
 
 ## fetchResponse
 
@@ -33,7 +39,7 @@ The optional body used, typically when HttpMethod is PUT or POST.
 
 ## error
 
-`RestError`
+`RestError` | `undefined`
 
 ## status
 
@@ -41,30 +47,13 @@ The optional body used, typically when HttpMethod is PUT or POST.
 
 ## headers
 
-[Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers)
+`Headers`
+
+An instance of the standard [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers) class, representing the response headers of the request.
 
 ## data
 
 `TResponse` | `null`
-
-
-The response body, leaded by `IRequestOptions.responseType` (runtime type) and `TResponse` (IDE type checking).
-
-Example:
-
-```typescript
-interface IMyObject {
-	test: string
-}
-const client = new RestClient({
-	host: "https://server.com",
-	basePath: "/controller",
-	responseType: "json"
-})
-const response = await client.get<IMyObject>("/action");
-```
-
-The property `response.data` will infer the `IMyObject` interface.
 
 ## throwFilter
 
@@ -99,14 +88,18 @@ const second = await first.repeat();
 
 The request object used to get the response, including options, url, method and body.
 
-**url**
+### url
+
+`URL`
 
 The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using `host`, `basePath` and the request `path`.
 
-## method
+### method
 
 `HttpMethod`
 
-**body**
+### body
+
+`object` | `null`
 
 The optional body used, typically when HttpMethod is `PUT` or `POST`.
