@@ -1,10 +1,13 @@
 # Getting Started
 
-1. Install it using `npm i scarlett` or `yarn add scarlett`
-1. Import it in your project, here is an example using ESM Module:
-	```typescript
-	import { createRestClient } from "scarlett"
-	```
+Install it using `npm i scarlett` or `yarn add scarlett`
+
+Supposing that you are working on a modern Javascript project, here is an example of import using the ESM Module:
+```typescript
+import { createRestClient } from "scarlett"
+```
+
+Depending on your project's setup or the bundler you are using, the import strategy could vary, for this reason the package provides different builds.
 
 ## Different builds
 
@@ -25,7 +28,7 @@ Here is the list of modules included:
 
 Sources are compiled to`ES2021` for every module format, keep in mind that **polyfills are not included**.
 
-### Runtime required APIs
+### Runtime required polyfills
 
 * [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
@@ -48,8 +51,9 @@ const useRestClient = createRestClient({
 	responseType: `text`
 })
 const { get } = useRestClient()
-const response = await get<string>(`path`)
-console.log(response.data) // << string or undefined
+const { data, statusCode } = await get<string>(`path`)
+console.log(data) // << string or undefined
+console.log(statusCode)
 ```
 
 Using Class API:
