@@ -49,7 +49,7 @@ Check out [override strategy guide](/api/rest-client-options#overridestrategy) f
 
 ## 💎 Key features
 
-Here we are, with the lovely help of colleagues and friends, here is the full list of key features, extending the main principles.
+Here we are, with the lovely help of colleagues and friends, here is the full list of key features, all covering the main principles.
 
 * [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) & [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based rest client
 * Both Functional and Class API style
