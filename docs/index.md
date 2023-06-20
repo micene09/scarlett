@@ -1,7 +1,7 @@
 ---
 layout: home
 
-title: Scarlett
+title: scarlett
 titleTemplate: Do you wanna Fetch with me?
 
 hero:
@@ -14,7 +14,7 @@ hero:
       text: Get Started
       link: /guide/getting-started
     - theme: alt
-      text: Why Scarlett?
+      text: Why scarlett?
       link: /guide/why
     - theme: alt
       text: View on GitHub

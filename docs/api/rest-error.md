@@ -1,6 +1,6 @@
 # Rest Error
 
-Independently of the chosen API Style, probably you will have to deal with errors, to provide an efficient way to track errors, in Scarlett you will find a utility class named `RestError` that extends the default JavaScript's `Error`.
+Independently of the chosen API Style, probably you will have to deal with errors, to provide an efficient way to track errors, in scarlett you will find a utility class named `RestError` that extends the default JavaScript's `Error`.
 
 It is used internally to track and better qualify the error thrown.
 

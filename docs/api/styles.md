@@ -1,6 +1,6 @@
 # API Styles
 
-Scarlett comes with two styles, functional and class based.
+scarlett comes with two styles, functional and class based.
 
 ## What style to use
 
@@ -47,7 +47,7 @@ const response = await client.get<string>(`path`)
 
 ## The core
 
-Internally, Scarlett is based on Functional API because of its extreme modularity and flexibility.
+Internally, scarlett is based on Functional API because of its extreme modularity and flexibility.
 
 The Class API is actually a wrapper around the Functional API's methods.
 
