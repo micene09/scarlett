@@ -82,24 +82,3 @@ const rest1 = builder.createRestClient();
 const builder2 = builder.clone().set("basePath", "/api-custom");
 const rest2 = builder2.createRestClient();
 ```
-
-## In-Memory Cache System
-
-If the standard cache options aren't enough, you can go for an internal in-memory, high performance cache system:
-
-```typescript
-import { RestClient } from `scarlett`
-
-const rest = new RestClient({
-	cacheInMemory: true, // << activate it!
-});
-```
-
-You can even chose a custom cacheKey for a dedicated/custom rest method:
-
-```typescript
-const cacheKey = "a_special_key_for_this_method";
-rest.get(`/action2`, { cacheKey });
-```
-
-Check out the in-memory section for more details about the cache system.
