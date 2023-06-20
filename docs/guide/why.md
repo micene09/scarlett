@@ -12,7 +12,7 @@ Speaking with colleagues of mine and digging deeper on the web, me and my team f
 
 Of course there was many good Typescript projects out there, but usually in real life complex scenarios, Backend developers in large companies provide implicitly two API contracts, the response for the API you are calling and a generic one for all the domain's API errors.
 
-With scarlett you have full control over typed body response for both success or error, [checkout the guide](/guide/functional).
+With scarlett you have full control over typed body response for both success or error, [checkout this guide](/api/response-object) about the response object type inference.
 
 ### 2. Advanced Throw Mechanism
 
