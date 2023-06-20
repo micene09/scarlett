@@ -2,7 +2,7 @@
 
 During the 2019 Q1, I was coding in two very large and complex Frontend repositories, trying to use popular XHR based or early Fetch based libraries, but...more than one thing was missing to me.
 
-The idea behind Scarlett was based on needs that initially appeared so simple to me, but soon I realized that, while most of the Open Source focus was just about settings customizations, no libraries was covering all the needs that me and my team was facing.
+The idea behind scarlett was based on needs that initially appeared so simple to me, but soon I realized that, while most of the Open Source focus was just about settings customizations, no libraries was covering all the needs that me and my team was facing.
 
 ## 📕 Main principles
 
@@ -12,7 +12,7 @@ Speaking with colleagues of mine and digging deeper on the web, me and my team f
 
 Of course there was many good Typescript projects out there, but usually in real life complex scenarios, Backend developers in large companies provide implicitly two API contracts, the response for the API you are calling and a generic one for all the domain's API errors.
 
-With Scarlett you have full control over typed body response for both success or error, [checkout the guide](/guide/functional).
+With scarlett you have full control over typed body response for both success or error, [checkout the guide](/guide/functional).
 
 ### Advanced Throw Mechanism
 
@@ -28,7 +28,7 @@ Naturally, not all `4xx` or `5xx` can be considered Fatal errors, think about th
 * [503 Service Unavailable](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503), if you are integrating with a third party API, you can easily expect that the service could be temporary unavailable, a smart move is considering it as an expected response, that if occurs can be handled with a proper UX.
 * [404 Not Found](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404), think about an e-commerce, in which you are trying to resume a Cart using your cached Cart Id, but the Cart expired and API is returning 404, it cannot be a Fatal error because for your app is an expected behavior, so it should be handled to provide a UX like "Sorry, your cart expired, please go to home and start again".
 
-In Scarlett you have the following options:
+In scarlett you have the following options:
 1. Throw always an error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false`
 2. Never throw error
 3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false` but exclude from throwing with custom local options or custom callbacks on the response context, checking for status codes or details on the (typed) error body
@@ -39,7 +39,7 @@ Check out [the documentation](/api/functional#throwexcluding) for more details a
 
 It's a common practice to have global and common settings for every rest client initialized in your web app, but what if you have just a few specializations in one or two request methods?
 
-In Scarlett you will have two layers of settings:
+In scarlett you will have two layers of settings:
 * The global layer, that will be shared to every request method defined in your rest client
 * The local layer, a specific context in your request method that will override one or more settings from the global layer
 
