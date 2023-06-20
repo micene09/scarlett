@@ -51,9 +51,9 @@ const useRestClient = createRestClient({
 	responseType: `text`
 })
 const { get } = useRestClient()
-const { data, statusCode } = await get<string>(`path`)
+const { data, status } = await get<string>(`path`)
 console.log(data) // << string or undefined
-console.log(statusCode)
+console.log(status)
 ```
 
 Using Class API:
