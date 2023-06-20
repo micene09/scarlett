@@ -1,14 +1,16 @@
 # API Styles
 
-scarlett comes with two styles, functional and class based.
+This library comes with two styles, functional and class based, to better adapt to your project's needs and style.
 
 ## What style to use
 
 There are no limitation on choosing an API style and both share the same [options](/api/rest-client-options).
 
-I suggest to go for the best fit for your project, for example:
+It's highly recommended to go for the best fit for your project's code style, for example:
 * Class API if you are on an [Angular](https://angular.io/) project, to stay aligned with his Class based API
 * Functional API if you are on a [Vue](https://vuejs.org/) or [React](https://react.dev/) project.
+
+Still don't know what to choose? Keep reading to know more about PROs and CONs.
 
 ## PROs and CONs
 
@@ -27,7 +29,7 @@ function getCartItems() {
  * ✓ Destructuring enabled
  * ✓ Very close to Functional-Based projects like [Vue](https://vuejs.org/) or [React](https://react.dev/)
  * ✓ Module bundler's Tree-Shaking friendly
- * ⚠️ Needs a wrap methods pattern (`createRestClient` method that create the real initiator)
+ * ⚠️ Needs a wrap methods pattern (`createRestClient` >> `useRestClient`)
  * ⚠️ No `this` available
 
 ### Class API
