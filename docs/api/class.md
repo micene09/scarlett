@@ -38,6 +38,8 @@ For more details about the options object, visit the [Rest Client Options](/api/
  * `TResponse` is the `response.data` type (typescript intellisense)
  * `TError` is the **optional** `response.error.data` type
 
+For more details about the response object, visit the [Response Object](/api/response-object) section.
+
 ```typescript
 const client = new RestClient({
 	host: "https://server.com",
