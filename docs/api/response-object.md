@@ -4,8 +4,8 @@
 Once that rest client was defined, you can proceed to execute your REST calls, the response object obtained aims to cover every details needed by a complex application.
 
 The return type of every REST method is basically a `Promise`, wrapping `IResponse<TResponse, TError>`, where:
- * `TResponse`, that will infer the `response.data` type
- * `TError` (optional), that will infer the `response.error.data` type
+ * `TResponse`, will infer the `response.data` type
+ * `TError` (optional), will infer the `response.error.data` type
 
 To start the inference just use Typescript Generics on the REST method:
 ```typescript
