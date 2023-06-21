@@ -16,9 +16,9 @@ With scarlett you have full control over typed body response for both success or
 
 ### 2. Advanced Throw Mechanism
 
-Fetch promises only reject with a `TypeError` when a network error occurs, since `4xx` or `5xx` are not network errors you will never have a blocking `throw` error. Some libraries had (and still) settings to activate the auto-throw error when the [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) property is `false`...but even today it sounds like "an all-in or all-out" choice, this is not enough for a complex web app.
+Fetch promises only reject with a `TypeError` when a network error occurs, since `4xx` or `5xx` are not network errors you will never have a blocking `throw` error. Some libraries had (and still) settings to activate the auto-throw error when the [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) property is `false`...but even today it sounds like "*an all-in or all-out*" choice, this is not enough for a complex web app.
 
-In a real world web app, there are two kind of errors:
+In a real world high complexity web app, there are two kind of errors:
 * Fatal Errors
 * Handled Errors
 
