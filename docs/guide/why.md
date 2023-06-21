@@ -1,6 +1,6 @@
 # Why
 
-It was about 2019 Q1 and I was coding in three very large and complex Frontend repositories for my company, trying to deal with popular XHR based or early Fetch based libraries, but...more than one thing was missing to me.
+It was about 2019 Q1 and I was coding in three very large and complex Frontend repositories for my company, trying to deal with popular XHR or early Fetch based libraries, but...more than one thing was missing to me.
 
 The idea behind scarlett was based on needs that initially appeared so obvious to me, but soon I realized that, while most of the Open Source focus was just about settings customizations, no libraries was covering all the needs that me and my team was facing.
 
