@@ -67,11 +67,6 @@ Here we are, with the lovely help of colleagues and friends, here is the full li
 * Query-string utilities
 * Rest Client Builder
 
-## 🌟 Inspired by
-
-* [axios](https://github.com/axios/axios)
-* DotNet Core's [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests#typed-clients)
-
 ## 😬 Why this name?
 
 Yeah, I'm a huge fan of that beautiful American actress...
