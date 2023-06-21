@@ -11,7 +11,7 @@ To start the inference just use Typescript Generics on the REST method:
 ```typescript
 const response = await client.get<MyObject, MyError>("/path")
 ```
-...then you will have different types depending on request success or failure (`fetchResponse.ok` as `true` or `false`):
+...then you will have type inference on the following scenarios:
  * `response.data` typed as `MyObject` on success, or `undefined` on failure
  * `response.error.data` typed as `MyError` on failure, or `undefined` on success
 
