@@ -67,24 +67,20 @@ When a `IResponseFilter` matches the response, this property will expose it.
 
 `(): Promise<IResponse<TResponse, TError>>`
 
-A useful shortcut to repeat the request sent, having the following interface:
+A shortcut to repeat the request sent with the same options.
 
 ```typescript
-export interface IRepeat<TResponse, TError = any> {
-	(method?: HttpMethod, requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
-}
-export interface IRepeat<TResponse, TError = any> {
-	(requestOptions?: IRequestOptions): Promise<IResponse<TResponse, TError>>
-}
-```
-
-Every parameter is optional and you can override every option as usual.
-
-*Usage*
-```typescript
-const first = await restClient.get<any>("/action");
+const first = await get<any>("/action");
 const second = await first.repeat();
 ```
+
+You can even override request options on a local repeat call.
+
+```typescript
+const response = await second.repeat({ responseType: "text" });
+```
+
+*Usage*
 
 ## request
 
