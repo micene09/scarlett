@@ -15,6 +15,8 @@ const response = await client.get<MyObject, MyError>("/path")
  * `response.data` typed as `MyObject` on success, or `undefined` on failure
  * `response.error.data` typed as `MyError` on failure, or `undefined` on success
 
+Keep reading to better understand every prop provided by the response object.
+
 ## fetchResponse
 
 [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)
