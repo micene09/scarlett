@@ -40,6 +40,12 @@ Store the response object provided to the internal `RestClient` instance's cache
 
 Retrieve the response object, if exists, from the internal `RestClient` instance's cache.
 
+## cacheExpireIn
+
+`number`
+
+Set an expire time in milliseconds for the entry.
+
 ## cacheClearByKey
 
 `(cacheKey: string)`
