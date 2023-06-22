@@ -1,5 +1,7 @@
 # Functional API
 
+TODO: finish functional section
+
 ## createRestClient
 
 `(options) => useRestClient`
