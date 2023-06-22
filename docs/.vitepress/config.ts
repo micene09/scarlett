@@ -67,6 +67,12 @@ export default defineConfig({
 						{ text: "Built-in Cache System", link: "/api/in-memory-cache" },
 						{ text: "Rest Error", link: "/api/rest-error" }
 					]
+				},
+				{
+					text: "Migration",
+					items: [
+						{ text: "1.x to 2.", link: "/migration/1-to-2" }
+					]
 				}
 			]
 		},
