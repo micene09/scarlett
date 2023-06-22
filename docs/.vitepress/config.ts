@@ -71,7 +71,7 @@ export default defineConfig({
 				{
 					text: "Migration",
 					items: [
-						{ text: "1.x to 2.", link: "/migration/1-to-2" }
+						{ text: "1.x to 2.x", link: "/migration/1-to-2" }
 					]
 				}
 			]
