@@ -6,7 +6,7 @@ export default defineConfig({
 		server: { host: "0.0.0.0" }
 	},
 	title: "scarlett",
-	description: "A strongly typed with zero dependencies, rest client library based on Fetch API.",
+	description: "A rest client library that actually covers high complexity scenarios...for real!",
 	outDir: "../lib-docs",
 	base: "/scarlett/",
 	head: [
@@ -15,7 +15,7 @@ export default defineConfig({
 		['meta', { property: 'og:title', content: "scarlett" }],
 		['meta', { property: 'og:image', content: "...to define..." }],
 		['meta', { property: 'og:url', content: "" }],
-		['meta', { property: 'og:description', content: "A strongly typed with zero dependencies, rest client library based on Fetch API." }],
+		['meta', { property: 'og:description', content: "A rest client library that actually covers high complexity scenarios...for real!" }],
 		['meta', { name: 'theme-color', content: '#646cff' }]
 	],
 	themeConfig: {
