@@ -1,11 +1,5 @@
-import fetch from 'node-fetch';
-import AbortController from "abort-controller"
 import fastify from "fastify";
-import RestClient, { RestClientBuilder, createRestClient, useRestClientBuilder } from '../src';
-
-(globalThis as any).fetch = fetch;
-(globalThis as any).Headers = (fetch as any).Headers;
-(globalThis as any).AbortController = AbortController;
+import RestClient, { createRestClient, useRestClientBuilder } from '../src';
 
 let testServer = fastify({ logger: false });
 interface ITestJsonResponse {
