@@ -13,8 +13,6 @@ Depending on your project's setup or the bundler you are using, the import strat
 
 Once installed, the package includes different modules to ensure the best compatibility to your module bundler/importer, you need to choose the right one depending on your project setup.
 
-Keep in mind that the default one is the most modern: ES Module.
-
 Here is the list of modules included:
 
 | Format                    | Filename                  |
@@ -25,19 +23,7 @@ Here is the list of modules included:
 | **CommonJs ES3**          | `lib/index.es3.common.js` |
 | **CommonJs ES6**          | `lib/index.es6.common.js` |
 
-
-Sources are compiled to`ES2021` for every module format, keep in mind that **polyfills are not included**.
-
-### Runtime required polyfills
-
-* [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-* [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-* [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
-* [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
-* [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers)
-* [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
-* [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
-
+For more details about supported browsers and platform, please visit the [Support](/guide/support) section.
 
 ## Basic Usage
 

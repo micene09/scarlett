@@ -56,6 +56,7 @@ export default defineConfig({
 						{ text: "Why", link: "/guide/why" },
 						{ text: "Features", link: "/guide/features" },
 						{ text: "Getting Started", link: "/guide/getting-started" },
+						{ text: "Support", link: "/guide/support" },
 						{ text: "Functional API Usage", link: "/guide/functional" },
 						{ text: "Class API Usage", link: "/guide/class" }
 					]
