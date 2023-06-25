@@ -1,58 +1,46 @@
 # Getting Started
 
-Install it using `npm i scarlett` or `yarn add scarlett`
+## Installation
 
-Supposing that you are working on a modern Javascript project, here is an example of import using the ESM Module:
+Install it using `npm i scarlett` or `yarn add scarlett`.
+
+## Import
+
+Supposing that you are working on a modern Javascript project, here is an example using ESM Module:
 ```typescript
 import { createRestClient } from "scarlett"
+
 ```
 
-Depending on your project's setup or the bundler you are using, the import strategy could vary, for this reason the package provides different builds.
+For more details about supported platforms, please visit the [Support](/guide/support) section.
 
-## Different builds
+## Usage
 
-Once installed, the package includes different modules to ensure the best compatibility to your module bundler/importer, you need to choose the right one depending on your project setup.
+This library comes with different class styles, here are some examples:
 
-Here is the list of modules included:
+* Using Functional API
+	```typescript
+	import { createRestClient } from `scarlett`
 
-| Format                    | Filename                  |
-|---------------------------|---------------------------|
-| **ES Module** *(default)* | `lib/index.js`            |
-| **UMD**                   | `lib/index.umd.js`        |
-| **CommonJs**              | `lib/index.common.js`     |
-| **CommonJs ES3**          | `lib/index.es3.common.js` |
-| **CommonJs ES6**          | `lib/index.es6.common.js` |
+	const useRestClient = createRestClient({
+		host: `https://server.com`,
+		responseType: `text`
+	})
+	const { get } = useRestClient()
+	const { data, status } = await get<string>(`path`)
+	console.log(data) // << string or undefined
+	console.log(status)
+	```
+* Using Class API:
+	```typescript
+	import { RestClient } from `scarlett`
 
-For more details about supported browsers and platform, please visit the [Support](/guide/support) section.
+	const client = new RestClient({
+		host: `https://server.com`,
+		responseType: `text`
+	})
+	const response = await client.get<string>(`path`)
+	console.log(response.data) // << string or undefined
+	```
 
-## Basic Usage
-
-Using Functional API:
-
-```typescript
-import { createRestClient } from `scarlett`
-
-const useRestClient = createRestClient({
-	host: `https://server.com`,
-	responseType: `text`
-})
-const { get } = useRestClient()
-const { data, status } = await get<string>(`path`)
-console.log(data) // << string or undefined
-console.log(status)
-```
-
-Using Class API:
-
-```typescript
-import { RestClient } from `scarlett`
-
-const client = new RestClient({
-	host: `https://server.com`,
-	responseType: `text`
-})
-const response = await client.get<string>(`path`)
-console.log(response.data) // << string or undefined
-```
-
-For more details about the usage of both styles, just visit the [API](/api) section.
+For more details about th API styles topic, just visit the [API Styles](/api/styles) section.
