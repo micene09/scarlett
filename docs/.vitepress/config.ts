@@ -3,7 +3,10 @@ import { version } from "../../package.json"
 
 export default defineConfig({
 	vite: {
-		server: { host: "0.0.0.0" }
+		server: {
+			host: "0.0.0.0",
+			open: true
+		}
 	},
 	title: "scarlett",
 	description: "A rest client library that actually covers high complexity scenarios...for real!",
