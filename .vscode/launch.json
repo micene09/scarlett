@@ -2,18 +2,12 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Debug Jest Tests",
-			"type": "node",
+			"name": "Launch Docs Dev",
 			"request": "launch",
-			"preLaunchTask": "build",
-			"program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
-			"args": [
-				"-i",
-				"--config=${workspaceRoot}/jest.config.js"
-			],
-			"skipFiles": [ "<node_internals>/**/*.js", "node_modules" ],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": ["docs-dev"],
+			"skipFiles": ["<node_internals>/**"],
+			"type": "node"
 		}
 	]
 }
