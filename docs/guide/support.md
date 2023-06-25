@@ -2,19 +2,35 @@
 
 ## Runtime Environments
 
-Any build provided assumes that the runtime supports native [ES Modules](https://caniuse.com/es6-module) and [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API):
+### Browsers
 
-* Chrome >=87
-* Edge >=88
-* Firefox >=78
-* Safari >=14
-* Node.js >= 18
+Any build provided assumes that the runtime supports native [ES Modules](https://caniuse.com/es6-module) and [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), so the following browsers and versions are supported:
+
+* Chrome >= `87`
+* Edge >= `88`
+* Firefox >= `78`
+* Safari >= `14`
+
+### Node.js
+
+You are all set if using `v18+`.
+
+If you are on a pre-`v18`:
+1. Install [node-fetch](https://github.com/node-fetch/node-fetch) and [abort-controller](https://github.com/mysticatea/abort-controller) as dependencies
+2. Set the following overrides:
+	```ts
+	import fetch from "node-fetch";
+	import AbortController from "abort-controller"
+
+	globalThis.fetch = fetch;
+	globalThis.Headers = fetch.Headers;
+	globalThis.AbortController = AbortController;
+	```
+
 
 ### Deno <Badge type="tip" text="COMING SOON" />
 
 Currently <u>not supported</u>, needs extra effort to support this new shining environment.
-
-The good news is that from `v2.x` there aren't any kind of blocking things.
 
 Any help will be appreciated, feel free to submit a Pull Request.
 
