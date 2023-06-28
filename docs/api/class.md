@@ -8,7 +8,9 @@ For more details about the options object, visit the [Rest Client Options](/api/
 
 ### request()
 
-`<TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<Options>): Promise<IResponse<TResponse, TError>>`
+```ts
+<TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<Options>) => Promise<IResponse<TResponse, TError>>
+```
 
 *Parameters*:
 * HttpMethod (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
