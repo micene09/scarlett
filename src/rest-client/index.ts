@@ -5,7 +5,7 @@ import { cloneObject, getRequestUrl, mergeObject, resolveAny, setUrlParameters, 
 
 export type CacheKey = (url: URL, method: HttpMethod | "*", customKey?: string) => string;
 export type CacheClear = () => void;
-export type CacheClearByKey = (cacheKey?: string | null) => void;
+export type CacheClearByKey = (cacheKey: string) => void;
 export type CacheSet = <TResponse = any, TError = any>(response: IResponse<TResponse, TError>, customKey?: string, expireIn?: number) => void;
 export type CacheGet = <TResponse = any, TError = any>(url: URL, method: HttpMethod | "*", customKey?: string) => {
 	response: IResponse<TResponse, TError>,
