@@ -8,13 +8,13 @@ The idea behind scarlett was based on needs that initially appeared so obvious t
 
 Speaking with colleagues of mine and digging deeper on the web, me and my team found a list of principles that a rest client library, in our opinion, should absolutely respect.
 
-### 1. Fully Typed
+### 1. Keep it fully typed
 
 Of course there was many good Typescript projects out there, but usually in real life complex scenarios, Backend developers in large companies provide implicitly two API contracts, the response for the API you are calling and a generic one for all the domain's API errors.
 
-With scarlett you have full control over typed body response for both success or error, [checkout this guide](/api/response-object) about the response object type inference.
+With scarlett you have full control over typed body response for both success and error, [checkout this guide](/api/response-object) about the response object type inference.
 
-### 2. Advanced Throw Mechanism
+### 2. Control the throw mechanism
 
 Fetch promises only reject with a `TypeError` when a network error occurs, since `4xx` or `5xx` are not network errors you will never have a blocking `throw` error. Some libraries had (and still) settings to activate the auto-throw error when the [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) property is `false`...but even today it sounds like "*an all-in or all-out*" choice, this is not enough for a complex web app.
 
@@ -22,7 +22,7 @@ In a real world high complexity web app, there are two kind of errors:
 * Fatal Errors
 * Handled Errors
 
-Most of the `5xx` HTTP Status Codes from the server can be considered Fatal Error that should be thrown in the main thread, "blocking" the UX with a proper message for the user. When a Fatal error occurs, means that the user, you and your team are experiencing an unexpected error, not handled by any logic on both client and server, basically a bug.
+Most of the `5xx` HTTP Status Codes from the server can be considered Fatal Error that should be thrown in the main thread, "blocking" the UX with a proper message for the user. When a Fatal error occurs means that the user, you and your team are experiencing an unexpected error, not handled by any logic on both client and server, basically a bug.
 
 But not all `4xx` or `5xx` can be considered Fatal errors, think about the following examples of Handled Errors:
 * [503 Service Unavailable](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503), if you are integrating with a third party API, you can easily expect that the service could be temporary unavailable, a smart move is considering it as an expected response, that if occurs can be handled with a proper UX.
@@ -35,9 +35,9 @@ In scarlett you have the following options:
 
 Check out [the documentation](/api/functional#throwexcluding) for more details about it.
 
-### 3. Different customization layers
+### 3. Allow specializations
 
-It's a common practice to have global and common options for every rest client initialized in your web app, but what if you have just a few specializations in one or two request methods?
+It's a common practice to have global/common options for every rest client initialized in your web app, but supposing that you have a collection of business rest methods for CRUD operations, what if you have just a few specializations in one or two?
 
 In scarlett you will have two layers of rest options:
 * The global layer, that will be shared to every request method defined in your rest client
