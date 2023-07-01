@@ -9,6 +9,7 @@
 	"scripts": {
 		"test": "vitest run",
 		"test-watch": "vitest watch",
+		"coverage": "vitest run --coverage",
 		"build": "rollup --config",
 		"build-es3": "rollup --config --es3",
 		"build-es6": "rollup --config --es6",
@@ -38,6 +39,7 @@
 		"@rollup/plugin-typescript": "^11.1.0",
 		"@types/node": "^20.1.1",
 		"@types/node-fetch": "^2.6.3",
+		"@vitest/coverage-c8": "^0.32.2",
 		"bumpp": "^9.1.0",
 		"fastify": "^4.17.0",
 		"rollup": "^3.21.5",
