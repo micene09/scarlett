@@ -125,6 +125,79 @@ Sets the `value` provided for the option `key`.
 
 Returns a copy of the current global options.
 
-## restClientBuilder
+## useRestClientBuilder
 
-TODO: finish functional section
+```ts
+() => {
+	getOption, setOption, unsetOption,
+	cloneOptions, mergeOptions, assignOptions,
+	checkAndRestoreDefaults,
+	createRestClient
+}
+```
+
+Returning a destructible object, containing options utilities and the rest client generator.
+
+### getOption (builder)
+
+```ts
+(key: K) => Options[K]
+```
+
+Returns the current value of the provided option `key`.
+
+### setOption (builder)
+
+```ts
+(key: K, value: Options[K]) => void
+```
+
+Sets the `value` provided for the option `key`.
+
+### unsetOption
+
+```ts
+(key: K) => Options[K]
+```
+
+Restore the default value for the provided option `key`.
+
+### cloneOptions (builder)
+
+```ts
+() => Options
+```
+
+Returns a copy of the current options.
+
+### mergeOptions
+
+```ts
+(options: Options) => void
+```
+
+Overrides current options with the provided `options` using a merge strategy.
+
+### assignOptions
+
+```ts
+(options: Options) => void
+```
+
+Overrides current options with the provided `options` using a [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) strategy.
+
+### checkAndRestoreDefaults
+
+```ts
+() => void
+```
+
+Iterate internally over every option and restores defaults value if `undefined` or `falsy` value.
+
+### createRestClient
+
+```ts
+() => { ... } // useRestClient function
+```
+
+Creates a rest client based on the current options, returning a ready [useRestClient](#userestclient) function.
