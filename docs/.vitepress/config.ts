@@ -8,6 +8,7 @@ export default defineConfig({
 			open: true
 		}
 	},
+	lang: 'en-US',
 	title: "scarlett",
 	description: "A rest client library that actually covers high complexity scenarios...for real!",
 	outDir: "../lib-docs",
@@ -23,6 +24,13 @@ export default defineConfig({
 	],
 	themeConfig: {
 		logo: undefined,
+		search: {
+			provider: "local"
+		},
+		editLink: {
+			pattern: 'https://github.com/micene09/scarlett/edit/main/docs/:path',
+			text: 'Edit this page on GitHub'
+		},
 		nav: [
 			{
 				text: 'Guide',
