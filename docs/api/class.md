@@ -2,7 +2,9 @@
 
 ## RestClient
 
-`constructor(options)`
+```ts
+constructor(options)
+```
 
 For more details about the options object, visit the [Rest Client Options](/api/rest-client-options) section.
 
@@ -64,7 +66,7 @@ Note: every shortcut method will internally call the `request()` method.
 ### optionsOverride
 
 ```typescript
-(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => Partial<IRestOptions<TResponse, TError>>
+(overrides?: Partial<Options>, base?: Partial<Options>) => Partial<Options>
 ```
 Provide a copy of the options object updated using the `overrideStrategy` option.
 
@@ -76,7 +78,7 @@ On a `RestClient` class instance, you will find every cache capability available
 
 ## RestClientBuilder
 
-Every instance of `RestClient` will have a public property named **options**, this is just an instance of `RestClientBuilder`.
+Every instance of `RestClient` will have a public property named **options**, this is just an instance of RestClientBuilder.
 
 You can access and modify the global options of your rest client instance using his methods.
 
@@ -96,55 +98,73 @@ Here is the full list of available instance's methods:
 
 ### current
 
-`() => Partial<Options>`
+```ts
+() => Partial<Options>
+```
 
 Will return a copy of the current options object.
 
 ### get
 
-`(key: K) => value`
+```ts
+(key: K) => value
+```
 
 Will return a copy of the option's value.
 
 ### set
 
-`(key: K, val: value) => void`
+```ts
+(key: K, val: value) => void
+```
 
 To directly update an option (your TypeScript's IDE plugin will warn you about type issues).
 
 ### unset
 
-`(key: K) => void`
+```ts
+(key: K) => void
+```
 
 Will internally restore the default value.
 
 ### clone
 
-`() => RestClientBuilder`
+```ts
+() => RestClientBuilder
+```
 
-Will return a new cloned instance of `RestClientBuilder` .
+Will return a new cloned instance of `RestClientBuilder`.
 
 ### merge
 
-`(options?: Partial<IRestOptions<TResponse, TError>>) => void`
+```ts
+(options: Partial<Options>) => void
+```
 
-Override with *options* using the `merge` strategy.
+Overrides current options with the provided `options` using a merge strategy.
 
 ### assign
 
-`(options?: Partial<IRestOptions<TResponse, TError>>) => void`
+```ts
+(options: Partial<Options>) => void
+```
 
-Override with *options* using the `assign` strategy.
+Overrides current options with the provided `options` using a [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) strategy.
 
 ### createRestClient
 
-`(..params: any[]) => RestClient`
+```ts
+(..params: any[]) => RestClient
+```
 
 Will return a new `RestClient` based on the current options, using the params from your factory class.
 
 ### setFactory
 
-`(factoryClass: RestClient)`
+```ts
+(factoryClass: RestClient)
+```
 
 Supposing that you created a new Class that extends the default RestClient (see [Advanced usage](#advanced-usage)), you can override the default factory class with this method.
 

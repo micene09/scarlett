@@ -2,7 +2,7 @@
 
 ## createRestClient
 
-`(options: Options) => useRestClient`
+`(options: Partial<Options>) => useRestClient`
 
 The initiator function, returning the `useRestClient` function.
 
@@ -94,7 +94,7 @@ Set a cache entry using the response object, a custom key to override (if omitte
 ### optionsOverride
 
 ```ts
-<TResponse = any, TError = any>(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => Partial<IRestOptions<TResponse, TError>>
+<TResponse = any, TError = any>(overrides?: Partial<Options>, base?: Partial<Options>) => Partial<Options>
 ```
 
 Overrides rest client global options using provided `overrides` object as first parameter. It will override just the `base` when provided. Any override done by this method will follow behaviors from [overrideStrategy](/api/rest-client-options#overridestrategy).
@@ -173,7 +173,7 @@ Returns a copy of the current options.
 ### mergeOptions
 
 ```ts
-(options: Options) => void
+(options: Partial<Options>) => void
 ```
 
 Overrides current options with the provided `options` using a merge strategy.
@@ -181,7 +181,7 @@ Overrides current options with the provided `options` using a merge strategy.
 ### assignOptions
 
 ```ts
-(options: Options) => void
+(options: Partial<Options>) => void
 ```
 
 Overrides current options with the provided `options` using a [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) strategy.
