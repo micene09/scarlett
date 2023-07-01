@@ -30,9 +30,11 @@ If you are on a pre-`v18`:
 
 ### Deno <Badge type="tip" text="COMING SOON" />
 
-Currently <u>not supported</u>, needs extra effort to support this new shining environment.
+Everything should work fine from `v1.28+`, additional tests needed.
 
-Any help will be appreciated, feel free to submit a Pull Request.
+### Bun <Badge type="tip" text="COMING SOON" />
+
+Everything should work fine, additional tests needed.
 
 ## Different builds
 
