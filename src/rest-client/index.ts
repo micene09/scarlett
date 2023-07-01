@@ -17,7 +17,7 @@ export type RequestMethodFull = <TResponse = any, TError = any>(method: HttpMeth
 
 export default function createRestClient<TResponse = any, TError = any>(options?: Partial<IRestOptionsGlobals<TResponse, TError>>) {
 	const _cache = new Map<string, { response: IResponse<any, any>, expireAt: Date | null }>();
-	const { getOption, setOption, currentOptions, cloneOptions } = useRestClientBuilder(options ?? {});
+	const { getOption, setOption, cloneOptions } = useRestClientBuilder(options ?? {});
 	const cacheKey: CacheKey = (url, method = "*", customKey) => {
 		const cacheKey = customKey?.trim() ? customKey : (getOption("cacheKey") ?? '');
 		function formDataToObj(formData: FormData) {
@@ -59,7 +59,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 		return cached;
 	};
 	const optionsOverride: OptionsOverride = <TResponse, TError>(overrides?: Partial<IRestOptions<TResponse, TError>>, base?: Partial<IRestOptions<TResponse, TError>>) => {
-		const target = base ?? currentOptions();
+		const target = base ?? cloneOptions();
 		if (getOption("overrideStrategy") === "merge") {
 			let o = cloneObject(target);
 			return mergeObject(o, overrides ?? {}, ["body"]) as Partial<IRestOptions<TResponse, TError>>;
@@ -69,7 +69,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 	const requestFull: RequestMethodFull = async <TResponse, TError>(method: HttpMethod, path: string, requestOptions?: Partial<IRestOptions<TResponse, TError>>): Promise<IResponse<TResponse, TError>> => {
 		const localOptions = (requestOptions
 			? optionsOverride(requestOptions)
-			: currentOptions()) as Partial<IRestOptions<TResponse, TError>>
+			: cloneOptions()) as Partial<IRestOptions<TResponse, TError>>
 		const url = getRequestUrl(localOptions.host, localOptions.basePath, path);
 
 		if (localOptions.query && Object.keys(localOptions.query).length)
@@ -232,7 +232,7 @@ export default function createRestClient<TResponse = any, TError = any>(options?
 		cacheSet,
 		cacheGet,
 		optionsOverride,
-		getOption, setOption, currentOptions, cloneOptions,
+		getOption, setOption, cloneOptions,
 		request: requestFull,
 		get,
 		del,

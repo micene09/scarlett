@@ -3,7 +3,6 @@ import createRestClient from "../rest-client";
 import { cloneObject, cloneValue, mergeObject } from "../utilities";
 
 export type CheckAndRestoreDefault = () => void
-export type CurrentOptions<TResponse, TError> = () => Partial<IRestOptions<TResponse, TError>>
 export type GetOption<TResponse, TError> = <K extends keyof IRestOptionsGlobals<TResponse, TError>>(key: K) => IRestOptionsGlobals<TResponse, TError>[K];
 export type SetOption<TResponse, TError> = <K extends keyof IRestOptionsGlobals<TResponse, TError>>(key: K, val: IRestOptionsGlobals<TResponse, TError>[K]) => void;
 export type UnsetOption<TResponse, TError> = <K extends keyof IRestOptions<TResponse, TError>>(key: K) => void;
@@ -25,7 +24,6 @@ export default function useRestClientBuilder<TResponse = any, TError = any>(opti
 		if (typeof _options.throw === "undefined" && _options.throwExcluding && _options.throwExcluding.length)
 			_options.throw = true;
 	}
-	const currentOptions: CurrentOptions<TResponse, TError> = () => cloneObject(_options);
 	const createRestClientFromOptions = () => {
 		const options = cloneOptions();
 		return createRestClient(options);
@@ -44,7 +42,6 @@ export default function useRestClientBuilder<TResponse = any, TError = any>(opti
 
 	return {
 		checkAndRestoreDefaults,
-		currentOptions,
 		createRestClient: createRestClientFromOptions,
 		getOption,
 		setOption,
