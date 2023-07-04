@@ -57,7 +57,7 @@ export default function useCustomRestClient(opts: any) {
 }
 ```
 
-...later in tour project:
+...later in your project:
 
 ```typescript
 // example.ts
