@@ -2,7 +2,7 @@
 
 To init a rest client you need a base object describing behaviors and details, that every subsequent request will inherits:
 
-```typescript
+```ts
 const client = createRestClient({ // << the options object
 	host: "https://server.com",
 	responseType: "text"
@@ -30,30 +30,36 @@ The following native properties from original [Fetch's Request Object](https://d
 
 ### host
 
-`string`
+```ts
+string
+```
 
 Defaults to `localhost.href`.
 
 ### basePath
 
-`string`
+```ts
+string
+```
 
 The base path to use on every request, defaults to `/`, combined with the `host` option.
 
 ### responseType
 
-`HttpResponseFormat`
+```ts
+HttpResponseFormat
+```
 
 This property will lead the response body parsing, to get the proper output type. For example, with `json` as responseType you don't need to `JSON.parse()` on `response.data`.
 
 It can be defined as:
 1. `HttpResponseFormatType` typed value: `undefined` (default), `null`, `json`, `text`, `blob`, `arrayBuffer`, `formData`
 2. A sync method returning a `HttpResponseFormatType`
-   ```typescript
+   ```ts
    (request: IRequest, fetchResponse: Response | null) => HttpResponseFormatType
    ```
 3. An async method resolving a `HttpResponseFormatType`
-   ```typescript
+   ```ts
    (request: IRequest, fetchResponse: Response | null) => Promise<HttpResponseFormatType>
    ```
 
@@ -67,19 +73,23 @@ Optional request body content, if the method is `GET`, this value will be set to
 
 ### query
 
-`{ [key: string]: any }`
+```ts
+{ [key: string]: any }
+```
 
 Optional key-value pair, this will be converted (and appended) to the request URI.
 
 ### queryParamsTransformer
 
-`IQueryParamTransformer`
+```ts
+IQueryParamTransformer
+```
 
 Let's suppose you have a complex key-value pair, in which every value needs to be converted using a custom logic.
 
 You can do this using this as a callback having the following definition:
 
-```typescript
+```ts
 interface IQueryParamTransformer {
 	(key: string, value: any, query: any): string
 }
@@ -91,7 +101,9 @@ Check out `tests/features.test.ts` to see it in action!
 
 ### queryParamsIncludeEmpty
 
-`boolean`
+```ts
+boolean
+```
 
 If true, it will include falsy values as empty, example: `/example/?a=&b=`.
 
@@ -99,7 +111,9 @@ Defaults to `false`.
 
 ### cacheInMemory
 
-`boolean`
+```ts
+boolean
+```
 
 If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based, cache system.
 
@@ -119,7 +133,9 @@ Defaults to `undefined`.
 
 ### cacheKey
 
-`string`
+```ts
+string
+```
 
 An optional alias reference to the current request, useful if you are using `cacheInMemory` parameter as true.
 
@@ -134,7 +150,9 @@ Defaults to `""`.
 
 ### throw
 
-`boolean`
+```ts
+boolean
+```
 
 As standard behavior of fetch, every request will never throw error. But sometimes, in very large applications, you need a centralized API error handler.
 
@@ -146,7 +164,9 @@ Defaults to `false`.
 
 ### throwExcluding
 
-`IResponseFilter[]`
+```ts
+IResponseFilter[]
+```
 
 Even when you throwing error on failed requests, sometimes you may need to filter this errors and react properly without throwing.
 
@@ -154,7 +174,7 @@ You can do this providing an array of `IResponseFilter`.
 
 A filter can be defined as object:
 
-```typescript
+```ts
 await client.get("/example", {
 	throwExcluding: [{ // every prop here is optional
 		path: "/example", // filter based on url path
@@ -167,7 +187,7 @@ await client.get("/example", {
 
 ...or as sync/async method returning `true` to prevent the `throw`:
 
-```typescript
+```ts
 await client.get("/example", {
 	throwExcluding: [
 		async (err) => {
@@ -200,7 +220,9 @@ Note that this option cannot be overridden on a request method, to do this you n
 
 ### onRequest
 
-`(request: IRequest): void | Promise`
+```ts
+(request: IRequest) => void | Promise
+```
 
 Global handler, running on your `RestClient`'s instance context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument.
 
@@ -208,13 +230,17 @@ If the return value is a `Promise`'s instance, the request will `await` for it b
 
 ### onResponse
 
-`(response: IResponse): void`
+```ts
+(response: IResponse) => void
+```
 
 Global handler, running on your `RestClient`'s instance context, called at every successful response received.
 Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
 
 ### onError
 
-`(error: RestError, response: IResponse): void`
+```ts
+(error: RestError, response: IResponse) => void
+```
 
 Global handler, running on your `RestClient`'s instance context, called every time an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
