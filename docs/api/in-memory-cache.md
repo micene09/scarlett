@@ -20,7 +20,9 @@ Here is the full list properties that you can use as rest options:
 
 ## cacheKey
 
-`(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
+```ts
+(url: URL, method: HttpMethod | "*" = "*", customKey?: string) => string
+```
 
 Evaluate the unique cache-key for a particular request, having the provided `url`, (optional) `method`, combining this couple with the `cacheKey` option.
 
@@ -30,30 +32,43 @@ This method is used internally to complete common cache's task operations like s
 
 ## cacheSet
 
-`(response: IResponse, customKey?: string)`
+```ts
+(response: IResponse, customKey?: string) => void
+```
 
 Store the response object provided to the internal `RestClient` instance's cache.
 
 ## cacheGet
 
-`(url: URL, method: HttpMethod | "*" = "*", customKey?: string)`
+```ts
+(url: URL, method: HttpMethod | "*" = "*", customKey?: string) => {
+	response: IResponse<TResponse, TError>,
+	expireAt: Date | null
+} | undefined
+```
 
 Retrieve the response object, if exists, from the internal `RestClient` instance's cache.
 
 ## cacheExpireIn
 
-`number`
+```ts
+number
+```
 
 Set an expire time in milliseconds for the entry.
 
 ## cacheClearByKey
 
-`(cacheKey: string)`
+```ts
+(cacheKey: string) => void
+```
 
 Clears every cache entry in a `RestClient` instance context, matching with the provided `cacheKey`.
 
 ## cacheClear
 
-`(): void`
+```ts
+() => void
+```
 
 Clears every cache entry in a `RestClient` instance context.

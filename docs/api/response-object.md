@@ -8,7 +8,7 @@ The return type of every REST method is basically a `Promise`, wrapping `IRespon
  * `TError` (optional), will infer the `response.error.data` type
 
 To start the inference just use Typescript Generics on the REST method:
-```typescript
+```ts
 const response = await client.get<MyObject, MyError>("/path")
 ```
 ...then you will have type inference on the following scenarios:
@@ -19,21 +19,38 @@ Keep reading to better understand every prop provided by the response object.
 
 ## fetchResponse
 
-[Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)
+```ts
+Response
+```
+
+Instance of type [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response), the native response object from the Fetch API.
 
 ## request
+
+```ts
+interface IRequest {
+	options: Partial<Options>;
+	url: URL
+	method: HttpMethod
+	body: any
+}
+```
 
 The request object used to get the response, including options, url, method and body.
 
 ### url
 
-`URL`
+```ts
+URL
+```
 
 The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using host, basePath and the request path.
 
 ### method
 
-`HttpMethod`
+```ts
+HttpMethod
+```
 
 ### body
 
@@ -41,46 +58,58 @@ The optional body used, typically when HttpMethod is PUT or POST.
 
 ## error
 
-`RestError` | `undefined`
+```ts
+RestError | undefined
+```
+
+An instance of type [RestError](/api/rest-error) if present, or `undefined` on successful requests.
 
 ## status
 
-`HTTPStatusCode`
+```ts
+number
+```
+
+The HTTP Status code of the response.
 
 ## headers
 
-`Headers`
+```ts
+Headers
+```
 
-An instance of the standard [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers) class, representing the response headers of the request.
+An instance of type [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers) class, representing the response headers of the request.
 
 ## data
 
-`TResponse` | `null`
+The parsed response object if present.
 
 ## throwFilter
 
-`IResponseFilter`
+```ts
+ResponseFilter
+```
 
 When a `IResponseFilter` matches the response, this property will expose it.
 
 ## repeat
 
-`(): Promise<IResponse<TResponse, TError>>`
+```ts
+() => Promise<IResponse>
+```
 
 A shortcut to repeat the request sent with the same options.
 
-```typescript
+```ts
 const first = await get<any>("/action");
 const second = await first.repeat();
 ```
 
 You can even override request options on a local repeat call.
 
-```typescript
+```ts
 const response = await second.repeat({ responseType: "text" });
 ```
-
-*Usage*
 
 ## request
 
@@ -88,16 +117,24 @@ The request object used to get the response, including options, url, method and 
 
 ### url
 
-`URL`
+```ts
+URL
+```
 
 The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using `host`, `basePath` and the request `path`.
 
 ### method
 
-`HttpMethod`
+```ts
+HttpMethod
+```
+
+The HTTP method used to perform the request.
 
 ### body
 
-`object` | `null`
+```ts
+object | null
+```
 
 The optional body used, typically when HttpMethod is `PUT` or `POST`.
