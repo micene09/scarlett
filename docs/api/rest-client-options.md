@@ -172,20 +172,29 @@ Even when you throwing error on failed requests, sometimes you may need to filte
 
 You can do this providing an array of `IResponseFilter`.
 
-A filter can be defined as object:
+A filter can be defined as object (every prop is optional):
 
 ```ts
 await client.get("/example", {
-	throwExcluding: [{ // every prop here is optional
-		path: "/example", // filter based on url path
-		method: "GET",
-		statusCode: 404,
-		errorCode: "Timeout" // the internal error code
+	throwExcluding: [{
+		path: "/example",    // the url path to exclude
+		method: "GET",       // the method to exclude
+		statusCode: 404,     // the status code to exclude
+		errorCode: "Timeout" // the internal error code to exclude
 	}]
 })
 ```
 
-...or as sync/async method returning `true` to prevent the `throw`:
+The property `errorCode` differs from `statusCode`, because it is related to library's internal mechanisms errors. The type definition is:
+
+```ts
+type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
+```
+1. Timeout, when a request fails to a timeout
+2. BodyParse, when the body parse fails with the given `responseType`
+3. UrlParameter, when something gets wrong during set or get operations on url parameters
+
+You can even declare it as sync/async method returning `true` to prevent the `throw`:
 
 ```ts
 await client.get("/example", {
@@ -199,15 +208,17 @@ await client.get("/example", {
 })
 ```
 
-If a failed request match one of the objects provided, your rest client instance will not throw any error.
+If a failed request match one of the items provided here, your rest client instance will not throw any error.
 
-You will find the matched filter on [Response Object](/api/response-object).throwFilter property.
+You will find the matched filter on [response.throwFilter](/api/response-object#throwfilter) property.
 
-Setting throwExcluding will also set `throw` option to `true`.
+Setting `throwExcluding` will also set `throw` option to `true` implicitly.
 
 ### overrideStrategy
 
-`merge` | `assign`
+```ts
+"merge" | "assign"
+```
 
 On every request method, you can override any option just providing it as parameter.
 
