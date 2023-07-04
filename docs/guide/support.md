@@ -28,13 +28,13 @@ If you are on a pre-`v18`:
 	```
 
 
-### Deno <Badge type="tip" text="COMING SOON" />
+### Deno
 
-Everything should work fine from `v1.28+`, additional tests needed.
+Supported on `v1.28+` using the `npm:` import prefix.
 
-### Bun <Badge type="tip" text="COMING SOON" />
+### Bun
 
-Everything should work fine, additional tests needed.
+Supported.
 
 ## Different builds
 
