@@ -16,7 +16,7 @@ With scarlett you have full control over typed body response for both success an
 
 ### 2. Control the throw mechanism
 
-Fetch promises only reject with a `TypeError` when a network error occurs, since `4xx` or `5xx` are not network errors you will never have a blocking `throw` error. Some libraries had (and still) settings to activate the auto-throw error when the [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) property is `false`...but even today it sounds like "*an all-in or all-out*" choice, this is not enough for a complex web app.
+Fetch promises only reject with a `TypeError` when a network error occurs, since `4xx` or `5xx` are not network errors you will never have a blocking `throw` error. Some libraries had (and still) settings to activate the auto-throw error when the [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) property is `false`...but even today it sounds like an "*all-in or all-out*" choice, this is not enough for a complex web app.
 
 In a real world high complexity web app, there are two kind of errors:
 * Fatal Errors
@@ -33,7 +33,7 @@ In scarlett you have the following options:
 2. Never throw error
 3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false`, a network error occurs...but exclude from throwing with custom local options or custom callbacks on the response context, checking for status codes or details on the (typed) error body
 
-Check out [the documentation](/api/functional#throwexcluding) for more details about it.
+Check out [the documentation](/api/rest-client-options#throwexcluding) for more details about it.
 
 ### 3. Allow specializations
 
