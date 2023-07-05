@@ -125,7 +125,9 @@ Defaults to `false`.
 
 ### cacheExpireIn
 
-`number` | `undefined`
+```ts
+number | undefined
+```
 
 Define the cache duration for a response in milliseconds.
 
