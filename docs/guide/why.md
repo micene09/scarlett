@@ -6,7 +6,7 @@ The idea behind scarlett was based on needs that initially appeared so obvious t
 
 ## 📕 Main principles
 
-Speaking with colleagues of mine and digging deeper on the web, me and my team found a list of principles that a rest client library, in our opinion, should absolutely respect.
+Speaking with colleagues of mine and digging deeper on the web, the team found a list of principles that a rest client library, in our opinion, should absolutely respect.
 
 ### 1. Keep it fully typed
 
@@ -14,7 +14,7 @@ Of course there was many good Typescript projects out there, but usually in real
 
 With scarlett you have full control over typed body response for both success and error, [checkout this guide](/api/response-object) about the response object type inference.
 
-### 2. Control the throw mechanism
+### 2. Control over the throw mechanism
 
 Fetch promises only reject with a `TypeError` when a network error occurs, since `4xx` or `5xx` are not network errors you will never have a blocking `throw` error. Some libraries had (and still) settings to activate the auto-throw error when the [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) property is `false`...but even today it sounds like an "*all-in or all-out*" choice, this is not enough for a complex web app.
 
@@ -35,7 +35,7 @@ In scarlett you have the following options:
 
 Check out [the documentation](/api/rest-client-options#throwexcluding) for more details about it.
 
-### 3. Allow specializations
+### 3. Options specializations
 
 It's a common practice to have global/common options for every rest client initialized in your web app, but supposing that you have a collection of business rest methods for CRUD operations, what if you have just a few specializations in one or two?
 
