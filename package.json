@@ -20,7 +20,9 @@
 		"bump": "bumpp"
 	},
 	"files": [
-		"lib/*.*"
+		"lib/*.*",
+		"readme.md",
+		"license"
 	],
 	"engines": {
 		"node": ">= 16.15 <19"
