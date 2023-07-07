@@ -51,7 +51,11 @@ const options = {
 	plugins: [
 		typescript(tsOptions),
 		resolve()
-	]
+	],
+	onwarn(warning, warn) {
+		if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+		warn(warning);
+	}
 };
 
 /** @type {import('rollup').RollupOptions} */
