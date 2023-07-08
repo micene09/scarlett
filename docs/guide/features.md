@@ -10,7 +10,7 @@ Here we are, with the lovely help of colleagues and friends, here is the full li
 * Fully typed response body for both success and failures
 * Centralized config with optional local overrides on http methods
 * Fetch standard [standard cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache) system
-* Built-in in-memory cache system (with auto expire logic)
+* Built-in in-memory cache system, with auto expire logic
 * Requests can `throw` errors on failures
 * Catch and filter expected errors preventing `throw`
 * Timeout supported
