@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import RestClient, { createRestClient, useRestClientBuilder } from '../src';
+import { createRestClient, useRestClientBuilder, RestClient } from '../src';
 
 let testServer = fastify({ logger: false });
 interface ITestJsonResponse {
@@ -74,10 +74,9 @@ export function useTestRestClient(host: string) {
 		responseType: "json",
 		throw: true
 	});
-	const { setOption, optionsOverride, request, get, currentOptions, cacheClearByKey } = useRestClient()
+	const { setOption, optionsOverride, request, get, cacheClearByKey } = useRestClient()
 	return {
 		setOption,
-		currentOptions,
 		optionsOverride,
 		cacheClearByKey,
 		requestJson(method: Parameters<typeof request>[0], overrides?: Parameters<typeof request>[2]) {
@@ -110,14 +109,13 @@ export function useTestRestClient(host: string) {
 	};
 }
 export function useTestRestBuilder(host: string) {
-	const { setOption, cloneOptions, currentOptions } = useRestClientBuilder({
+	const { setOption, cloneOptions } = useRestClientBuilder({
 		host,
 		responseType: "json",
 		throw: true
 	});
 	return {
 		setOption,
-		currentOptions,
 		createRestClient() {
 			const rest = useTestRestClient(host);
 			const currentOptions = cloneOptions()
