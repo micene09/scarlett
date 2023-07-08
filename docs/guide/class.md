@@ -17,6 +17,7 @@ You can also override an options object as last parameter to the request method:
 
 ```typescript
 const response = await client.get<string>("/example", { responseType: "text" })
+// response.data type inferred as string or undefined
 ```
 
 In the example above, the `responseType` option will be the override value just for that request, the global options will remain the same.

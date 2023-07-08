@@ -16,6 +16,7 @@ Use rest methods with destructuring pattern:
 ```typescript
 const { get } = useRestClient()
 const { data, status } = await get<string>(`path`)
+// data type inferred as string or undefined
 ```
 
 Any provided option on `createRestClient` will be considered the default for every subsequent requests for any method behind `useRestClient`, for more details about the options object, visit the [Rest Client Options](/api/rest-client-options) section.
