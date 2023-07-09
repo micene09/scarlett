@@ -87,10 +87,10 @@ The parsed response object if present.
 ## throwFilter
 
 ```ts
-ResponseFilter
+throwExcluding // object or handler
 ```
 
-When a `IResponseFilter` matches the response, this property will expose it.
+When a provided throw filter (via [throwExcluding](/api/rest-client-options#throwexcluding)) matches, this property will expose it.
 
 ## repeat
 
