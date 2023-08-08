@@ -9,7 +9,7 @@ export default defineConfig({
 		}
 	},
 	lang: 'en-US',
-	title: "scarlett",
+	title: "Scarlett",
 	description: "A rest client library that actually covers high complexity scenarios...for real!",
 	outDir: "../lib-docs",
 	base: "/scarlett/",
