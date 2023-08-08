@@ -33,7 +33,7 @@ Every request method will return a `Promise<IResponse<TResponse>>`, for more det
 
 ## Expose just your logics
 
-Structuring a custom initiator can come in handy when you want to hide the scarlett's internal methods and exposing just your own functions:
+Structuring a custom initiator can come in handy when you want to hide the Scarlett's internal methods and exposing just your own functions:
 
 ```typescript
 // custom-rest.ts
