@@ -6,7 +6,7 @@
 [![downloads](https://img.shields.io/npm/dm/scarlett)](https://www.npmjs.com/package/scarlett)
 
 
-## 👋 Welcome to scarlett
+## 👋 Welcome to Scarlett
 
 A strongly typed with zero dependencies, rest client library based on Fetch API.
 
