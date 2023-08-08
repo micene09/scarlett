@@ -1,11 +1,11 @@
 ---
 layout: home
 
-title: scarlett
+title: Scarlett
 titleTemplate: Do you wanna Fetch with me?
 
 hero:
-  name: scarlett
+  name: Scarlett
   text: Do you wanna Fetch with me?
   tagline: A rest client library that actually covers high complexity scenarios...for real!
   image:
@@ -14,7 +14,7 @@ hero:
       text: Get Started
       link: /guide/getting-started
     - theme: alt
-      text: Why scarlett?
+      text: Why Scarlett?
       link: /guide/why
     - theme: alt
       text: View on GitHub
