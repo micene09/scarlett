@@ -49,7 +49,7 @@ const response = await client.get<string>(`path`)
 
 ## The core
 
-Internally, scarlett is based on Functional API because of its extreme modularity and flexibility.
+Internally, Scarlett is based on Functional API because of its extreme modularity and flexibility.
 
 The Class API is actually a wrapper around the Functional API's methods.
 
