@@ -146,7 +146,7 @@ Keep in mind that when the in-memory cache is activated, a base cacheKey will be
 * HTTP Method
 * Serialized inputs (for POST and PUT requests)
 
-Defining this parameter doesn't override the entire overall base cacheKey, your cacheKey string will be prepended to the base one, in this way scarlett grants cache items isolation per request.
+Defining this parameter doesn't override the entire overall base cacheKey, your cacheKey string will be prepended to the base one, in this way Scarlett grants cache items isolation per request.
 
 Defaults to `""`.
 
