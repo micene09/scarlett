@@ -31,7 +31,7 @@ features:
     title: Tiny
     details: Zero dependencies to ensure the smallest bundle
   - icon: 🚀
-    title: Feature Rich
+    title: Rich Features
     details: Supported timeout, in-memory cache, throw errors on failures and more!
 ---
 
@@ -73,7 +73,7 @@ const members = [
 		The Team
 	</template>
 	<template #lead>
-		Passionate people who believe that even the most complex things can be turned in easy ones.
+		Passionate people who believe that even the most complex things can be turned into easy ones.
 	</template>
 </VPTeamPageTitle>
 <VPTeamMembers size="small" :members="members" />
