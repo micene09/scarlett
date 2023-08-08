@@ -4,11 +4,11 @@
 
 :root {
 	--vp-c-bg: #ffffff;
-	--vp-c-brand: #ff2400;
+	--vp-c-brand: #bb0000;
 	--vp-c-brand-light: #FF4B2E;
 	--vp-c-brand-lighter: #FF735C;
 	--vp-c-brand-lightest: #FF9A8A;
-	--vp-c-brand-dark: #D11E00;
+	--vp-c-brand-dark: #bb0000;
 	--vp-c-brand-darker: #A31700;
 	--vp-c-brand-dimm: #751100;
 }
