@@ -2,12 +2,12 @@
 layout: home
 
 title: Scarlett
-titleTemplate: Do you wanna Fetch with me?
+titleTemplate: Strongly typed rest client based on Fetch API
 
 hero:
   name: Scarlett
-  text: Do you wanna Fetch with me?
-  tagline: A rest client library that actually covers high complexity scenarios...for real!
+  text: Fetch data like a Pro
+  tagline: A rest client library ready to cover high complexity scenarios... for real!
   image:
   actions:
     - theme: brand
