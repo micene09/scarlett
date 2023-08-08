@@ -53,7 +53,8 @@ const members = [
 		name: 'pablobbb',
 		title: 'Maintainer',
 		links: [
-			{ icon: 'github', link: 'https://github.com/pablobbb' }
+			{ icon: 'github', link: 'https://github.com/pablobbb' },
+			{ icon: 'twitter', link: 'https://twitter.com/fresh_rapp' }
 		]
 	},
 	{
