@@ -14,13 +14,13 @@ export default defineConfig({
 	outDir: "../lib-docs",
 	base: "/scarlett/",
 	head: [
-		['link', { rel: 'icon', type: 'image/svg+xml', href: '...to define...' }],
+		['link', { rel: 'icon', type: 'image/svg+xml', href: 'assets/logo.svg' }],
 		['meta', { property: 'og:type', content: 'website' }],
 		['meta', { property: 'og:title', content: "Scarlett" }],
-		['meta', { property: 'og:image', content: "...to define..." }],
+		['meta', { property: 'og:image', content: "assets/og-image.png" }],
 		['meta', { property: 'og:url', content: "" }],
 		['meta', { property: 'og:description', content: "A rest client library that actually covers high complexity scenarios...for real!" }],
-		['meta', { name: 'theme-color', content: '#646cff' }]
+		['meta', { name: 'theme-color', content: '#BB0000' }]
 	],
 	themeConfig: {
 		logo: "assets/logo.svg",
