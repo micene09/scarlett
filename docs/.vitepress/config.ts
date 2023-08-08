@@ -23,7 +23,7 @@ export default defineConfig({
 		['meta', { name: 'theme-color', content: '#646cff' }]
 	],
 	themeConfig: {
-		logo: undefined,
+		logo: "assets/logo.svg",
 		search: {
 			provider: "local"
 		},
