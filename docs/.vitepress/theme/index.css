@@ -3,7 +3,7 @@
  * -------------------------------------------------------------------------- */
 
 :root {
-	--vp-c-bg: #ffffff;
+	--vp-c-bg: #eeeeee;
 	--vp-c-brand: #bb0000;
 	--vp-c-brand-light: #FF4B2E;
 	--vp-c-brand-lighter: #FF735C;
@@ -14,7 +14,7 @@
 }
 
 .dark {
-	--vp-c-bg: #1f1e20;
+	--vp-c-bg: #111111;
 }
 
 /**
