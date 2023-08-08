@@ -51,8 +51,8 @@
 			var(--vp-c-brand-lighter));
 
 	--vp-home-hero-image-background-image: linear-gradient(-45deg,
-			var(--vp-c-brand) 50%,
-			#FBDD00 50%);
+			var(--vp-c-brand-darker) 50%,
+			var(--vp-c-brand-light) 50%);
 	--vp-home-hero-image-filter: blur(40px);
 }
 
