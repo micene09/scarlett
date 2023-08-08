@@ -16,7 +16,7 @@ export default defineConfig({
 	head: [
 		['link', { rel: 'icon', type: 'image/svg+xml', href: '...to define...' }],
 		['meta', { property: 'og:type', content: 'website' }],
-		['meta', { property: 'og:title', content: "scarlett" }],
+		['meta', { property: 'og:title', content: "Scarlett" }],
 		['meta', { property: 'og:image', content: "...to define..." }],
 		['meta', { property: 'og:url', content: "" }],
 		['meta', { property: 'og:description', content: "A rest client library that actually covers high complexity scenarios...for real!" }],
