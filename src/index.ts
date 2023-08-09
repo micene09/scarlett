@@ -1,7 +1,7 @@
-import createRestClient from './rest-client';
+import createRestClient from './rest-client/index';
 import RestClient from './rest-client/index.class';
 
-import useRestClientBuilder from './rest-client-builder';
+import useRestClientBuilder from './rest-client-builder/index';
 import RestClientBuilder from './rest-client-builder/index.class';
 
 import RestError from './rest-error';
@@ -12,7 +12,7 @@ export { RestClientBuilder as RestOptions };
 export { CacheKey, CacheClear, CacheClearByKey, CacheSet, CacheGet,
 	OptionsOverride,
 	RequestMethod,
-	RequestMethodFull } from "./rest-client"
+	RequestMethodFull } from "./rest-client/index"
 export type {
 	IResponse, IRequest,
 	IRestOptions, IRestOptionsQuery, IRestOptionsProtected, IRestOptionsGlobals, IRestOptionsNative,
