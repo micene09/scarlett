@@ -8,7 +8,7 @@
 
 ## 👋 Welcome to Scarlett
 
-A strongly typed with zero dependencies, rest client library based on Fetch API.
+A rest client library that actually covers high complexity scenarios...for real!
 
 Checkout the [documentation](https://micene09.github.io/scarlett).
 

@@ -2,7 +2,7 @@
 layout: home
 
 title: Scarlett
-titleTemplate: Strongly typed rest client based on Fetch API
+titleTemplate: A rest client library that actually covers high complexity scenarios...for real!
 
 hero:
   name: Scarlett

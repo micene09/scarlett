@@ -2,7 +2,7 @@
 	"name": "scarlett",
 	"type": "module",
 	"version": "2.0.0",
-	"description": "A strongly typed with zero dependencies, rest client library based on Fetch API.",
+	"description": "A rest client library that actually covers high complexity scenarios...for real!",
 	"browser": "lib/index.umd.js",
 	"module": "lib/index.js",
 	"types": "lib/index.d.ts",
