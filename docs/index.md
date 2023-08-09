@@ -8,7 +8,7 @@ hero:
   name: Scarlett
   text: Fetch data like a Pro
   tagline: A rest client library ready to cover high complexity scenarios... for real!
-  image: assets/hero.png
+  image: /hero.png
   actions:
     - theme: brand
       text: Get Started

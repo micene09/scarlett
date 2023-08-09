@@ -14,16 +14,16 @@ export default defineConfig({
 	outDir: "../lib-docs",
 	base: "/scarlett/",
 	head: [
-		['link', { rel: 'icon', type: 'image/svg+xml', href: '/assets/logo.svg' }],
+		['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
 		['meta', { property: 'og:type', content: 'website' }],
 		['meta', { property: 'og:title', content: "Scarlett" }],
-		['meta', { property: 'og:image', content: "assets/og-image.png" }],
+		['meta', { property: 'og:image', content: "/og-image.png" }],
 		['meta', { property: 'og:url', content: "" }],
 		['meta', { property: 'og:description', content: "A rest client library that actually covers high complexity scenarios...for real!" }],
 		['meta', { name: 'theme-color', content: '#BB0000' }]
 	],
 	themeConfig: {
-		logo: "/assets/logo.svg",
+		logo: "/logo.svg",
 		search: {
 			provider: "local"
 		},
