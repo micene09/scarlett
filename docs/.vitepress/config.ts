@@ -14,7 +14,7 @@ export default defineConfig({
 	outDir: "../lib-docs",
 	base: "/scarlett/",
 	head: [
-		['link', { rel: 'icon', type: 'image/svg+xml', href: 'assets/logo.svg' }],
+		['link', { rel: 'icon', type: 'image/svg+xml', href: '/assets/logo.svg' }],
 		['meta', { property: 'og:type', content: 'website' }],
 		['meta', { property: 'og:title', content: "Scarlett" }],
 		['meta', { property: 'og:image', content: "assets/og-image.png" }],
@@ -23,7 +23,7 @@ export default defineConfig({
 		['meta', { name: 'theme-color', content: '#BB0000' }]
 	],
 	themeConfig: {
-		logo: "assets/logo.svg",
+		logo: "/assets/logo.svg",
 		search: {
 			provider: "local"
 		},
