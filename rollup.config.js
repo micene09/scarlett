@@ -11,7 +11,7 @@ const tsOptions = {
 	tsconfig: "./tsconfig.json",
 	declaration: true,
 	declarationDir: ".",
-	include: [ "src/**/*.ts" ],
+	include: [ "src/*.ts", "src/**/*.ts" ],
 };
 
 /** @type {import('rollup').RollupOptions} */
