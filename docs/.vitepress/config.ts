@@ -18,7 +18,7 @@ export default defineConfig({
 		['meta', { property: 'og:type', content: 'website' }],
 		['meta', { property: 'og:title', content: "Scarlett" }],
 		['meta', { property: 'og:image', content: "/scarlett/og-image.png" }],
-		['meta', { property: 'og:url', content: "" }],
+		['meta', { property: 'og:url', content: "https://micene09.github.io/scarlett" }],
 		['meta', { property: 'og:description', content: "A rest client library that actually covers high complexity scenarios...for real!" }],
 		['meta', { name: 'theme-color', content: '#BB0000' }]
 	],
