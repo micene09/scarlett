@@ -8,7 +8,7 @@ The idea behind Scarlett was based on needs that initially appeared so obvious t
 
 Speaking with colleagues of mine and digging deeper on the web, the team found a list of principles that a rest client library, in our opinion, should absolutely respect.
 
-### 1. Keep it fully typed
+### 1. Truly typed
 
 Of course there was many good Typescript projects out there, but usually in real life complex scenarios, Backend developers in large companies provide implicitly two API contracts, the response for the API you are calling and a generic one for all the domain's API errors.
 
