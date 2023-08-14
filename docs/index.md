@@ -21,17 +21,29 @@ hero:
       link: https://github.com/Micene09/scarlett
 
 features:
-  - icon: 🖌️
-    title: Multi API Styles
-    details: Available Class and Functional API to find the best fit to your project
   - icon: 💪
-    title: Fully Typed
-    details: Success and Error response objects with intellisense covered
+    title: Truly Typed
+    details: Everything is typed and extensible, you can infer types even on success and error response objects
+  - icon: 🛡️
+    title: Control the Throw
+    details: Full control over the Throw mechanism, you choose which error is Fatal or Handled
+  - icon: ⚙️
+    title: Options specializations
+    details: Define multiple layers of configuration on global or specialized scopes
+  - icon: 🖥️
+    title: Multi Platform
+    details: It's supported just everywhere, use it on browsers or in your favorite runtime
+  - icon: ⚡️
+    title: Fetch API based
+    details: Based on the same standard behind PWAs and standard browser's request mechanism...and yeah, it's fast!
+  - icon: 🖌️
+    title: API Styles
+    details: Available Class and Functional API to find the best fit to your project
   - icon: 📦
     title: Tiny
     details: Zero dependencies to ensure the smallest bundle
   - icon: 🚀
-    title: Rich Features
+    title: Feature Rich
     details: Supported timeout, in-memory cache, throw errors on failures and more!
 ---
 
