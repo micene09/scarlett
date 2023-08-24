@@ -1,9 +1,23 @@
 # Getting Started
 
-## Installation
+## Use in your project
 
-Install it using `npm i scarlett` or `yarn add scarlett`.
+Install Scarlett as a dependency using npm
+```bash
+npm i scarlett
+```
 
+or if you're using Yarn
+```bash
+yarn add scarlett
+```
+
+## Use from CDN
+You can use Scarlett from a CDN using a script tag:
+```html
+<script src="https://unpkg.com/scarlett@2/lib/index.js"></script>
+
+```
 ## Import
 
 Supposing that you are working on a modern Javascript project, here is an example using ESM Module:
