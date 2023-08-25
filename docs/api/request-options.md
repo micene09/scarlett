@@ -16,7 +16,7 @@ const client = new RestClient({
 })
 ```
 
-Options provided at this level are considered as **Global Layer Options**.
+Options provided at this level are considered as **Global Layer** options.
 
 Every option can also be overridden at the request method's level:
 
@@ -26,7 +26,7 @@ const response = client.get("/path", { // << the options object
 })
 ```
 
-At this level options are considered **Local Layer Options**.
+At this level options are considered **Local Layer** options.
 
 :::tip
  You should play with [overrideStrategy](/api/request-options#overridestrategy) to better understand the magic behind overrides.
@@ -66,18 +66,22 @@ The base path to use on every request, defaults to `/`, combined with the `host`
 ## responseType
 
 ```ts
-type HttpResponseFormatType = "json" | "text" | "blob" | "arrayBuffer" | "formData" | undefined | null;
+type responseTypeRaw = "json" | "text" | "blob" | "arrayBuffer" | "formData"
+type responseType = responseTypeRaw
+	| (request: IRequest, fetchResponse: Response | null) => responseTypeRaw
+	| (request: IRequest, fetchResponse: Response | null) => Promise<responseTypeRaw>
+	| undefined | null;
 ```
 
 This property will lead the response body parsing, to get the proper output type. For example, with `json` as responseType you don't need to `JSON.parse()` on `response.data`.
 
 It can be defined as:
-1. `HttpResponseFormatType`
-2. A sync method returning a `HttpResponseFormatType`
+1. `responseTypeRaw`
+2. A sync method returning a `responseTypeRaw`
    ```ts
    (request: IRequest, fetchResponse: Response | null) => HttpResponseFormatType
    ```
-3. An async method resolving a `HttpResponseFormatType`
+3. An async method resolving a `responseTypeRaw`
    ```ts
    (request: IRequest, fetchResponse: Response | null) => Promise<HttpResponseFormatType>
    ```
@@ -85,6 +89,10 @@ It can be defined as:
 When the value resolved is `undefined` or `null`, the response's body will not be parsed.
 
 Defaults to `undefined`.
+
+:::tip
+ Use the sync/async handler to handle complex business logics affecting the response body type.
+:::
 
 ## body
 
@@ -142,9 +150,9 @@ Once enabled, it can works together with the Standard Fetch API's cache mechanis
 type cacheExpireIn = number | undefined
 ```
 
-Define the cache duration for a response in milliseconds.
+Define the cache entry expiry in milliseconds.
 
-Defaults to `undefined`.
+Defaults to `undefined`, meaning that will never expire.
 
 ## cacheKey
 
@@ -234,7 +242,7 @@ If a failed request match one of the items provided here, your rest client insta
 
 You will find the matched filter on [response.throwFilter](/api/response-object#throwfilter) property.
 
-Setting `throwExcluding` will also set `throw` option to `true` implicitly.
+Setting `throwExcluding` will also set implicitly set `throw` option to `true`.
 
 ## overrideStrategy
 
@@ -242,10 +250,9 @@ Setting `throwExcluding` will also set `throw` option to `true` implicitly.
 type overrideStrategy = "merge" | "assign"
 ```
 
-On every request method, you can override any option just providing it as parameter.
+Set the override strategy used when overriding Global Layer options in a rest method (Local Layer).
 
-Internally, the library supports the following strategies to update the request options:
-
+Available strategies:
 * *merge* (default), every simple primitive type (like strings, and numbers) will be overwritten, while Headers, Object-like and Array-like options will be merged.
 * *assign*, every value will be overwritten using [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 
@@ -255,7 +262,7 @@ Internally, the library supports the following strategies to update the request 
 type onRequest = (request: IRequest) => void | Promise
 ```
 
-Global handler, running on your rest client context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument. If the return value is a `Promise`'s instance, the request will `await` for it before starting.
+Global handler, running on your rest client context, called at every request. You can edit the outgoing request options just modifying the `request` object provided as first argument. If the return value is a `Promise`'s instance, the request will `await` for it before starting.
 
 ## onResponse
 
