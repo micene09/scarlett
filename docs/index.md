@@ -2,12 +2,12 @@
 layout: home
 
 title: Scarlett
-titleTemplate: A rest client library that actually covers high complexity scenarios...for real!
+titleTemplate: A rest client library ready to cover high complexity scenarios...for real!
 
 hero:
   name: Scarlett
   text: Fetch data like a Pro
-  tagline: A rest client library ready to cover high complexity scenarios... for real!
+  tagline: A rest client library ready to cover high complexity scenarios...for real!
   image: /hero.png
   actions:
     - theme: brand
