@@ -6,7 +6,7 @@
 (options: Partial<Options>) => useRestClient
 ```
 
-The initiator function, returning the `useRestClient` function.
+The initiator function, returning the `useRestClient` function using the provided options object as Global Layer Options.
 
 For more details about the options object, visit the [Request Options](/api/request-options) section.
 
@@ -23,7 +23,15 @@ For more details about the options object, visit the [Request Options](/api/requ
 }
 ```
 
-Returning a destructible object, containing rest methods and utilities.
+Returning an object containing rest methods, options and other utilities.
+
+:::tip
+ This is a destructible object, use this patter to a more simple and readable code:
+ ```ts
+const { get } = useRestClient()
+const { data, status } = await get<string>(`/my-controller`)
+ ```
+:::
 
 ### request
 
