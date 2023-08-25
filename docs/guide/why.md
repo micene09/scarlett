@@ -39,11 +39,11 @@ Check out [the documentation](/api/request-options#throwexcluding) for more deta
 
 ### 3. Options specializations
 
-It's a common practice to have global and common options for every rest client initialized in your web app, but supposing that you have a collection of business rest methods for CRUD operations, what if you have just a few specializations in one or two?
+It's a common practice to have global/common options for every rest client initialized in your web app, but supposing that you have a collection of business rest methods for CRUD operations, what if you have just a few specializations in one or two?
 
-In Scarlett you will have two layers of rest options:
-* The Global Layer options, that will be shared to every request method defined in your rest client
-* The Local Layer options, a specific context in your request method that will override one or more rest options from the global layer
+In Scarlett you will have two layers of options:
+* The **Global Layer** options, that will be shared to every request method of a specific rest client
+* The **Local Layer** options, override one or more options from Global Layer in a specific request method
 
 Another key mechanism is the override strategy, in which you can define how to override props on rest options object, on global or local layer.
 
