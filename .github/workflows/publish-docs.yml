@@ -8,37 +8,46 @@ on:
         required: false
         default: 'updates on contents'
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js v18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 'v18.x'
+        registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    - run: yarn install
+    - run: yarn docs-build
+    - name: upload github pages artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: './lib-docs'
+
+  publish:
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true
+
     environment:
       name: github-pages
-      url: /scarlett
+      url: https://micene09.github.io/scarlett
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js v18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 'v18.x'
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - run: yarn install
-      - run: yarn docs-build
-      - name: upload github pages artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: './lib-docs'
       - name: publish
         id: deployment
         uses: actions/deploy-pages@v2
