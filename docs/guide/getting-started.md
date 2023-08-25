@@ -55,7 +55,7 @@ This library comes with different class styles, here are some examples:
 		responseType: `text`
 	})
 	const response = await client.get<string>(`path`)
-	console.log(data) // inferred as string or undefined
+	console.log(response.data) // inferred as string or undefined
 	```
 	See the full [Class API Usage](/guide/class) guide.
 
