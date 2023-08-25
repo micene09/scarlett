@@ -237,7 +237,7 @@ Note that this option cannot be overridden on a request method, to do this you n
 (request: IRequest) => void | Promise
 ```
 
-Global handler, running on your `RestClient`'s instance context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument.
+Global handler, running on your rest client context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument.
 
 If the return value is a `Promise`'s instance, the request will `await` for it before starting.
 
@@ -247,7 +247,7 @@ If the return value is a `Promise`'s instance, the request will `await` for it b
 (response: IResponse) => void
 ```
 
-Global handler, running on your `RestClient`'s instance context, called at every successful response received.
+Global handler, running on your rest client context, called at every successful response received.
 Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
 
 ### onError
@@ -256,4 +256,4 @@ Keep in mind that, if you set the `throw` option as true, or any of your `throwE
 (error: RestError, response: IResponse) => void
 ```
 
-Global handler, running on your `RestClient`'s instance context, called every time an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
+Global handler, running on your rest-client context, called every time an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
