@@ -44,7 +44,7 @@ features:
     details: Zero dependencies to ensure the smallest bundle
   - icon: 🚀
     title: Feature Rich
-    details: Supported timeout, in-memory cache, throw errors on failures and more!
+    details: Timeout, built-in memory cache with auto-expire and more!
 ---
 
 <script setup>
