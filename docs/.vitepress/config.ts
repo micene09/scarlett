@@ -50,7 +50,7 @@ export default defineConfig({
 						link: 'https://github.com/Micene09/scarlett/releases'
 					},
 					{
-						text: 'Contributing',
+						text: 'How to contribute',
 						link: '/contribute'
 					}
 				]
@@ -64,6 +64,7 @@ export default defineConfig({
 						{ text: "Why", link: "/guide/why" },
 						{ text: "Features", link: "/guide/features" },
 						{ text: "Getting Started", link: "/guide/getting-started" },
+						{ text: "How to contribute", link: "/contribute" },
 						{ text: "Support", link: "/guide/support" },
 						{ text: "Functional API Usage", link: "/guide/functional" },
 						{ text: "Class API Usage", link: "/guide/class" }
