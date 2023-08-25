@@ -6,7 +6,7 @@ on:
       name:
         description: 'reason'
         required: false
-        default: ''
+        default: 'updates on contents'
 
 jobs:
   publish:
