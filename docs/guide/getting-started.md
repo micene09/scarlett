@@ -45,6 +45,8 @@ This library comes with different class styles, here are some examples:
 	console.log(data) // << string or undefined
 	console.log(status)
 	```
+	See the full [Functional API Usage](/guide/functional) guide.
+
 * Using Class API:
 	```typescript
 	import { RestClient } from `scarlett`
@@ -56,5 +58,6 @@ This library comes with different class styles, here are some examples:
 	const response = await client.get<string>(`path`)
 	console.log(response.data) // << string or undefined
 	```
+	See the full [Class API Usage](/guide/class) guide.
 
 For more details about th API styles topic, just visit the [API Styles](/api/styles) section.
