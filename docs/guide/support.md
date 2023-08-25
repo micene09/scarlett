@@ -1,8 +1,6 @@
 # ⚙️ Support
 
-## Runtime Environments
-
-### Browsers
+## Browsers
 
 Any build provided assumes that the runtime supports native [ES Modules](https://caniuse.com/es6-module) and [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), so the following browsers and versions are supported:
 
@@ -11,7 +9,7 @@ Any build provided assumes that the runtime supports native [ES Modules](https:/
 * Firefox >= `78`
 * Safari >= `14`
 
-### Node.js
+## Node.js
 
 You are all set if using `v18+`.
 
@@ -28,15 +26,15 @@ If you are on a pre-`v18`:
 	```
 
 
-### Deno
+## Deno
 
 Supported on `v1.28+` using the `npm:` import prefix.
 
-### Bun
+## Bun
 
 Supported.
 
-## Different builds
+## Builds provided
 
 Depending on your project's bundler you are using the import strategy could vary, for this reason the package provides different builds.
 
@@ -55,6 +53,7 @@ Here is the list of modules included:
 ## Required APIs
 
 If you are not any of the above mentioned runtime environments, please make sure that yours supports:
+
 * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 * [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 * [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
