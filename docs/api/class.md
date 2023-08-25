@@ -54,7 +54,7 @@ The optional `base` parameter defaults to the current rest client options object
 
 ## cache methods
 
-On a `RestClient` class instance, you will find every cache capability available as public method, for more details visit the [Built-in Cache System](/api/in-memory-cache) section.
+On a `RestClient` class instance, you will find every cache capability available as public method, for more details visit the [Cache System](/api/in-memory-cache) section.
 
 ## options
 

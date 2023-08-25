@@ -1,4 +1,4 @@
-# Built-in Cache System
+# Cache System
 
 A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based cache, disabled by default and triggered by the `cacheInMemory` flag.
 
