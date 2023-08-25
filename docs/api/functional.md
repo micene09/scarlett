@@ -96,12 +96,14 @@ Set a cache entry using the response object, a custom key to override (if omitte
 ### optionsOverride
 
 ```ts
-<TResponse = any, TError = any>(overrides?: Partial<Options>, base?: Partial<Options>) => Partial<Options>
+<TResponse = any, TError = any>(overrides: Partial<Options>, base?: Partial<Options>) => Partial<Options>
 ```
 
-Overrides rest client global options using provided `overrides` object as first parameter. It will override just the `base` when provided. Any override done by this method will follow behaviors from [overrideStrategy](/api/rest-client-options#overridestrategy).
+Will override the current options using the `overrides` object without modifying anything on the current context. It will override just the `base` when provided.
 
-Returns a copy of the override result.
+::: tip
+Any override done by this method will follow behaviors from [overrideStrategy](/api/request-options#overridestrategy).
+:::
 
 ### getOption
 
