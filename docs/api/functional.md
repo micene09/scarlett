@@ -2,7 +2,9 @@
 
 ## createRestClient
 
-`(options: Partial<Options>) => useRestClient`
+```ts
+(options: Partial<Options>) => useRestClient
+```
 
 The initiator function, returning the `useRestClient` function.
 
