@@ -8,7 +8,7 @@
 (options: Partial<Options>) => useRestClient
 ```
 
-The initiator function, returning the `useRestClient` function using the provided options object as Global Layer Options.
+The initiator function, returning the `useRestClient` function using the provided options object as Global Layer options.
 
 For more details about the options object, visit the [Request Options](/api/request-options) section.
 

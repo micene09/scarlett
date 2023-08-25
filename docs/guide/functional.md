@@ -19,15 +19,15 @@ const { data, status } = await get<string>(`/my-controller`)
  ```
 :::
 
-Any provided option on `createRestClient` will be considered the default (Global Layer Options) for every subsequent requests for any method behind `useRestClient`, for more details about the options object, visit the [Request Options](/api/request-options) section.
+Any provided option on `createRestClient` will be considered the default (Global Layer options) for every subsequent requests for any method behind `useRestClient`, for more details about the options object, visit the [Request Options](/api/request-options) section.
 
-To have a custom Local Layer Options, you can provide your overrides as second parameter to the request method:
+To have a custom Local Layer options, you can provide your overrides as second parameter to the request method:
 
 ```typescript
 const response = await get<string>("/example", { responseType: "json" })
 ```
 
-In the example above, the `responseType` option will be the override value just for that request, the Global Layer Options will remain the same.
+In the example above, the `responseType` option will be the override value just for that request, the Global Layer options will remain the same.
 
 Every request method will return a `Promise<IResponse<TResponse>>`, for more details about the response object, visit the [Response Object](/api/response-object) section.
 
