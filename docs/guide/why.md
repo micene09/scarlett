@@ -2,7 +2,7 @@
 
 It was about 2019 Q1 and I was coding in three very large and complex Frontend repositories for my company, trying to deal with popular XHR or early Fetch based libraries, but...more than one thing was missing to me.
 
-The idea behind Scarlett was based on needs that initially appeared so obvious to me, but soon I realized that, while most of the Open Source focus was just about settings customizations, no libraries was covering all the needs that me and my team was facing.
+The idea behind Scarlett was based on needs that initially appeared so obvious to me, but soon I realized that, while most of the Open Source world focus was just about options customizations, no libraries was covering all the obstacles that me and my team was facing.
 
 ## 📕 Main principles
 
@@ -10,19 +10,19 @@ Speaking with colleagues of mine and digging deeper on the web, the team found a
 
 ### 1. Truly typed
 
-Of course there was many good Typescript projects out there, but usually in real life complex scenarios, Backend developers in large companies provide implicitly two API contracts, the response for the API you are calling and a generic one for all the domain's API errors.
+Of course there was many good Typescript projects out there, but usually in real life complex scenarios, Backend developers in large companies provide implicitly two API contracts, the response for the API you are calling and a generic one for errors in a specific API domain.
 
 With Scarlett you have full control over typed body response for both success and error, [checkout this guide](/api/response-object) about the response object type inference.
 
 ### 2. Control over the throw mechanism
 
-Fetch promises only reject with a `TypeError` when a network error occurs, since `4xx` or `5xx` are not network errors you will never have a blocking `throw` error. Some libraries had (and still) settings to activate the auto-throw error when the [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) property is `false`...but even today it sounds like an "*all-in or all-out*" choice, this is not enough for a complex web app.
+The standard Fetch API promises only reject with a `TypeError` when a network error occurs, since `4xx` or `5xx` are not network errors you will never have a blocking `throw` error. Some libraries had (and still) settings to activate the auto-throw error when the [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) property is `false`...but even today it sounds like an "*all-in or all-out*" choice, this is not enough for a complex web app.
 
 In a real world high complexity web app, there are two kind of errors:
-* Fatal Errors
-* Handled Errors
+* Fatal
+* Handled
 
-Most of the `5xx` HTTP Status Codes from the server can be considered Fatal Error that should be thrown in the main thread, "blocking" the UX with a proper message for the user. When a Fatal error occurs means that the user, you and your team are experiencing an unexpected error, not handled by any logic on both client and server, basically a bug.
+Most of the `5xx` HTTP Status Codes from the server can be considered Fatal errors that should be thrown in the main thread, "blocking" the UX with a proper message for the user. When a Fatal error occurs means that the user, you and your team are experiencing an unexpected error, not handled by any logic on both client and server, basically a bug.
 
 But not all `4xx` or `5xx` can be considered Fatal errors, think about the following examples of Handled Errors:
 * [503 Service Unavailable](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503), if you are integrating with a third party API, you can easily expect that the service could be temporary unavailable, a smart move is considering it as an expected response, that if occurs can be handled with a proper UX.
@@ -31,13 +31,15 @@ But not all `4xx` or `5xx` can be considered Fatal errors, think about the follo
 In Scarlett you have the following options:
 1. Throw always an error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false` or a network error occurs
 2. Never throw error
-3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false`, a network error occurs...but exclude from throwing with custom local options or custom callbacks on the response context, checking for status codes or details on the (typed) error body
+3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false`...but exclude from throwing with custom local options or callbacks on a specific request
+
+The last option was gold for us, because in this way is possible to intercept Handled errors applying business logic and auto-throw for unexpected Fatal errors (as always).
 
 Check out [the documentation](/api/request-options#throwexcluding) for more details about it.
 
 ### 3. Options specializations
 
-It's a common practice to have global/common options for every rest client initialized in your web app, but supposing that you have a collection of business rest methods for CRUD operations, what if you have just a few specializations in one or two?
+It's a common practice to have global and common options for every rest client initialized in your web app, but supposing that you have a collection of business rest methods for CRUD operations, what if you have just a few specializations in one or two?
 
 In Scarlett you will have two layers of rest options:
 * The Global Layer options, that will be shared to every request method defined in your rest client
