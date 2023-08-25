@@ -5,72 +5,77 @@ Independently of the chosen API Style, probably you will have to deal with error
 It is used internally to track and better qualify the error thrown.
 
 Sometimes, a success response body differs from error response body, for this reason you can specify generic types qualify the response provided by backend API's handled exceptions:
-```typescript
-const response = await restClient.get<any, IBackendError>("/status-code/412");
-const data = response.data;         // << response.data property will be null because of the error
-const error = response.error?.data; // << error.data property will infer IBackendError interface
+
+```ts
+const response = await rest.get<any, IBackendError>("/status-code/412");
+const data = response.data;         // << response.data property inferred as null because of the error
+const error = response.error?.data; // << error.data property inferred as IBackendError
 ```
 
 When a request's response has an error, you will find an instance of `RestError` as a property named **error** on `IResponse` object. If the `throw` flag is enabled, or the `throwExcluding` fails to filter an error, the library will internally `throw` it.
 
+:::tip
 You can event import it and create an instance to extend your business logic:
-```typescript
+
+```ts
 import { RestError } from "scarlett";
 const err = new RestError<IBackendError>("The Error Message");
 ```
+:::
 
-## The constructor
+## constructor
 
-```typescript
-constructor(message: string, statusCode?: HTTPStatusCode, code?: InternalErrorCode)
+```ts
+(message: string, statusCode?: HTTPStatusCode, code?: InternalErrorCode)
 ```
 
 ### message
 
-`string`
+```ts
+type message = string
+```
 
 A human-friendly error message.
 
 ### statusCode
 
-`HTTPStatusCode`
+```ts
+enum HTTPStatusCode {}
+```
 
-The standard http status code.
+An enum containing all the standard http status codes.
+
+::: tip
+ You can import this enum from scarlett and use it in your app:
+ ```ts
+ import { HTTPStatusCode } from "scarlett"
+ ```
+:::
 
 ### code
 
-```typescript
+```ts
 type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
 ```
 
 An internal error code to track unexpected behaviors based on request settings.
 
-## Instance properties
+::: info
+ Any of these parameters are available as public properties on `RestError` instance.
+:::
 
-### isRestError
+## isRestError
 
-`boolean`
+An always `true` property, used as simple utility to distinguish the standard `Error` from the `RestError`.
 
-Always true, it's a simple utility prop that can be useful to distinguish the standard `Error` from the `RestError`.
+## request
 
-### request
+The request object use to perform the request, it is just the same [type defined on the response object](/api/response-object.html#request).
 
-`IRequest`
+## fetchResponse
 
-### fetchResponse
+Instance of type [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response), the native response object from the Fetch API.
 
-`[Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)`
+## data
 
-### code
-
-The same on the constructor parameter.
-
-### statusCode
-
-`HTTPStatusCode`
-
-### data
-
-`TError`
-
-The error object parsed from response body content.
+The error object parsed from response body content, inferred with the type provided as generic in the request method or when creating a new instance.
