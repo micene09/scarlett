@@ -60,4 +60,4 @@ This library comes with different class styles, here are some examples:
 	```
 	See the full [Class API Usage](/guide/class) guide.
 
-For more details about th API styles topic, just visit the [API Styles](/api/styles) section.
+Visit the [API Styles](/api/styles) section to know more about it.
