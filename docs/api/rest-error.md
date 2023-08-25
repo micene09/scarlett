@@ -15,7 +15,7 @@ const error = response.error?.data; // << error.data property inferred as IBacke
 When a request's response has an error, you will find an instance of `RestError` as a property named **error** on `IResponse` object. If the `throw` flag is enabled, or the `throwExcluding` fails to filter an error, the library will internally `throw` it.
 
 :::tip
-You can event import it and create an instance to extend your business logic:
+You can even import it and create an instance to extend your business logic:
 
 ```ts
 import { RestError } from "scarlett";
@@ -46,7 +46,7 @@ enum HTTPStatusCode {}
 An enum containing all the standard http status codes.
 
 ::: tip
- You can import this enum from scarlett and use it in your app:
+ You can import this enum from Scarlett and use it in your app:
  ```ts
  import { HTTPStatusCode } from "scarlett"
  ```
