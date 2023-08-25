@@ -10,7 +10,7 @@ const client = createRestClient({
 })
 
 // Class API
-const client = new Rest Client({
+const client = new RestClient({
 	host: "https://server.com",
 	responseType: "text"
 })
@@ -86,7 +86,9 @@ Defaults to `undefined`.
 
 ## body
 
-`Object` (ex: `{ [key: string]: any }`) | `string` | `ArrayBuffer` | `ArrayBufferView` | `Blob` | `File` | `FormData` | `undefined`
+```ts
+type Body = { [key: string]: any } | string | ArrayBuffer | ArrayBufferView | Blob | File | FormData | undefined
+```
 
 Optional request body content, if the method is `GET`, this value will be set to `undefined`.
 

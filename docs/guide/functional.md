@@ -12,7 +12,7 @@ const useRestClient = createRestClient({
 ```
 
 :::tip
- The returning function is a destructible object, use this patter to a more simple and readable code:
+ The `useRestClient` function returns a destructible object, use this patter to a more simple and readable code:
  ```ts
 const { get } = useRestClient()
 const { data, status } = await get<string>(`/my-controller`)
