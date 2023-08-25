@@ -1,6 +1,0 @@
-{
-	"name": "scarlett",
-	"entryPoints": ["src/index.ts"],
-	"out": "docs/types",
-	"plugin": ["typedoc-plugin-markdown"]
-}
