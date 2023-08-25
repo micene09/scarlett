@@ -29,7 +29,7 @@ function getCartItems() {
  * ✓ Destructuring enabled
  * ✓ Very close to Functional-Based projects like [Vue](https://vuejs.org/) or [React](https://react.dev/)
  * ✓ Module bundler's Tree-Shaking friendly
- * ⚠️ Needs a wrap methods pattern (`createRestClient` >> `useRestClient`)
+ * ⚠️ Needs a wrap methods pattern (`createRestClient()` >> `useRestClient()`)
  * ⚠️ No `this` available
 
 #### Class API
@@ -43,7 +43,7 @@ const response = await client.get<string>(`path`)
 ```
  * ✓ Constructor logics and patterns
  * ✓ Very close to Class-Based projects like [Angular](https://angular.io/) or [Nest](https://nestjs.com/)
- * ⚠️ Class methods and props are not tree-shakable
+ * ⚠️ Classes are not tree-shakable
  * ⚠️ Every standard request method is just public, so will be exposed when extending the `RestClient` class
  * ⚠️ Destructuring is not available because of `this` binding due to Class limitations
 
