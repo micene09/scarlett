@@ -41,14 +41,20 @@ const { data, status } = await get<string>(`/my-controller`)
 <TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<Options>) => Promise<IResponse<TResponse, TError>>
 ```
 
-*Parameters*:
-* HttpMethod (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
+#### Parameters
+
+* method (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
 * path *(string)*, the request path relative to `host`+`basePath`
 * requestOptions *(Options | undefined)*, local request options that will override the global options provided via `createRestClient`.
 
-*Returns* `Promise<IResponse<TResponse, TError>>`, where:
- * `TResponse` is the `response.data` type (typescript intellisense)
- * `TError` is the **optional** `response.error.data` type
+#### Returns
+
+```ts
+<TResponse, TError>(...) => Promise<IResponse<TResponse, TError>>
+```
+
+ * `TResponse` is the `response.data` type inference
+ * `TError` is the **optional** `response.error.data` type inference
 
 For more details about the response object, visit the [Response Object](/api/response-object) section.
 

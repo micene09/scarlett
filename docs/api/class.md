@@ -14,32 +14,22 @@ For more details about the options object, visit the [Request Options](/api/requ
 <TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<Options>) => Promise<IResponse<TResponse, TError>>
 ```
 
-*Parameters*:
-* HttpMethod (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
-* path *(string)*, the request path relative to `host`+`basePath`
-* requestOptions *(Options | undefined)*, local request options that will override the global options provided via constructor.
+#### Parameters
 
-*Returns* `Promise<IResponse<TResponse, TError>>`, where:
- * `TResponse` is the `response.data` type (typescript intellisense)
- * `TError` is the **optional** `response.error.data` type
+* method (`GET` | `DELETE` | `HEAD` | `OPTIONS` | `POST` | `PUT` | `PATCH` | `LINK`)
+* path *(string)*, the request path relative to `host`+`basePath`
+* requestOptions *(Options | undefined)*, local request options that will override the global options provided via `createRestClient`.
+
+#### Returns
+
+```ts
+<TResponse, TError>(...) => Promise<IResponse<TResponse, TError>>
+```
+
+ * `TResponse` is the `response.data` type inference
+ * `TError` is the **optional** `response.error.data` type inference
 
 For more details about the response object, visit the [Response Object](/api/response-object) section.
-
-```ts
-const client = new RestClient({
-	host: "https://server.com",
-	basePath: "/controller",
-	responseType: "text"
-})
-const response = await client.request<string>("GET", "/action");
-```
-
-Note that the `path` property will be combined with `host` and `basePath`:
-
-```ts
-const response = await client.request<string>("GET", "/action");
-console.log(response.request.url.href);
-```
 
 ## get / del / post / patch / put
 

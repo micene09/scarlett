@@ -14,7 +14,7 @@ Still don't know what to choose? Keep reading to know more about PROs and CONs.
 
 ## PROs and CONs
 
-### Functional API
+#### Functional API
 
 ```typescript
 const useRestClient =  createRestClient({
@@ -32,7 +32,7 @@ function getCartItems() {
  * ⚠️ Needs a wrap methods pattern (`createRestClient` >> `useRestClient`)
  * ⚠️ No `this` available
 
-### Class API
+#### Class API
 
 ```typescript
 const client = new RestClient({

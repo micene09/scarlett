@@ -29,7 +29,7 @@ const err = new RestError<IBackendError>("The Error Message");
 (message: string, statusCode?: HTTPStatusCode, code?: InternalErrorCode)
 ```
 
-### message
+#### message
 
 ```ts
 type message = string
@@ -37,7 +37,7 @@ type message = string
 
 A human-friendly error message.
 
-### statusCode
+#### statusCode
 
 ```ts
 enum HTTPStatusCode {}
@@ -52,7 +52,7 @@ An enum containing all the standard http status codes.
  ```
 :::
 
-### code
+#### code
 
 ```ts
 type InternalErrorCode = "Timeout" | "BodyParse" | "UrlParameter";
