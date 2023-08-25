@@ -156,7 +156,7 @@ Returns a copy of the current global options.
 
 Returning a destructible object, containing options utilities and the rest client generator.
 
-### getOption (builder)
+## builder.getOption
 
 ```ts
 (key: K) => Options[K]
@@ -164,7 +164,7 @@ Returning a destructible object, containing options utilities and the rest clien
 
 Returns the current value of the provided option `key`.
 
-### setOption (builder)
+## builder.setOption
 
 ```ts
 (key: K, value: Options[K]) => void
@@ -172,7 +172,7 @@ Returns the current value of the provided option `key`.
 
 Sets the `value` provided for the option `key`.
 
-### unsetOption
+## builder.unsetOption
 
 ```ts
 (key: K) => Options[K]
@@ -180,7 +180,7 @@ Sets the `value` provided for the option `key`.
 
 Restore the default value for the provided option `key`.
 
-### cloneOptions (builder)
+## builder.cloneOptions
 
 ```ts
 () => Options
@@ -188,7 +188,7 @@ Restore the default value for the provided option `key`.
 
 Returns a copy of the current options.
 
-### mergeOptions
+## builder.mergeOptions
 
 ```ts
 (options: Partial<Options>) => void
@@ -196,7 +196,7 @@ Returns a copy of the current options.
 
 Overrides current options with the provided `options` using a merge strategy.
 
-### assignOptions
+## builder.assignOptions
 
 ```ts
 (options: Partial<Options>) => void
@@ -204,7 +204,7 @@ Overrides current options with the provided `options` using a merge strategy.
 
 Overrides current options with the provided `options` using a [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) strategy.
 
-### checkAndRestoreDefaults
+## builder.checkAndRestoreDefaults
 
 ```ts
 () => void
@@ -212,7 +212,7 @@ Overrides current options with the provided `options` using a [Object.assign](ht
 
 Iterate internally over every option and restores defaults value if `undefined` or `falsy` value.
 
-### createRestClient
+## builder.createRestClient
 
 ```ts
 () => { ... } // useRestClient function
