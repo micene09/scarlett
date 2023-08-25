@@ -31,7 +31,7 @@ The following native properties from original [Fetch's Request Object](https://d
 ### host
 
 ```ts
-string
+type host = string
 ```
 
 Defaults to `localhost.href`.
@@ -39,7 +39,7 @@ Defaults to `localhost.href`.
 ### basePath
 
 ```ts
-string
+type basePath = string
 ```
 
 The base path to use on every request, defaults to `/`, combined with the `host` option.
@@ -47,13 +47,13 @@ The base path to use on every request, defaults to `/`, combined with the `host`
 ### responseType
 
 ```ts
-HttpResponseFormat
+type HttpResponseFormatType = "json" | "text" | "blob" | "arrayBuffer" | "formData" | undefined | null;
 ```
 
 This property will lead the response body parsing, to get the proper output type. For example, with `json` as responseType you don't need to `JSON.parse()` on `response.data`.
 
 It can be defined as:
-1. `HttpResponseFormatType` typed value: `undefined` (default), `null`, `json`, `text`, `blob`, `arrayBuffer`, `formData`
+1. `HttpResponseFormatType`
 2. A sync method returning a `HttpResponseFormatType`
    ```ts
    (request: IRequest, fetchResponse: Response | null) => HttpResponseFormatType
@@ -65,6 +65,8 @@ It can be defined as:
 
 When the value resolved is `undefined` or `null`, the response's body will not be parsed.
 
+Defaults to `undefined`.
+
 ### body
 
 `Object` (ex: `{ [key: string]: any }`) | `string` | `ArrayBuffer` | `ArrayBufferView` | `Blob` | `File` | `FormData` | `undefined`
@@ -74,7 +76,7 @@ Optional request body content, if the method is `GET`, this value will be set to
 ### query
 
 ```ts
-{ [key: string]: any }
+type query = { [key: string]: any }
 ```
 
 Optional key-value pair, this will be converted (and appended) to the request URI.
@@ -82,27 +84,17 @@ Optional key-value pair, this will be converted (and appended) to the request UR
 ### queryParamsTransformer
 
 ```ts
-IQueryParamTransformer
-```
-
-Let's suppose you have a complex key-value pair, in which every value needs to be converted using a custom logic.
-
-You can do this using this as a callback having the following definition:
-
-```ts
 interface IQueryParamTransformer {
 	(key: string, value: any, query: any): string
 }
 ```
 
-...it needs to have back the `string` version of your custom type parameter.
-
-Check out `tests/features.test.ts` to see it in action!
+Let's suppose you have a complex key-value pair, in which every value needs to be converted using a custom logic. In this case you can use this handler to convert your parameters to `string`.
 
 ### queryParamsIncludeEmpty
 
 ```ts
-boolean
+type queryParamsIncludeEmpty = boolean
 ```
 
 If true, it will include falsy values as empty, example: `/example/?a=&b=`.
@@ -112,14 +104,10 @@ Defaults to `false`.
 ### cacheInMemory
 
 ```ts
-boolean
+type cacheInMemory = boolean
 ```
 
-If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based, cache system.
-
-Every entry for this cache, will use a compound-key containing the `cacheKey`, if provided.
-
-See the [cache section](/api/in-memory-cache) for more details.
+If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based, cache system. Every entry for this cache, will use a compound-key containing the `cacheKey`, if provided. See the [cache section](/api/in-memory-cache) for more details.
 
 Defaults to `false`.
 
@@ -136,7 +124,7 @@ Defaults to `undefined`.
 ### cacheKey
 
 ```ts
-string
+type cacheKey = string
 ```
 
 An optional alias reference to the current request, useful if you are using `cacheInMemory` parameter as true.
@@ -153,13 +141,11 @@ Defaults to `""`.
 ### throw
 
 ```ts
-boolean
+type throwOption = boolean
 ```
 
 As standard behavior of fetch, every request will never throw error. But sometimes, in very large applications, you need a centralized API error handler.
-
-If true, when the standard [fetch -> Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is false the API will throw an error.
-
+If `true`, when the standard [fetch -> Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is false the API will throw an error.
 The error object will be an instance of [RestError](#RestError) class.
 
 Defaults to `false`.
@@ -167,12 +153,21 @@ Defaults to `false`.
 ### throwExcluding
 
 ```ts
-IResponseFilter[]
+type ResponseFilter = {
+	path?: string;
+	method?: HttpMethod;
+	statusCode?: HTTPStatusCode;
+	errorCode?: InternalErrorCode;
+} || {
+	(restError: RestError<TError>): boolean
+} || {
+	(restError: RestError<TError>): Promise<boolean>
+}
 ```
 
 Even when you throwing error on failed requests, sometimes you may need to filter this errors and react properly without throwing.
 
-You can do this providing an array of `IResponseFilter`.
+You can do this providing an array of `ResponseFilter`.
 
 A filter can be defined as object (every prop is optional):
 
@@ -219,7 +214,7 @@ Setting `throwExcluding` will also set `throw` option to `true` implicitly.
 ### overrideStrategy
 
 ```ts
-"merge" | "assign"
+type overrideStrategy = "merge" | "assign"
 ```
 
 On every request method, you can override any option just providing it as parameter.
@@ -234,26 +229,23 @@ Note that this option cannot be overridden on a request method, to do this you n
 ### onRequest
 
 ```ts
-(request: IRequest) => void | Promise
+type onRequest = (request: IRequest) => void | Promise
 ```
 
-Global handler, running on your rest client context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument.
-
-If the return value is a `Promise`'s instance, the request will `await` for it before starting.
+Global handler, running on your rest client context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument. If the return value is a `Promise`'s instance, the request will `await` for it before starting.
 
 ### onResponse
 
 ```ts
-(response: IResponse) => void
+type onResponse = (response: IResponse) => void
 ```
 
-Global handler, running on your rest client context, called at every successful response received.
-Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
+Global handler, running on your rest client context, called at every successful response received. Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
 
 ### onError
 
 ```ts
-(error: RestError, response: IResponse) => void
+type onError = (error: RestError, response: IResponse) => void
 ```
 
 Global handler, running on your rest-client context, called every time an error was received by a request. This callback will not be invoked if it is filtered by `throwExcluding` option.
