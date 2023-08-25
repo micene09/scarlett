@@ -32,7 +32,7 @@ At this level options are considered **Local Layer Options**.
  You should play with [overrideStrategy](/api/request-options#overridestrategy) to better understand the magic behind overrides.
 :::
 
-## Fetch Standards options
+## Standards options
 
 The following native properties from original [Fetch's Request Object](https://developer.mozilla.org/en-US/docs/Web/API/Request) are supported and usable as options object:
  * `abortController`
@@ -44,6 +44,8 @@ The following native properties from original [Fetch's Request Object](https://d
  * `redirect`
  * `referrer`
  * `referrerPolicy`
+
+Refer to the official documentation about how they works, continue reading about Scarlett's built-in options.
 
 ## host
 
