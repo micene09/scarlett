@@ -132,6 +132,10 @@ If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/d
 
 Defaults to `false`.
 
+:::tip
+Once enabled, it can works together with the Standard Fetch API's cache mechanism ([link](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache)). Keep in mind that if the Standard Cache mechanism will run only if the in memory cache haven't any cached record, in other words, the built-in cache system has the priority.
+:::
+
 ## cacheExpireIn
 
 ```ts
