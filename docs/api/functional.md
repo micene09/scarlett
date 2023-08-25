@@ -1,6 +1,8 @@
 # Functional API
 
-## createRestClient
+## Initiators
+
+### createRestClient
 
 ```ts
 (options: Partial<Options>) => useRestClient
@@ -10,7 +12,7 @@ The initiator function, returning the `useRestClient` function using the provide
 
 For more details about the options object, visit the [Request Options](/api/request-options) section.
 
-## useRestClient
+### useRestClient
 
 ```ts
 () => {
@@ -33,7 +35,7 @@ const { data, status } = await get<string>(`/my-controller`)
  ```
 :::
 
-### request
+## request
 
 ```ts
 <TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<Options>) => Promise<IResponse<TResponse, TError>>
@@ -50,7 +52,7 @@ const { data, status } = await get<string>(`/my-controller`)
 
 For more details about the response object, visit the [Response Object](/api/response-object) section.
 
-### get / del / post / patch / put
+## get / del / post / patch / put
 
 ```ts
 <TResponse, TError>(path?: string, requestOptions?: Partial<Options>) => Promise<IResponse<TResponse, TError>>
@@ -58,7 +60,7 @@ For more details about the response object, visit the [Response Object](/api/res
 
 Like the previous `request` method, local request options that will override the global options provided via `createRestClient`.
 
-### cacheKey
+## cacheKey
 
 ```ts
 (url: URL, method: HttpMethod | "*", customKey?: string) => string
@@ -66,7 +68,7 @@ Like the previous `request` method, local request options that will override the
 
 Evaluate an internal cache key, giving a `URL` instance, `HTTP` method and a key prefix as third parameter (if omitted, inherits from context's options).
 
-### cacheClear
+## cacheClear
 
 ```ts
 () => void
@@ -74,7 +76,7 @@ Evaluate an internal cache key, giving a `URL` instance, `HTTP` method and a key
 
 Clear the entire internal cache stored on the client's context.
 
-### cacheClearByKey
+## cacheClearByKey
 
 ```ts
 (cacheKey: string) => void
@@ -82,7 +84,7 @@ Clear the entire internal cache stored on the client's context.
 
 Clear any cache entry store using the provided `cacheKey`.
 
-### cacheGet
+## cacheGet
 
 ```ts
 (url: URL, method: HttpMethod | "*", customKey?: string) => {
@@ -93,7 +95,7 @@ Clear any cache entry store using the provided `cacheKey`.
 
 Return a cache entry if exits, if the third parameter is omitted will be inherited from client's context.
 
-### cacheSet
+## cacheSet
 
 ```ts
 (response: IResponse, customKey?: string, expireIn?: number) => void
@@ -101,7 +103,7 @@ Return a cache entry if exits, if the third parameter is omitted will be inherit
 
 Set a cache entry using the response object, a custom key to override (if omitted will inherit from client's context) and a expiration in milliseconds (if omitted, no expiration on the entry)
 
-### optionsOverride
+## optionsOverride
 
 ```ts
 <TResponse = any, TError = any>(overrides: Partial<Options>, base?: Partial<Options>) => Partial<Options>
@@ -113,7 +115,7 @@ Will override the current options using the `overrides` object without modifying
 Any override done by this method will follow behaviors from [overrideStrategy](/api/request-options#overridestrategy).
 :::
 
-### getOption
+## getOption
 
 ```ts
 (key: K) => Options[K]
@@ -121,7 +123,7 @@ Any override done by this method will follow behaviors from [overrideStrategy](/
 
 Returns the current value of the provided option `key`.
 
-### setOption
+## setOption
 
 ```ts
 (key: K, value: Options[K]) => void
@@ -129,7 +131,7 @@ Returns the current value of the provided option `key`.
 
 Sets the `value` provided for the option `key`.
 
-### cloneOptions
+## cloneOptions
 
 ```ts
 () => Options
