@@ -76,9 +76,9 @@ export default defineConfig({
 						{ text: "Styles", link: "/api/styles" },
 						{ text: "Functional API", link: "/api/functional" },
 						{ text: "Class API", link: "/api/class" },
+						{ text: "Cache System", link: "/api/in-memory-cache" },
 						{ text: "Request Options", link: "/api/request-options" },
 						{ text: "Response Object", link: "/api/response-object" },
-						{ text: "Cache System", link: "/api/in-memory-cache" },
 						{ text: "Rest Error", link: "/api/rest-error" }
 					]
 				},
