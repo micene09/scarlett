@@ -8,7 +8,7 @@
 
 The initiator function, returning the `useRestClient` function.
 
-For more details about the options object, visit the [Rest Client Options](/api/rest-client-options) section.
+For more details about the options object, visit the [Request Options](/api/request-options) section.
 
 ## useRestClient
 

@@ -33,7 +33,7 @@ In Scarlett you have the following options:
 2. Never throw error
 3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false`, a network error occurs...but exclude from throwing with custom local options or custom callbacks on the response context, checking for status codes or details on the (typed) error body
 
-Check out [the documentation](/api/rest-client-options#throwexcluding) for more details about it.
+Check out [the documentation](/api/request-options#throwexcluding) for more details about it.
 
 ### 3. Options specializations
 
@@ -45,7 +45,7 @@ In Scarlett you will have two layers of rest options:
 
 Another key mechanism is the override strategy, in which you can define how to override props on rest options object, on global or local layer.
 
-Check out [override strategy guide](/api/rest-client-options#overridestrategy) for more details about it.
+Check out [override strategy guide](/api/request-options#overridestrategy) for more details about it.
 
 ## 😬 Why this name?
 

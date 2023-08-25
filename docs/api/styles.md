@@ -4,7 +4,7 @@ This library comes with two styles, functional and class based, to better adapt 
 
 ## What style to use
 
-There are no limitation on choosing an API style and both share the same [options](/api/rest-client-options).
+There are no limitation on choosing an API style and both share the same [options](/api/request-options).
 
 It's highly recommended to go for the best fit for your project's code style, for example:
 * Class API if you are on an [Angular](https://angular.io/) or [Nest](https://nestjs.com/) project, to stay aligned with his Class based API

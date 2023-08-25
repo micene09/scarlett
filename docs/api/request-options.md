@@ -1,17 +1,36 @@
-# Rest Client options
+# Request Options
 
 To init a rest client you need a base object describing behaviors and details, that every subsequent request will inherits:
 
 ```ts
-const client = createRestClient({ // << the options object
+// Functional API
+const client = createRestClient({
+	host: "https://server.com",
+	responseType: "text"
+})
+
+// Class API
+const client = new Rest Client({
 	host: "https://server.com",
 	responseType: "text"
 })
 ```
 
-There are basically two kind of options:
-* Fetch Standards options
-* Built-in options
+Options provided at this level are considered as **Global Layer Options**.
+
+Every option can also be overridden at the request method's level:
+
+```ts
+const response = client.get("/path", { // << the options object
+	responseType: "json"
+})
+```
+
+At this level options are considered **Local Layer Options**.
+
+:::tip
+ You should play with [overrideStrategy](/api/request-options#overridestrategy) to better understand the magic behind overrides.
+:::
 
 ## Fetch Standards options
 
@@ -26,9 +45,7 @@ The following native properties from original [Fetch's Request Object](https://d
  * `referrer`
  * `referrerPolicy`
 
-## Built-in options
-
-### host
+## host
 
 ```ts
 type host = string
@@ -36,7 +53,7 @@ type host = string
 
 Defaults to `localhost.href`.
 
-### basePath
+## basePath
 
 ```ts
 type basePath = string
@@ -44,7 +61,7 @@ type basePath = string
 
 The base path to use on every request, defaults to `/`, combined with the `host` option.
 
-### responseType
+## responseType
 
 ```ts
 type HttpResponseFormatType = "json" | "text" | "blob" | "arrayBuffer" | "formData" | undefined | null;
@@ -67,13 +84,13 @@ When the value resolved is `undefined` or `null`, the response's body will not b
 
 Defaults to `undefined`.
 
-### body
+## body
 
 `Object` (ex: `{ [key: string]: any }`) | `string` | `ArrayBuffer` | `ArrayBufferView` | `Blob` | `File` | `FormData` | `undefined`
 
 Optional request body content, if the method is `GET`, this value will be set to `undefined`.
 
-### query
+## query
 
 ```ts
 type query = { [key: string]: any }
@@ -81,7 +98,7 @@ type query = { [key: string]: any }
 
 Optional key-value pair, this will be converted (and appended) to the request URI.
 
-### queryParamsTransformer
+## queryParamsTransformer
 
 ```ts
 interface IQueryParamTransformer {
@@ -91,7 +108,7 @@ interface IQueryParamTransformer {
 
 Let's suppose you have a complex key-value pair, in which every value needs to be converted using a custom logic. In this case you can use this handler to convert your parameters to `string`.
 
-### queryParamsIncludeEmpty
+## queryParamsIncludeEmpty
 
 ```ts
 type queryParamsIncludeEmpty = boolean
@@ -101,7 +118,7 @@ If true, it will include falsy values as empty, example: `/example/?a=&b=`.
 
 Defaults to `false`.
 
-### cacheInMemory
+## cacheInMemory
 
 ```ts
 type cacheInMemory = boolean
@@ -111,17 +128,17 @@ If true, it will enable an internal, [Map](https://developer.mozilla.org/en-US/d
 
 Defaults to `false`.
 
-### cacheExpireIn
+## cacheExpireIn
 
 ```ts
-number | undefined
+type cacheExpireIn = number | undefined
 ```
 
 Define the cache duration for a response in milliseconds.
 
 Defaults to `undefined`.
 
-### cacheKey
+## cacheKey
 
 ```ts
 type cacheKey = string
@@ -138,7 +155,7 @@ Defining this parameter doesn't override the entire overall base cacheKey, your 
 
 Defaults to `""`.
 
-### throw
+## throw
 
 ```ts
 type throwOption = boolean
@@ -150,7 +167,7 @@ The error object will be an instance of [RestError](#RestError) class.
 
 Defaults to `false`.
 
-### throwExcluding
+## throwExcluding
 
 ```ts
 type ResponseFilter = {
@@ -211,7 +228,7 @@ You will find the matched filter on [response.throwFilter](/api/response-object#
 
 Setting `throwExcluding` will also set `throw` option to `true` implicitly.
 
-### overrideStrategy
+## overrideStrategy
 
 ```ts
 type overrideStrategy = "merge" | "assign"
@@ -226,7 +243,7 @@ Internally, the library supports the following strategies to update the request 
 
 Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestClientBuilder API](#RestClientBuilder).
 
-### onRequest
+## onRequest
 
 ```ts
 type onRequest = (request: IRequest) => void | Promise
@@ -234,7 +251,7 @@ type onRequest = (request: IRequest) => void | Promise
 
 Global handler, running on your rest client context, called at every request. You can edit the outgoing request options, just modify the `request` object provided as first argument. If the return value is a `Promise`'s instance, the request will `await` for it before starting.
 
-### onResponse
+## onResponse
 
 ```ts
 type onResponse = (response: IResponse) => void
@@ -242,7 +259,7 @@ type onResponse = (response: IResponse) => void
 
 Global handler, running on your rest client context, called at every successful response received. Keep in mind that, if you set the `throw` option as true, or any of your `throwExcluding` filters doesn't match, this handler will never be called.
 
-### onError
+## onError
 
 ```ts
 type onError = (error: RestError, response: IResponse) => void

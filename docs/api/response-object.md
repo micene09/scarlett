@@ -43,7 +43,7 @@ The request object used to perform the request, containing:
 An instance of type [RestError](/api/rest-error) if present, or `undefined` on successful requests.
 
 ::: info
-Keep in mind that this is considering the [throwExcluding](/api/rest-client-options.html#throwexcluding) logics.
+Keep in mind that this is considering the [throwExcluding](/api/request-options.html#throwexcluding) logics.
 :::
 
 ## status
@@ -64,7 +64,7 @@ The parsed response if present.
 
 ## throwFilter
 
-When a provided throw filter (via [throwExcluding](/api/rest-client-options#throwexcluding)) matches, this property will expose it.
+When a provided throw filter (via [throwExcluding](/api/request-options#throwexcluding)) matches, this property will expose it.
 
 ## repeat
 

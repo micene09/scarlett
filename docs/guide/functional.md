@@ -19,7 +19,7 @@ const { data, status } = await get<string>(`path`)
 // data type inferred as string or undefined
 ```
 
-Any provided option on `createRestClient` will be considered the default for every subsequent requests for any method behind `useRestClient`, for more details about the options object, visit the [Rest Client Options](/api/rest-client-options) section.
+Any provided option on `createRestClient` will be considered the default for every subsequent requests for any method behind `useRestClient`, for more details about the options object, visit the [Request Options](/api/request-options) section.
 
 You can also override an options object as last parameter to the request method:
 
