@@ -241,8 +241,6 @@ Internally, the library supports the following strategies to update the request 
 * *merge* (default), every simple primitive type (like strings, and numbers) will be overwritten, while Headers, Object-like and Array-like options will be merged.
 * *assign*, every value will be overwritten using [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 
-Note that this option cannot be overridden on a request method, to do this you need to set it globally using the [RestClientBuilder API](#RestClientBuilder).
-
 ## onRequest
 
 ```ts
