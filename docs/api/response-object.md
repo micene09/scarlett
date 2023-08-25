@@ -15,13 +15,9 @@ const response = await client.get<MyObject, MyError>("/path")
  * `response.data` typed as `MyObject` on success, or `undefined` on failure
  * `response.error.data` typed as `MyError` on failure, or `undefined` on success
 
-Keep reading to better understand every prop provided by the response object.
+Keep reading to better understand every prop provided by the `response` object.
 
 ## fetchResponse
-
-```ts
-Response
-```
 
 Instance of type [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response), the native response object from the Fetch API.
 
@@ -32,63 +28,41 @@ interface IRequest {
 	options: Partial<Options>;
 	url: URL
 	method: HttpMethod
-	body: any
+	body?: any
 }
 ```
 
-The request object used to get the response, including options, url, method and body.
-
-### url
-
-```ts
-URL
-```
-
-The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using host, basePath and the request path.
-
-### method
-
-```ts
-HttpMethod
-```
-
-### body
-
-The optional body used, typically when HttpMethod is PUT or POST.
+The request object used to perform the request, containing:
+* The `Options` object used
+* The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using host, basePath and the request path.
+* The HTTP method used to perform the request.
+* The (optional) request body, typically used when `HttpMethod` is PUT or POST.
 
 ## error
 
-```ts
-RestError | undefined
-```
-
 An instance of type [RestError](/api/rest-error) if present, or `undefined` on successful requests.
+
+::: info
+Keep in mind that this is considering the [throwExcluding](/api/rest-client-options.html#throwexcluding) logics.
+:::
 
 ## status
 
 ```ts
-number
+type StatusCode = number
 ```
 
 The HTTP Status code of the response.
 
 ## headers
 
-```ts
-Headers
-```
-
 An instance of type [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Headers) class, representing the response headers of the request.
 
 ## data
 
-The parsed response object if present.
+The parsed response if present.
 
 ## throwFilter
-
-```ts
-throwExcluding // object or handler
-```
 
 When a provided throw filter (via [throwExcluding](/api/rest-client-options#throwexcluding)) matches, this property will expose it.
 
@@ -110,31 +84,3 @@ You can even override request options on a local repeat call.
 ```ts
 const response = await second.repeat({ responseType: "text" });
 ```
-
-## request
-
-The request object used to get the response, including options, url, method and body.
-
-### url
-
-```ts
-URL
-```
-
-The [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) instance evaluated using `host`, `basePath` and the request `path`.
-
-### method
-
-```ts
-HttpMethod
-```
-
-The HTTP method used to perform the request.
-
-### body
-
-```ts
-object | null
-```
-
-The optional body used, typically when HttpMethod is `PUT` or `POST`.
