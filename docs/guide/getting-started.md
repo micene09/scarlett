@@ -42,8 +42,7 @@ This library comes with different class styles, here are some examples:
 	})
 	const { get } = useRestClient()
 	const { data, status } = await get<string>(`path`)
-	console.log(data) // << string or undefined
-	console.log(status)
+	console.log(data) // inferred as string or undefined
 	```
 	See the full [Functional API Usage](/guide/functional) guide.
 
@@ -56,7 +55,7 @@ This library comes with different class styles, here are some examples:
 		responseType: `text`
 	})
 	const response = await client.get<string>(`path`)
-	console.log(response.data) // << string or undefined
+	console.log(data) // inferred as string or undefined
 	```
 	See the full [Class API Usage](/guide/class) guide.
 
