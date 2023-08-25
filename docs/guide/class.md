@@ -9,7 +9,7 @@ const client = new RestClient({
 })
 ```
 
-Any provided option will be considered the default for every subsequent request of the new instance, for more details about the options object, visit the [Request Options](/api/request-options) section.
+Any provided option will be considered as default for every request method of the new instance, for more details about the options object, visit the [Request Options](/api/request-options) section.
 
 Every option will be accessible/updatable using the public **options** property, an instance of [RestClientBuilder](#RestClientBuilder) class.
 

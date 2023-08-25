@@ -1,6 +1,6 @@
 # Request Options
 
-To init a rest client you need a base object describing behaviors and details, that every subsequent request will inherits:
+To init a rest client you need a base object describing behaviors and details, that every request method will inherits:
 
 ```ts
 // Functional API

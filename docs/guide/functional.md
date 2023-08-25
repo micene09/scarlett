@@ -19,7 +19,7 @@ const { data, status } = await get<string>(`/my-controller`)
  ```
 :::
 
-Any provided option on `createRestClient` will be considered the default (Global Layer options) for every subsequent requests for any method behind `useRestClient`, for more details about the options object, visit the [Request Options](/api/request-options) section.
+Any provided option on `createRestClient` will be considered the default (Global Layer options) for every request function in `useRestClient()`, for more details about the options object, visit the [Request Options](/api/request-options) section.
 
 To have a custom Local Layer options, you can provide your overrides as second parameter to the request method:
 
