@@ -58,7 +58,11 @@ For more details about the response object, visit the [Response Object](/api/res
 <TResponse, TError>(path?: string, requestOptions?: Partial<Options>) => Promise<IResponse<TResponse, TError>>
 ```
 
-Like the previous `request` method, local request options that will override the global options provided via `createRestClient`.
+Like the previous `request` method but without the need to specify the HTTP Method (implicit), Local Layer options (`requestOptions` parameter) will override the Global Layer options provided via `createRestClient`.
+
+:::info
+Every shortcut method will internally call the `request` function.
+:::
 
 ## cacheKey
 

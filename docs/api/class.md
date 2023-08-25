@@ -1,14 +1,14 @@
 # Class API
 
-## RestClient
+## constructor
 
 ```ts
-constructor(options)
+constructor(options: Options)
 ```
 
 For more details about the options object, visit the [Request Options](/api/request-options) section.
 
-### request()
+## request
 
 ```ts
 <TResponse, TError>(method: HttpMethod, path?: string, requestOptions?: Partial<Options>) => Promise<IResponse<TResponse, TError>>
@@ -25,7 +25,7 @@ For more details about the options object, visit the [Request Options](/api/requ
 
 For more details about the response object, visit the [Response Object](/api/response-object) section.
 
-```typescript
+```ts
 const client = new RestClient({
 	host: "https://server.com",
 	basePath: "/controller",
@@ -36,55 +36,50 @@ const response = await client.request<string>("GET", "/action");
 
 Note that the `path` property will be combined with `host` and `basePath`:
 
-```typescript
+```ts
 const response = await client.request<string>("GET", "/action");
 console.log(response.request.url.href);
 ```
 
-### HttpMethod shortcut methods
+## get / del / post / patch / put
 
-Every RestClient instance has all the http methods as a lower case named method as shortcut:
-
-* *get`<T>`()*
-* *post`<T>`()*
-* *put`<T>`()*
-* etc...
-
-...having the following, simplified, parameters:
-
-* path *(string)*
-* requestOptions *(Options | undefined)
-
-Example:
-
-```typescript
-const response = await client.get<string>("/action");
+```ts
+<TResponse, TError>(path?: string, requestOptions?: Partial<Options>) => Promise<IResponse<TResponse, TError>>
 ```
 
-Note: every shortcut method will internally call the `request()` method.
+Like the previous `request` method but without the need to specify the HTTP Method (implicit), Local Layer options (`requestOptions` parameter) that will override the Global Layer options provided via `constructor`.
 
-### optionsOverride
+:::info
+Every shortcut method will internally call the `request` method.
+:::
 
-```typescript
+## optionsOverride
+
+```ts
 (overrides?: Partial<Options>, base?: Partial<Options>) => Partial<Options>
 ```
 Provide a copy of the options object updated using the `overrideStrategy` option.
 
 The optional `base` parameter defaults to the current rest client options object.
 
-### Built-in Cache System
+## cache methods
 
 On a `RestClient` class instance, you will find every cache capability available as public method, for more details visit the [Built-in Cache System](/api/in-memory-cache) section.
 
-## RestClientBuilder
+## options
 
-Every instance of `RestClient` will have a public property named **options**, this is just an instance of RestClientBuilder.
+```ts
+type options = RestClientBuilder
+```
+
+
+Every instance of `RestClient` will have a public property named **options**, this is just an instance of `RestClientBuilder`.
 
 You can access and modify the global options of your rest client instance using his methods.
 
 To create a new instance, just pass an options object (optional) as first parameter:
 
-```typescript
+```ts
 import { RestClientBuilder } from "scarlett"
 
 const opts = new RestClientBuilder({
@@ -94,9 +89,9 @@ const opts = new RestClientBuilder({
 })
 ```
 
-Here is the full list of available instance's methods:
+Keep reading to see the full list of available instance's methods.
 
-### current
+## options.current
 
 ```ts
 () => Partial<Options>
@@ -104,7 +99,7 @@ Here is the full list of available instance's methods:
 
 Will return a copy of the current options object.
 
-### get
+## options.get
 
 ```ts
 (key: K) => value
@@ -112,7 +107,7 @@ Will return a copy of the current options object.
 
 Will return a copy of the option's value.
 
-### set
+## options.set
 
 ```ts
 (key: K, val: value) => void
@@ -120,7 +115,7 @@ Will return a copy of the option's value.
 
 To directly update an option (your TypeScript's IDE plugin will warn you about type issues).
 
-### unset
+## options.unset
 
 ```ts
 (key: K) => void
@@ -128,7 +123,7 @@ To directly update an option (your TypeScript's IDE plugin will warn you about t
 
 Will internally restore the default value.
 
-### clone
+## options.clone
 
 ```ts
 () => RestClientBuilder
@@ -136,7 +131,7 @@ Will internally restore the default value.
 
 Will return a new cloned instance of `RestClientBuilder`.
 
-### merge
+## options.merge
 
 ```ts
 (options: Partial<Options>) => void
@@ -144,7 +139,7 @@ Will return a new cloned instance of `RestClientBuilder`.
 
 Overrides current options with the provided `options` using a merge strategy.
 
-### assign
+## options.assign
 
 ```ts
 (options: Partial<Options>) => void
@@ -152,7 +147,7 @@ Overrides current options with the provided `options` using a merge strategy.
 
 Overrides current options with the provided `options` using a [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) strategy.
 
-### createRestClient
+## options.createRestClient
 
 ```ts
 (..params: any[]) => RestClient
@@ -160,7 +155,7 @@ Overrides current options with the provided `options` using a [Object.assign](ht
 
 Will return a new `RestClient` based on the current options, using the params from your factory class.
 
-### setFactory
+## options.setFactory
 
 ```ts
 (factoryClass: RestClient)
@@ -170,7 +165,7 @@ Supposing that you created a new Class that extends the default RestClient (see 
 
 Example:
 
-```typescript
+```ts
 class MyRest extends RestClient { ... }
 
 const rest = new RestClientBuilder().setFactory(MyRest).createRestClient()
@@ -181,7 +176,7 @@ Custom classes having extra/custom parameters are supported.
 
 **Usage:**
 
-```typescript
+```ts
 import { RestClientBuilder } from "scarlett"
 
 const builder = new RestClientBuilder()
