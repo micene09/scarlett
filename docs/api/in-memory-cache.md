@@ -17,10 +17,10 @@ This internal cache system will never infer the native [Request.cache](https://d
 Enabling it, if a cached response for a particular request exists, the library will avoid the fetch call to resolve the `Promise` immediately.
 
 :::tip
-Once enabled, it can works together with the Standard Fetch API's cache mechanism ([link](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache)). Keep in mind that if the Standard Cache mechanism will run only if the in memory cache haven't any cached record, in other words, the built-in cache system has the priority.
+Once enabled, it can works together with the Standard Fetch API's cache mechanism ([link](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache)). Keep in mind that Standard Cache mechanism will run only if the in memory cache haven't any cached record at the check time, in other words, the built-in cache system has the priority because is executed first.
 :::
 
-Here is the full list properties that you can use as rest options:
+Here is the full list properties that you can use in the rest options object:
 
 ## cacheKey
 
@@ -56,7 +56,7 @@ Retrieve the response object, if exists, from the internal `RestClient` instance
 ## cacheExpireIn
 
 ```ts
-number
+type cacheExpireIn = number
 ```
 
 Set an expire time in milliseconds for the entry.
