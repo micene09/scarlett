@@ -89,7 +89,7 @@ Defaults to `undefined`.
 ## body
 
 ```ts
-type Body = { [key: string]: any } | string | ArrayBuffer | ArrayBufferView | Blob | File | FormData | undefined
+type Body = Record<string, any> | string | ArrayBuffer | ArrayBufferView | Blob | File | FormData | undefined
 ```
 
 Optional request body content, if the method is `GET`, this value will be set to `undefined`.
@@ -97,7 +97,7 @@ Optional request body content, if the method is `GET`, this value will be set to
 ## query
 
 ```ts
-type query = { [key: string]: any }
+type query = Record<string, any>
 ```
 
 Optional key-value pair, this will be converted (and appended) to the request URI.
