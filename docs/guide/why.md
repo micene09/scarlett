@@ -33,7 +33,7 @@ In Scarlett you have the following options:
 2. Never throw error
 3. Throw error when [Response.ok](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) is `false`...but exclude from throwing with custom local options or callbacks on a specific request
 
-The last option was gold for us, because in this way is possible to intercept Handled errors applying business logic and auto-throw for unexpected Fatal errors (as always).
+The third option was gold for us, because in this way is possible to intercept Handled errors applying business logic in some specific scenarios and at the same time auto-throw for unexpected Fatal errors (as usual).
 
 Check out [the documentation](/api/request-options#throwexcluding) for more details about it.
 
