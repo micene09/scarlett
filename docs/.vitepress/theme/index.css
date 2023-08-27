@@ -11,10 +11,15 @@
 	--vp-c-brand-dark: #bb0000;
 	--vp-c-brand-darker: #A31700;
 	--vp-c-brand-dimm: #751100;
+
+	--vp-c-tip: #059669;
+	--vp-c-info: #0078c3;
 }
 
 .dark {
 	--vp-c-bg: #111111;
+	--vp-c-tip: #6ee7b7;
+	--vp-c-info: #47B9FF;
 }
 
 /**
@@ -43,8 +48,10 @@
    * -------------------------------------------------------------------------- */
 
 :root {
-    --vp-custom-block-info-border: #0078c3;
-    --vp-custom-block-info-text: #0078c3;
+    --vp-custom-block-info-border: var(--vp-c-info);
+    --vp-custom-block-info-text: var(--vp-c-info);
+    --vp-custom-block-tip-border: var(--vp-c-tip);
+    --vp-custom-block-tip-text: var(--vp-c-tip);
 }
 
 /**
