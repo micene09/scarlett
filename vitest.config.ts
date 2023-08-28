@@ -5,7 +5,7 @@ export default defineConfig({
 		environment: "node",
 		testTimeout: 120000,
 		coverage: {
-			provider: "c8",
+			provider: "v8",
 			reporter: ["json", "text"]
 		}
 	}
