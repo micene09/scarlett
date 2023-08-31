@@ -28,7 +28,7 @@ For more details about the options object, visit the [Request Options](/api/requ
 Returning an object containing rest methods, options and other utilities.
 
 :::tip
- This is a destructible object, use this patter to a more simple and readable code:
+ This is a destructible object, use this pattern to a more simple and readable code:
  ```ts
 const { get } = useRestClient()
 const { data, status } = await get<string>(`/my-controller`)
