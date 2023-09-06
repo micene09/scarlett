@@ -75,8 +75,9 @@ export function useTestRestClient(host: string) {
 		throw: true,
 		mode: "cors"
 	});
-	const { setOption, optionsOverride, request, get, cacheClearByKey } = useRestClient()
+	const { setOption, getOption, optionsOverride, request, get, cacheClearByKey } = useRestClient()
 	return {
+		getOption,
 		setOption,
 		optionsOverride,
 		cacheClearByKey,
