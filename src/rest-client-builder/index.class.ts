@@ -24,16 +24,15 @@ export default class RestClientBuilder<TResponse = any, TError = any, TRestClien
 			restOpts.cloneOptions();
 			return this;
 		};
-		this.get = (...args) => {
-			restOpts.getOption(...args);
-			return this;
-		};
+		this.get = (...args) => restOpts.getOption(...args);
 		this.set = (...args) => {
 			restOpts.setOption(...args);
+			this._options = restOpts.cloneOptions();
 			return this;
 		};
 		this.unset = (...args) => {
 			restOpts.unsetOption(...args);
+			this._options = restOpts.cloneOptions();
 			return this;
 		};
 		this.clone = (...args) => {
@@ -42,10 +41,12 @@ export default class RestClientBuilder<TResponse = any, TError = any, TRestClien
 		};
 		this.merge = (...args) => {
 			restOpts.mergeOptions(...args);
+			this._options = restOpts.cloneOptions();
 			return this;
 		};
 		this.assign = (...args) => {
 			restOpts.mergeOptions(...args);
+			this._options = restOpts.cloneOptions();
 			return this;
 		};
 	}
