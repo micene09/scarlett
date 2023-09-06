@@ -72,7 +72,8 @@ export function useTestRestClient(host: string) {
 	const useRestClient = createRestClient({
 		host,
 		responseType: "json",
-		throw: true
+		throw: true,
+		mode: "cors"
 	});
 	const { setOption, optionsOverride, request, get, cacheClearByKey } = useRestClient()
 	return {
@@ -112,7 +113,8 @@ export function useTestRestBuilder(host: string) {
 	const { setOption, cloneOptions } = useRestClientBuilder({
 		host,
 		responseType: "json",
-		throw: true
+		throw: true,
+		mode: "cors"
 	});
 	return {
 		setOption,
@@ -130,7 +132,8 @@ export class TestRestClient extends RestClient {
 			...(options ?? {}),
 			host,
 			responseType: "json",
-			throw: true
+			throw: true,
+			mode: "cors"
 		});
 	}
 	requestJson(method: Parameters<RestClient["request"]>[0], overrides?: Parameters<RestClient["request"]>[2]) {
