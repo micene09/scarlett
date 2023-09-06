@@ -1,5 +1,5 @@
 import type { IRestOptionsGlobals } from '../interfaces';
-import type { CheckAndRestoreDefault, CloneOptions, GetOption, MergeOrAssignOptions, SetOption, UnsetOption } from '.';
+import type { CheckAndRestoreDefault, CloneOptions, MergeOrAssignOptions, GetOption, SetOption, UnsetOption } from '.';
 import useRestClientBuilder from '.';
 import RestClient from '../rest-client/index.class';
 
@@ -8,7 +8,7 @@ export default class RestClientBuilder<TResponse = any, TError = any, TRestClien
 	private _restFactory: TRestClient;
 	checkAndRestoreDefaults: CheckAndRestoreDefault;
 	current: (...params: Parameters<CloneOptions<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
-	get: (...params: Parameters<GetOption<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
+	get: GetOption<TResponse, TError>;
 	set: (...params: Parameters<SetOption<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
 	unset: (...params: Parameters<UnsetOption<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
 	clone: (...params: Parameters<CloneOptions<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
