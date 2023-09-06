@@ -12,6 +12,22 @@ beforeAll(async () => {
 afterAll(() => stopWebServer());
 
 describe('Rest Client using Functional API', () => {
+	test("Override global settings", async () => {
+
+		const { mirror, getOption, setOption } = useTestRestClient(testServer);
+		setOption("responseType", "text");
+		setOption("headers", new Headers());
+		const response = await mirror("GET");
+		const respType = typeof response.data;
+		expect(respType).toEqual("string");
+
+		const headers = getOption("headers");
+		headers.set("Accept-Language", "it-IT");
+		setOption("responseType", "json")
+		setOption("headers", headers);
+		const response2 = await mirror("GET");
+		expect(response2.data?.headers["accept-language"]).toEqual("it-IT");
+	});
 	test("Override global settings on local requests", async () => {
 
 		const { mirror } = useTestRestClient(testServer);
@@ -75,6 +91,23 @@ describe('Rest Client using Functional API', () => {
 	});
 });
 describe('Rest Client using Class API', () => {
+	test("Override global settings", async () => {
+
+		const baseClient = new TestRestClient(testServer);
+		baseClient.options.set("responseType", "text");
+		baseClient.options.set("headers", new Headers());
+		const response = await baseClient.mirror("GET");
+		const respType = typeof response.data;
+		expect(respType).toEqual("string");
+
+		const headers = baseClient.options.get("headers");
+		headers.set("Accept-Language", "it-IT");
+		baseClient.options
+			.set("responseType", "json")
+			.set("headers", headers);
+		const response2 = await baseClient.mirror("GET");
+		expect(response2.data?.headers["accept-language"]).toEqual("it-IT");
+	});
 	test("Override global settings on local requests", async () => {
 
 		const baseClient = new TestRestClient(testServer);
