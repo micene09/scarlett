@@ -1,17 +1,22 @@
-import type { IRestOptionsGlobals } from '../interfaces';
-import type { CheckAndRestoreDefault, CloneOptions, MergeOrAssignOptions, GetOption, SetOption, UnsetOption } from '.';
+import type { IRestOptions, IRestOptionsGlobals } from '../interfaces';
+import type { CheckAndRestoreDefault, MergeOrAssignOptions, GetOption } from '.';
 import useRestClientBuilder from '.';
 import RestClient from '../rest-client/index.class';
+
+type SetOption<TResponse, TError, TRestClient extends RestClient = RestClient> = <O extends IRestOptionsGlobals<TResponse, TError>, K extends keyof O, V extends O[K]>(key: K, val: V) => RestClientBuilder<TResponse, TError, TRestClient>;
+type UnsetOption<TResponse, TError, TRestClient extends RestClient = RestClient> = <K extends keyof IRestOptions<TResponse, TError>>(key: K) => RestClientBuilder<TResponse, TError, TRestClient>;
+type CloneOptions<TResponse, TError, TRestClient extends RestClient = RestClient> = () => RestClientBuilder<TResponse, TError, TRestClient>
+
 
 export default class RestClientBuilder<TResponse = any, TError = any, TRestClient extends RestClient = RestClient> {
 	private _options: Partial<IRestOptionsGlobals<TResponse, TError>>;
 	private _restFactory: TRestClient;
 	checkAndRestoreDefaults: CheckAndRestoreDefault;
-	current: (...params: Parameters<CloneOptions<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
+	current: (...params: Parameters<CloneOptions<TResponse, TError, TRestClient>>) => RestClientBuilder<TResponse, TError, TRestClient>;
 	get: GetOption<TResponse, TError>;
-	set: (...params: Parameters<SetOption<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
-	unset: (...params: Parameters<UnsetOption<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
-	clone: (...params: Parameters<CloneOptions<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
+	set: SetOption<TResponse, TError, TRestClient>;
+	unset: UnsetOption<TResponse, TError, TRestClient>;
+	clone: CloneOptions<TResponse, TError, TRestClient>;
 	merge: (...params: Parameters<MergeOrAssignOptions<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
 	assign: (...params: Parameters<MergeOrAssignOptions<TResponse, TError>>) => RestClientBuilder<TResponse, TError, TRestClient>;
 
@@ -25,8 +30,8 @@ export default class RestClientBuilder<TResponse = any, TError = any, TRestClien
 			return this;
 		};
 		this.get = (...args) => restOpts.getOption(...args);
-		this.set = (...args) => {
-			restOpts.setOption(...args);
+		this.set = (key, val) => {
+			restOpts.setOption(key as any, val);
 			this._options = restOpts.cloneOptions();
 			return this;
 		};

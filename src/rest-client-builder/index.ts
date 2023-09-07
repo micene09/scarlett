@@ -4,7 +4,7 @@ import { cloneObject, cloneValue, mergeObject } from "../utilities";
 
 export type CheckAndRestoreDefault = () => void
 export type GetOption<TResponse, TError> = <K extends keyof IRestOptionsGlobals<TResponse, TError>>(key: K) => IRestOptionsGlobals<TResponse, TError>[K];
-export type SetOption<TResponse, TError> = <K extends keyof IRestOptionsGlobals<TResponse, TError>>(key: K, val: IRestOptionsGlobals<TResponse, TError>[K]) => void;
+export type SetOption<TResponse, TError> = <O extends IRestOptionsGlobals<TResponse, TError>, K extends keyof O, V extends O[K]>(key: K, val: V) => void;
 export type UnsetOption<TResponse, TError> = <K extends keyof IRestOptions<TResponse, TError>>(key: K) => void;
 export type CloneOptions<TResponse, TError> = () => Partial<IRestOptions<TResponse, TError>>
 export type MergeOrAssignOptions<TResponse, TError> = (obj?: Partial<IRestOptions<TResponse, TError>>) => void
@@ -30,7 +30,7 @@ export default function useRestClientBuilder<TResponse = any, TError = any>(opti
 	};
 	const getOption: GetOption<TResponse, TError> = key => cloneValue(_options, key);
 	const setOption: SetOption<TResponse, TError> = (key, val) => {
-		_options[key] = val
+		(_options as any)[key] = val
 	}
 	const unsetOption: UnsetOption<TResponse, TError> = key => {
 		delete _options[key];
