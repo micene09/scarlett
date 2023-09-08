@@ -8,17 +8,11 @@ export interface IRestOptionsQuery {
 	queryParamsTransformer: IQueryParamTransformer;
 	queryParamsIncludeEmpty: boolean;
 }
-export interface IRestOptionsNative {
-	abortController: AbortController;
-	credentials: RequestCredentials;
-	mode: RequestMode;
-	keepalive: boolean;
-	headers: Headers;
-	cache: RequestCache;
-	redirect: RequestRedirect;
-	referrer: string;
-	referrerPolicy: ReferrerPolicy;
-}
+type Mutable<Type> = {
+	-readonly [Key in keyof Type]: Type[Key];
+};
+type AllowedNativeOptions = Omit<Mutable<Request>, "body" | "clone" | "signal" | "url" | keyof Body>
+export interface IRestOptionsNative extends AllowedNativeOptions {}
 export interface IRestOptionsProtected {
 	overrideStrategy: LocalOverrideStrategy;
 }
@@ -33,6 +27,7 @@ export interface IRestOptions<TResponse = any, TError = any> extends IRestOption
 	cacheExpireIn: number;
 	throw: boolean;
 	throwExcluding: IResponseFilter<TError>[];
+	abortController: AbortController;
 	onRequest(request: IRequest<TResponse, TError>): void | Promise<void>
 	onResponse(response: IResponse<TResponse, TError>): void
 	onError(error: RestError<TError>, response: TResponse): void
