@@ -32,20 +32,19 @@ At this level options are considered **Local Layer** options.
  You should play with [overrideStrategy](/api/request-options#overridestrategy) to better understand the magic behind overrides.
 :::
 
-## Standards options
+## Standard options
 
-The following native properties from original [Fetch's Request Object](https://developer.mozilla.org/en-US/docs/Web/API/Request) are supported and usable as options object:
- * `abortController`
- * `credentials`
- * `mode`
- * `keepalive`
- * `headers`
- * `cache`
- * `redirect`
- * `referrer`
- * `referrerPolicy`
+Standard properties from original fetch's Request object are supported and usable as options object, except for a small group of props that were overridden or disabled to achieve Scarlett's related abstractions, for example the standard [url](https://developer.mozilla.org/en-US/docs/Web/API/Request/url) property that we are using as first parameter in majority of cases and defining it as `string` type.
 
-Refer to the official documentation about how they works, continue reading about Scarlett's built-in options.
+If you are curious about the list of supported options from the standard interface, try to import the following type:
+
+```ts
+import { AllowedNativeOptions } from "scarlett"
+
+const playWithIt: AllowedNativeOptions; // << inspect this type!
+```
+
+Refer to the [official documentation](https://developer.mozilla.org/en-US/docs/Web/API/Request) about how they works, continue reading about Scarlett's built-in options.
 
 ## host
 
