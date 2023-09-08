@@ -11,7 +11,7 @@ export interface IRestOptionsQuery {
 type Mutable<Type> = {
 	-readonly [Key in keyof Type]: Type[Key];
 };
-type AllowedNativeOptions = Omit<Mutable<Request>, "body" | "clone" | "signal" | "url" | keyof Body>
+export type AllowedNativeOptions = Omit<Mutable<Request>, "body" | "clone" | "signal" | "url" | keyof Body>
 export interface IRestOptionsNative extends AllowedNativeOptions {}
 export interface IRestOptionsProtected {
 	overrideStrategy: LocalOverrideStrategy;

@@ -18,4 +18,4 @@ export type {
 	IRestOptions, IRestOptionsQuery, IRestOptionsProtected, IRestOptionsGlobals, IRestOptionsNative,
 	IQueryParamTransformer, LocalOverrideStrategy, IResponseFilter, InternalErrorCode,
 	HttpResponseFormat, HttpResponseFormatType, HttpResponseFormatResult,
-	HttpMethod, HTTPStatusCode } from './interfaces';
+	HttpMethod, HTTPStatusCode, AllowedNativeOptions } from './interfaces';
