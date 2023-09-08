@@ -11,7 +11,7 @@ export interface IRestOptionsQuery {
 type Mutable<Type> = {
 	-readonly [Key in keyof Type]: Type[Key];
 };
-export type AllowedNativeOptions = Omit<Mutable<Request>, "body" | "clone" | "signal" | "url" | keyof Body>
+export type AllowedNativeOptions = Omit<Mutable<Request>, "clone" | "signal" | "url" | keyof Body>
 export interface IRestOptionsNative extends AllowedNativeOptions {}
 export interface IRestOptionsProtected {
 	overrideStrategy: LocalOverrideStrategy;
@@ -20,7 +20,7 @@ export interface IRestOptions<TResponse = any, TError = any> extends IRestOption
 	host: string;
 	basePath: string;
 	responseType: HttpResponseFormat<TResponse, TError>;
-	body: | ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | IKeyValue;
+	body: ArrayBuffer | ArrayBufferView | Blob | File | string | URLSearchParams | FormData | IKeyValue;
 	timeout: number;
 	cacheInMemory: boolean;
 	cacheKey: string;
