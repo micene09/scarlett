@@ -9,7 +9,8 @@ on:
         default: 'updates on contents'
   push:
     paths:
-      - docs/**
+      - '!*'
+      - 'docs/**'
 
 jobs:
   build:
