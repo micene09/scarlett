@@ -1,20 +1,11 @@
 import { setTimeout } from "timers/promises";
-import { TestRestClient, useTestRestClient, useTestServer } from "./runtime.setup";
-import { beforeAll, afterAll, describe, test, expect } from "vitest";
-
-let stopWebServer = () => {};
-let testServer = "";
-beforeAll(async () => {
-	const { host, stop } = await useTestServer();
-	testServer = host as string
-	stopWebServer = stop;
-});
-afterAll(() => stopWebServer());
+import { TestRestClient, useTestRestClient } from "./mock/rest-client";
+import { describe, test, expect } from "vitest";
 
 describe('Request utilities and shortcuts using Functional API', () => {
 	test("Typed response data (responseType)", async () => {
 
-		const { requestJson, requestText, getStatusCodeEmpty, getStatusCode } = useTestRestClient(testServer);
+		const { requestJson, requestText, getStatusCodeEmpty, getStatusCode } = useTestRestClient();
 		const response1 = await requestJson("GET");
 		expect(response1.data!.fake).toEqual("model");
 		expect(response1.request.options.responseType).toEqual("json");
@@ -50,13 +41,13 @@ describe('Request utilities and shortcuts using Functional API', () => {
 	test("Auto-translation for objects on body property", async () => {
 
 		const obj = { test: 1, x: null };
-		const { mirror } = useTestRestClient(testServer);
+		const { mirror } = useTestRestClient();
 		const response = await mirror("POST", { body: obj });
 		const responseAsText = response.data?.body;
 		expect(responseAsText).toEqual('{"test":1,"x":null}');
 	});
 	test("Object to query string", async () => {
-		const { mirror } = useTestRestClient(testServer);
+		const { mirror } = useTestRestClient();
 		const response = await mirror("GET", {
 			responseType: "json",
 			query: { a: "1", b: "2", c: 3 }
@@ -64,7 +55,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 		expect(response.data?.queryString).toEqual("a=1&b=2&c=3");
 	});
 	test("Query string transformer before send", async () => {
-		const { mirror } = useTestRestClient(testServer);
+		const { mirror } = useTestRestClient();
 		const response = await mirror("GET", {
 			responseType: "json",
 			query: { a: "1", b: "2", some: ["one", "two"] },
@@ -78,7 +69,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 	});
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
-		const { delayedResponse, cacheClearByKey, setOption } = useTestRestClient(testServer);
+		const { delayedResponse, cacheClearByKey, setOption } = useTestRestClient();
 		setOption("cacheInMemory", true);
 		async function repliedIn(ms: number) {
 			const starting = Date.now();
@@ -94,7 +85,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 	});
 	test("Cache responses using expire mechanism", async () => {
 
-		const { getTimestamp } = useTestRestClient(testServer);
+		const { getTimestamp } = useTestRestClient();
 		const cacheExpireIn = 500;
 		const response = await getTimestamp({ cacheInMemory: true, cacheExpireIn });
 		const cachedTimestamp = response.data ?? "";
@@ -111,28 +102,30 @@ describe('Request utilities and shortcuts using Functional API', () => {
 	});
 	test("Abort request supported", async () => {
 		let abortController = new AbortController()
-		const { setOption, delayedResponse } = useTestRestClient(testServer);
+		const { setOption, delayedResponse } = useTestRestClient();
 		setOption("responseType", "text");
 		setOption("throw", false);
 		const milliseconds = 200;
 
 		let requestedAt = Date.now()
-		setTimeout(milliseconds / 2).then(() => abortController.abort());
-		await delayedResponse(milliseconds, { abortController })
+		setTimeout(milliseconds - 10).then(() => abortController.abort()); // abort right before the end
+		let response = delayedResponse(milliseconds, { abortController })
+		await response
 		let elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(milliseconds)
 
 		requestedAt = Date.now()
 		abortController = new AbortController();
-		abortController.abort();
-		await delayedResponse(milliseconds, { abortController })
+		setTimeout(0).then(() => abortController.abort()); // abort immediately
+		response = delayedResponse(milliseconds, { abortController })
+		await response
 		elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(10)
 	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
 
-		const { mirror } = useTestRestClient(testServer);
+		const { mirror } = useTestRestClient();
 		const firstR = await mirror("GET", {
 			query: { a: "1", b: "2", c: 3 }
 		});
@@ -152,7 +145,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 describe('Request utilities and shortcuts using Class API', () => {
 	test("Typed response data (responseType)", async () => {
 
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const response1 = await baseClient.requestJson("GET");
 		expect(response1.data!.fake).toEqual("model");
 		expect(response1.request.options.responseType).toEqual("json");
@@ -187,13 +180,13 @@ describe('Request utilities and shortcuts using Class API', () => {
 	});
 	test("Auto-translation for objects on body property", async () => {
 		const obj = { test: 1, x: null };
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const response = await baseClient.mirror("POST", { body: obj });
 		const responseAsText = response.data?.body;
 		expect(responseAsText).toEqual('{"test":1,"x":null}');
 	});
 	test("Object to query string", async () => {
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const response = await baseClient.mirror("GET", {
 			responseType: "json",
 			query: { a: "1", b: "2", c: 3 }
@@ -201,7 +194,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 		expect(response.data?.queryString).toEqual("a=1&b=2&c=3");
 	});
 	test("Query string transformer before send", async () => {
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const response = await baseClient.mirror("GET", {
 			responseType: "json",
 			query: { a: "1", b: "2", some: ["one", "two"] },
@@ -215,7 +208,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 	});
 	test("Cache responses using custom keys", async () => {
 		const cacheKey = "the very slow call...";
-		const rest = new TestRestClient(testServer);
+		const rest = new TestRestClient();
 		rest.options.set("cacheInMemory", true);
 		async function repliedIn(ms: number) {
 			const starting = Date.now();
@@ -231,7 +224,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 	});
 	test("Cache responses using expire mechanism", async () => {
 
-		const rest = new TestRestClient(testServer);
+		const rest = new TestRestClient();
 		const cacheExpireIn = 500;
 		const response = await rest.getTimestamp({ cacheInMemory: true, cacheExpireIn });
 		const cachedTimestamp = response.data ?? "";
@@ -248,28 +241,30 @@ describe('Request utilities and shortcuts using Class API', () => {
 	});
 	test("Abort request supported", async () => {
 		let abortController = new AbortController()
-		const rest = new TestRestClient(testServer);
+		const rest = new TestRestClient();
 		rest.options.set("responseType", "text");
 		rest.options.set("throw", false);
 		const milliseconds = 200;
 
 		let requestedAt = Date.now()
-		setTimeout(milliseconds / 2).then(() => abortController.abort())
-		await rest.delayedResponse(milliseconds, { abortController })
+		setTimeout(milliseconds - 10).then(() => abortController.abort()) // abort right before the end
+		let response = rest.delayedResponse(milliseconds, { abortController })
+		await response
 		let elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(milliseconds)
 
 		requestedAt = Date.now()
 		abortController = new AbortController();
-		abortController.abort();
-		await rest.delayedResponse(milliseconds, { abortController })
+		setTimeout(0).then(() => abortController.abort()) // abort immediately
+		response = rest.delayedResponse(milliseconds, { abortController })
+		await response
 		elapsed = Date.now() - requestedAt
 		expect(elapsed).toBeLessThan(10)
 	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
 
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const firstR = await baseClient.mirror("GET", {
 			query: { a: "1", b: "2", c: 3 }
 		});

@@ -1,20 +1,11 @@
-import { useTestServer, useTestRestClient, TestRestClient } from "./runtime.setup";
-import { beforeAll, afterAll, describe, test, expect, vi } from "vitest";
+import { useTestRestClient, TestRestClient } from "./mock/rest-client";
+import { describe, test, expect, vi } from "vitest";
 import { fail, ok } from "assert";
-
-let stopWebServer = () => {};
-let testServer = "";
-beforeAll(async () => {
-	const { host, stop } = await useTestServer();
-	testServer = host as string
-	stopWebServer = stop;
-});
-afterAll(() => stopWebServer());
 
 describe('Rest Error using Functional API', () => {
 	test("Throw error on not successful requests", () => {
 
-		const { getStatusCodeEmpty } = useTestRestClient(testServer)
+		const { getStatusCodeEmpty } = useTestRestClient()
 		expect(() => getStatusCodeEmpty(500))
 			.rejects
 			.toThrowError();
@@ -22,7 +13,7 @@ describe('Rest Error using Functional API', () => {
 	test("Error will not be thrown, because of the onError callback", async () => {
 
 		const onErrorCallback = vi.fn(err => err)
-		const { getStatusCodeEmpty, setOption } = useTestRestClient(testServer);
+		const { getStatusCodeEmpty, setOption } = useTestRestClient();
 		setOption("onError", onErrorCallback);
 		await getStatusCodeEmpty(500);
 		expect(onErrorCallback).toBeCalled();
@@ -30,7 +21,7 @@ describe('Rest Error using Functional API', () => {
 	test("Throw error disabled, onError() callback will never be called", async () => {
 
 		const onErrorCallback = vi.fn(err => err)
-		const { getStatusCodeEmpty, setOption } = useTestRestClient(testServer);
+		const { getStatusCodeEmpty, setOption } = useTestRestClient();
 		setOption("onError", onErrorCallback);
 		setOption("throw", false);
 
@@ -45,7 +36,7 @@ describe('Rest Error using Functional API', () => {
 
 		const handledStatusCode = 502
 		const onErrorCallback = vi.fn(err => {})
-		const { getStatusCodeEmpty, setOption } = useTestRestClient(testServer);
+		const { getStatusCodeEmpty, setOption } = useTestRestClient();
 		setOption("onError", onErrorCallback);
 		setOption("throwExcluding", [ { statusCode: handledStatusCode } ]);
 
@@ -64,7 +55,7 @@ describe('Rest Error using Functional API', () => {
 	});
 	test("Throw error enabled, excluding errors via custom hook functions", async () => {
 
-		const { getStatusCode, setOption } = useTestRestClient(testServer);
+		const { getStatusCode, setOption } = useTestRestClient();
 		const whiteListedCall = vi.fn((body: any) => new Promise<void>(resolve => setTimeout(resolve, 100)));
 		const whiteListedStatusCode = 405;
 		setOption("throwExcluding", [
@@ -94,7 +85,7 @@ describe('Rest Error using Functional API', () => {
 	});
 	test("Custom Error Object Interfaces", async () => {
 
-		const { getStatusCode, setOption } = useTestRestClient(testServer);
+		const { getStatusCode, setOption } = useTestRestClient();
 		setOption("throw", false);
 		const response = await getStatusCode(412);
 		const errorData = response?.error?.data;
@@ -103,7 +94,7 @@ describe('Rest Error using Functional API', () => {
 		expect(errorData?.statusCode).toEqual(412);
 	});
 	test("Custom Error Object handled as usual", async () => {
-		const { getStatusCode } = useTestRestClient(testServer);
+		const { getStatusCode } = useTestRestClient();
 		try {
 			await getStatusCode(412);
 			fail();
@@ -120,7 +111,7 @@ describe('Rest Error using Functional API', () => {
 describe('Rest Error using Class API', () => {
 	test("Throw error on not successful requests", () => {
 
-		const client = new TestRestClient(testServer)
+		const client = new TestRestClient()
 		expect(() => client.getStatusCodeEmpty(500))
 			.rejects
 			.toThrowError();
@@ -128,7 +119,7 @@ describe('Rest Error using Class API', () => {
 	test("Error will not be thrown, because of the onError callback", async () => {
 
 		const onErrorCallback = vi.fn(err => err);
-		const client = new TestRestClient(testServer);
+		const client = new TestRestClient();
 		client.options.set("onError", onErrorCallback);
 
 		await client.getStatusCodeEmpty(500);
@@ -137,7 +128,7 @@ describe('Rest Error using Class API', () => {
 	test("Throw error disabled, onError() callback will never be called", async () => {
 
 		const onErrorCallback = vi.fn(err => err);
-		const client = new TestRestClient(testServer);
+		const client = new TestRestClient();
 		client.options.set("onError", onErrorCallback);
 		client.options.set("throw", false);
 
@@ -152,7 +143,7 @@ describe('Rest Error using Class API', () => {
 
 		const handledStatusCode = 502
 		const onErrorCallback = vi.fn(err => {})
-		const client = new TestRestClient(testServer);
+		const client = new TestRestClient();
 		client.options.set("onError", onErrorCallback);
 		client.options.set("throw", false);
 		client.options.set("throwExcluding", [ { statusCode: handledStatusCode } ]);
@@ -172,7 +163,7 @@ describe('Rest Error using Class API', () => {
 	});
 	test("Throw error enabled, excluding errors via custom hook functions", async () => {
 
-		const client = new TestRestClient(testServer);
+		const client = new TestRestClient();
 		const whiteListedCall = vi.fn((body: any) => new Promise<void>(resolve => setTimeout(resolve, 100)));
 		const whiteListedStatusCode = 405;
 		client.options.set("throwExcluding", [
@@ -202,7 +193,7 @@ describe('Rest Error using Class API', () => {
 	});
 	test("Custom Error Object Interfaces", async () => {
 
-		const client = new TestRestClient(testServer);
+		const client = new TestRestClient();
 		client.options.set("throw", false);
 		const response = await client.getStatusCode(412);
 		const errorData = response?.error?.data;
@@ -211,7 +202,7 @@ describe('Rest Error using Class API', () => {
 		expect(errorData?.statusCode).toEqual(412);
 	});
 	test("Custom Error Object handled as usual", async () => {
-		const client = new TestRestClient(testServer);
+		const client = new TestRestClient();
 		try {
 			await client.getStatusCode(412);
 			fail();

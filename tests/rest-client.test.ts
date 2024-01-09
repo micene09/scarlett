@@ -1,20 +1,10 @@
-import { RestClientBuilder, useRestClientBuilder } from "../src";
-import { TestRestClient, useTestRestClient, useTestServer } from "./runtime.setup";
-import { beforeAll, afterAll, describe, test, expect, vi } from "vitest";
-
-let stopWebServer = () => {};
-let testServer = "";
-beforeAll(async () => {
-	const { host, stop } = await useTestServer();
-	testServer = host as string
-	stopWebServer = stop;
-});
-afterAll(() => stopWebServer());
+import { TestRestClient, useTestRestClient } from "./mock/rest-client";
+import { describe, test, expect, vi } from "vitest";
 
 describe('Rest Client using Functional API', () => {
 	test("Override global settings", async () => {
 
-		const { mirror, getOption, setOption } = useTestRestClient(testServer);
+		const { mirror, getOption, setOption } = useTestRestClient();
 		setOption("responseType", "text");
 		setOption("headers", new Headers());
 		const response = await mirror("GET");
@@ -30,14 +20,14 @@ describe('Rest Client using Functional API', () => {
 	});
 	test("Override global settings on local requests", async () => {
 
-		const { mirror } = useTestRestClient(testServer);
+		const { mirror } = useTestRestClient();
 		const response = await mirror("GET", { responseType: "text" });
 		const respType = typeof response.data;
 		expect(respType).toEqual("string");
 	});
 	test("Override global settings using merge vs assign strategies", async () => {
 
-		const { setOption, mirror } = useTestRestClient(testServer);
+		const { setOption, mirror } = useTestRestClient();
 		setOption("query", { a: 1, b: 2 }) // << default query-string for every request
 
 		// Merge strategy
@@ -57,7 +47,7 @@ describe('Rest Client using Functional API', () => {
 		const onError = vi.fn();
 		const onRequest = vi.fn();
 		const onResponse = vi.fn();
-		const { setOption, mirror, getStatusCodeEmpty } = useTestRestClient(testServer);
+		const { setOption, mirror, getStatusCodeEmpty } = useTestRestClient();
 		setOption("responseType", "json");
 		setOption("throw", true);
 		setOption("onRequest", () => onRequest());
@@ -75,7 +65,7 @@ describe('Rest Client using Functional API', () => {
 	});
 	test("onRequest can be a Promise", async () => {
 
-		const { setOption, mirror } = useTestRestClient(testServer);
+		const { setOption, mirror } = useTestRestClient();
 		setOption("responseType", "json");
 		setOption("throw", false);
 		setOption("onRequest", (request: any) => new Promise<void>(resolve => {
@@ -93,7 +83,7 @@ describe('Rest Client using Functional API', () => {
 describe('Rest Client using Class API', () => {
 	test("Override global settings", async () => {
 
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		baseClient.options.set("responseType", "text");
 		baseClient.options.set("headers", new Headers());
 		const response = await baseClient.mirror("GET");
@@ -110,14 +100,14 @@ describe('Rest Client using Class API', () => {
 	});
 	test("Override global settings on local requests", async () => {
 
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const response = await baseClient.mirror("GET", { responseType: "text" });
 		const respType = typeof response.data;
 		expect(respType).toEqual("string");
 	});
 	test("Override global settings using merge vs assign strategies", async () => {
 
-		const restOverrides = new TestRestClient(testServer);
+		const restOverrides = new TestRestClient();
 		restOverrides.options.set("query", { a: 1, b: 2 }) // << default query-string for every request
 
 		// Merge strategy
@@ -137,7 +127,7 @@ describe('Rest Client using Class API', () => {
 		const onError = vi.fn();
 		const onRequest = vi.fn();
 		const onResponse = vi.fn();
-		const rest = new TestRestClient(testServer);
+		const rest = new TestRestClient();
 		rest.options.set("responseType", "json");
 		rest.options.set("throw", true);
 		rest.options.set("onRequest", () => onRequest());
@@ -155,7 +145,7 @@ describe('Rest Client using Class API', () => {
 	});
 	test("onRequest can be a Promise", async () => {
 
-		const rest = new TestRestClient(testServer);
+		const rest = new TestRestClient();
 		rest.options.set("responseType", "json");
 		rest.options.set("throw", false);
 		rest.options.set("onRequest", (request: any) => new Promise<void>(resolve => {
