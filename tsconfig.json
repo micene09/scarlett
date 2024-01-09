@@ -14,9 +14,6 @@
 		"lib": [ "dom" ],
 		"types": [ "node" ]
 	},
-	"paths": {
-		"@/*": [ "src/*" ]
-	},
 	"include": [
 		"src/*.ts",
 		"src/**/*.ts",
