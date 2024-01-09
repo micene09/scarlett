@@ -1,76 +1,9 @@
-import fastify from "fastify";
-import { createRestClient, useRestClientBuilder, RestClient } from '../src';
+import { createRestClient, useRestClientBuilder, RestClient } from '../../src';
+import { ITestJsonResponse, ITestMirrorResponse, ITestStatusCodeResponse } from "./rest-server"
 
-let testServer = fastify({ logger: false });
-interface ITestJsonResponse {
-	fake: "model"
-}
-interface ITestMirrorResponse {
-	queryString: string;
-	queryObject: Record<string, string>;
-	headers: Record<string, string>;
-	body: string;
-}
-interface ITestStatusCodeResponse {
-	statusText: "CustomStatusCode",
-	statusCode: number
-}
-export async function useTestServer() {
-	testServer
-		.all("/json", (req, res) => {
-			res.header("Content-type", "application/json");
-			res.send({ fake: "model" });
-		})
-		.all("/text", (req, res) => {
-			res.header("Content-type", "text/plain");
-			res.send("text");
-		})
-		.get("/status-code/:code", (req, res) => {
-			res.header("Content-type", "application/json");
-			res.status(+(req.params as any).code);
-			res.send({
-				statusText: "CustomStatusCode",
-				statusCode: +(req.params as any).code
-			} as ITestStatusCodeResponse);
-		})
-		.get("/status-code/:code/empty", (req, res) => {
-			res.status(+(req.params as any).code);
-			res.send();
-		})
-		.all("/mirror", (req, res) => {
-			res.header("Content-type", "application/json");
-			res.send({
-				queryString: req.raw.url?.split("?")[1] ?? "",
-				queryObject: req.query,
-				headers: req.headers,
-				body: req.body
-			} as ITestMirrorResponse);
-		})
-		.all("/reply-in/:ms/milliseconds", (req, res) => {
-			res.header("Content-type", "text/plain");
-			setTimeout(() => {
-				res.send("ok");
-			}, +(req.params as any).ms);
-		})
-		.get("/timestamp", (req, res) => {
-			res.header("Content-type", "text/plain");
-			res.send(Date.now() + "");
-		});
-	const host = await testServer.listen({
-		host: "localhost",
-		port: 0
-	});
-	return {
-		host,
-		stop() {
-			testServer.close()
-		}
-	}
-}
-
-export function useTestRestClient(host: string) {
+export function useTestRestClient() {
 	const useRestClient = createRestClient({
-		host,
+		host: "https://scarlett.mock",
 		responseType: "json",
 		throw: true,
 		mode: "cors"
@@ -110,9 +43,9 @@ export function useTestRestClient(host: string) {
 		}
 	};
 }
-export function useTestRestBuilder(host: string) {
+export function useTestRestBuilder() {
 	const { setOption, cloneOptions } = useRestClientBuilder({
-		host,
+		host: "https://scarlett.mock",
 		responseType: "json",
 		throw: true,
 		mode: "cors"
@@ -120,7 +53,7 @@ export function useTestRestBuilder(host: string) {
 	return {
 		setOption,
 		createRestClient() {
-			const rest = useTestRestClient(host);
+			const rest = useTestRestClient();
 			const currentOptions = cloneOptions()
 			rest.optionsOverride(undefined, currentOptions);
 			return rest;
@@ -128,10 +61,10 @@ export function useTestRestBuilder(host: string) {
 	};
 }
 export class TestRestClient extends RestClient {
-	constructor(host: string, ...options: ConstructorParameters<typeof RestClient>) {
+	constructor(...options: ConstructorParameters<typeof RestClient>) {
 		super({
 			...(options ?? {}),
-			host,
+			host: "https://scarlett.mock",
 			responseType: "json",
 			throw: true,
 			mode: "cors"
