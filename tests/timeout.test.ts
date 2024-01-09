@@ -1,20 +1,11 @@
-import { TestRestClient, useTestRestClient, useTestServer } from "./runtime.setup";
-import { beforeAll, afterAll, describe, test, expect } from "vitest";
-
-let stopWebServer = () => {};
-let testServer = "";
-beforeAll(async () => {
-	const { host, stop } = await useTestServer();
-	testServer = host as string
-	stopWebServer = stop;
-});
-afterAll(() => stopWebServer());
+import { TestRestClient, useTestRestClient } from "./mock/rest-client";
+import { describe, test, expect } from "vitest";
 
 describe('Timeout support using Functional API', () => {
 	test("Supported timeout on requests", async () => {
 
 		const delay = 100;
-		const { delayedResponse } = useTestRestClient(testServer);
+		const { delayedResponse } = useTestRestClient();
 		const response = await delayedResponse(delay, {
 			responseType: "text",
 			timeout: delay / 2,
@@ -25,13 +16,13 @@ describe('Timeout support using Functional API', () => {
 	})
 	test("Timeout can also be disabled", async () => {
 
-		const { delayedResponse } = useTestRestClient(testServer);
+		const { delayedResponse } = useTestRestClient();
 		const response = await delayedResponse(100, { timeout: 0 });
 		expect(response.error).toBeFalsy();
 	})
 	test("Timeout error handling", async () => {
 
-		const { delayedResponse } = useTestRestClient(testServer);
+		const { delayedResponse } = useTestRestClient();
 		const response = await delayedResponse(150, {
 			timeout: 50,
 			throwExcluding: [{ errorCode: "Timeout" }]
@@ -43,7 +34,7 @@ describe('Timeout support using Class API', () => {
 	test("Supported timeout on requests", async () => {
 
 		const delay = 100;
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const response = await baseClient.delayedResponse(delay, {
 			responseType: "text",
 			timeout: delay / 2,
@@ -54,13 +45,13 @@ describe('Timeout support using Class API', () => {
 	})
 	test("Timeout can also be disabled", async () => {
 
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const response = await baseClient.delayedResponse(100, { timeout: 0 });
 		expect(response.error).toBeFalsy();
 	})
 	test("Timeout error handling", async () => {
 
-		const baseClient = new TestRestClient(testServer);
+		const baseClient = new TestRestClient();
 		const response = await baseClient.delayedResponse(150, {
 			timeout: 50,
 			throwExcluding: [{ errorCode: "Timeout" }]

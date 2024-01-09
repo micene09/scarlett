@@ -1,21 +1,12 @@
 import { RestClientBuilder, useRestClientBuilder } from "../src";
-import { TestRestClient, useTestServer } from "./runtime.setup";
-import { beforeAll, afterAll, describe, test, expect, vi } from "vitest";
-
-let stopWebServer = () => {};
-let testServer = "";
-beforeAll(async () => {
-	const { host, stop } = await useTestServer();
-	testServer = host as string
-	stopWebServer = stop;
-});
-afterAll(() => stopWebServer());
+import { TestRestClient } from "./mock/rest-client";
+import { describe, test, expect } from "vitest";
 
 describe('Rest Client Builder using Functional API', () => {
 	test("Create a rest client using builder", async () => {
 
 		const builder1 = useRestClientBuilder({
-			host: testServer,
+			host: "https://scarlett.mock",
 			responseType: "json",
 			throw: true
 		});
@@ -23,7 +14,7 @@ describe('Rest Client Builder using Functional API', () => {
 		const useRest1 = builder1.createRestClient();
 
 		const builder2 = useRestClientBuilder({
-			host: testServer,
+			host: "https://scarlett.mock",
 			responseType: "json",
 			throw: true
 		});
@@ -31,7 +22,7 @@ describe('Rest Client Builder using Functional API', () => {
 		const useRest2 = builder2.createRestClient();
 
 		const builder3 = useRestClientBuilder({
-			host: testServer,
+			host: "https://scarlett.mock",
 			responseType: "json",
 			throw: true
 		});
@@ -51,31 +42,31 @@ describe('Rest Client Builder using Class API', () => {
 	test("Create a rest client using builder", async () => {
 
 		const builder1 = new RestClientBuilder<any, any, TestRestClient>({
-			host: testServer,
+			host: "https://scarlett.mock",
 			responseType: "json",
 			throw: true
 		});
 		builder1.setFactory(TestRestClient);
 		builder1.set("headers", new Headers({ "x-restoptions": "1" }));
-		const restOpts1 = builder1.createRestClient<typeof TestRestClient>(testServer)
+		const restOpts1 = builder1.createRestClient<typeof TestRestClient>({ host: "https://scarlett.mock" })
 
 		const builder2 = new RestClientBuilder<any, any, TestRestClient>({
-			host: testServer,
+			host: "https://scarlett.mock",
 			responseType: "json",
 			throw: true
 		});
 		builder2.set("headers", new Headers({ "x-restoptions": "2" }));
 		builder2.setFactory(TestRestClient);
-		const restOpts2 = builder2.createRestClient<typeof TestRestClient>(testServer);
+		const restOpts2 = builder2.createRestClient<typeof TestRestClient>({ host: "https://scarlett.mock" });
 
 		const builder3 = new RestClientBuilder<any, any, TestRestClient>({
-			host: testServer,
+			host: "https://scarlett.mock",
 			responseType: "json",
 			throw: true
 		});
 		builder3.set("headers", new Headers({ "x-restoptions": "3" }));
 		builder3.setFactory(TestRestClient);
-		const restOpts3 = builder3.createRestClient(testServer);
+		const restOpts3 = builder3.createRestClient<typeof TestRestClient>({ host: "https://scarlett.mock" });
 
 		const resp1 = await restOpts1.mirror("GET");
 		const resp2 = await restOpts2.mirror("GET");
@@ -88,19 +79,19 @@ describe('Rest Client Builder using Class API', () => {
 	test("Create a rest client using a custom builder class", async () => {
 
 		class TestRestBuilder extends RestClientBuilder<any, any, TestRestClient> {
-			constructor(host: string, ...options: ConstructorParameters<typeof RestClientBuilder>) {
+			constructor(...options: ConstructorParameters<typeof RestClientBuilder>) {
 				super({
 					...(options ?? {}),
-					host,
+					host: "https://scarlett.mock",
 					responseType: "json",
 					throw: true
 				});
 				this.setFactory(TestRestClient);
 			}
 		}
-		const builder = new TestRestBuilder(testServer);
+		const builder = new TestRestBuilder();
 		builder.set("headers", new Headers({ "x-restoptions": "1" }));
-		const restOpts = builder.createRestClient<typeof TestRestClient>(testServer)
+		const restOpts = builder.createRestClient<typeof TestRestClient>({ host: "https://scarlett.mock" })
 		const resp1 = await restOpts.mirror("GET");
 		expect(resp1.data?.headers["x-restoptions"]).toEqual("1");
 	});
