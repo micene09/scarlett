@@ -1,8 +1,9 @@
 import { setTimeout } from "timers/promises";
-import { TestRestClient, useTestRestClient } from "./mock/rest-client";
-import { describe, test, expect } from "vitest";
+import { TestRestClient, clearRestClient, useTestRestClient } from "./mock/rest-client";
+import { describe, test, expect, afterEach } from "vitest";
 
 describe('Request utilities and shortcuts using Functional API', () => {
+	afterEach(() => clearRestClient())
 	test("Typed response data (responseType)", async () => {
 
 		const { requestJson, requestText, getStatusCodeEmpty, getStatusCode } = useTestRestClient();

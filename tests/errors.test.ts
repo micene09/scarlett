@@ -1,8 +1,9 @@
-import { useTestRestClient, TestRestClient } from "./mock/rest-client";
-import { describe, test, expect, vi } from "vitest";
+import { useTestRestClient, TestRestClient, clearRestClient } from "./mock/rest-client";
+import { describe, test, expect, vi, afterEach } from "vitest";
 import { fail, ok } from "assert";
 
 describe('Rest Error using Functional API', () => {
+	afterEach(() => clearRestClient())
 	test("Throw error on not successful requests", () => {
 
 		const { getStatusCodeEmpty } = useTestRestClient()

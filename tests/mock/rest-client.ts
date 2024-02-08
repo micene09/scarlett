@@ -1,14 +1,18 @@
 import { createRestClient, useRestClientBuilder, RestClient } from '../../src';
 import { ITestJsonResponse, ITestMirrorResponse, ITestStatusCodeResponse } from "./rest-server"
 
-export function useTestRestClient() {
-	const useRestClient = createRestClient({
+let _useRestClient = null as any as ReturnType<typeof createRestClient>;
+export function clearRestClient() {
+	_useRestClient = createRestClient({
 		host: "https://scarlett.mock",
 		responseType: "json",
 		throw: true,
 		mode: "cors"
 	});
-	const { setOption, getOption, optionsOverride, request, get, cacheClearByKey } = useRestClient()
+}
+clearRestClient();
+export function useTestRestClient() {
+	const { setOption, getOption, optionsOverride, request, get, cacheClearByKey } = _useRestClient()
 	return {
 		getOption,
 		setOption,
