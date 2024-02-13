@@ -1,22 +1,29 @@
-import { TestRestClient, useTestRestClient } from "./mock/rest-client";
-import { describe, test, expect, vi } from "vitest";
+import { TestRestClient, clearRestClient, useTestRestClient } from "./mock/rest-client";
+import { describe, test, expect, vi, afterEach } from "vitest";
 
 describe('Rest Client using Functional API', () => {
+	afterEach(() => clearRestClient())
 	test("Override global settings", async () => {
 
-		const { mirror, getOption, setOption } = useTestRestClient();
-		setOption("responseType", "text");
-		setOption("headers", new Headers());
-		const response = await mirror("GET");
-		const respType = typeof response.data;
-		expect(respType).toEqual("string");
-
-		const headers = getOption("headers");
-		headers.set("Accept-Language", "it-IT");
-		setOption("responseType", "json")
-		setOption("headers", headers);
-		const response2 = await mirror("GET");
-		expect(response2.data?.headers["accept-language"]).toEqual("it-IT");
+		async function scopeOne() {
+			const { mirror, setOption } = useTestRestClient();
+			setOption("responseType", "text");
+			setOption("headers", new Headers());
+			const response = await mirror("GET");
+			const respType = typeof response.data;
+			expect(respType).toEqual("string");
+		}
+		async function scopeTwo() {
+			const { mirror, getOption, setOption } = useTestRestClient();
+			const headers = getOption("headers");
+			headers.set("Accept-Language", "it-IT");
+			setOption("responseType", "json")
+			setOption("headers", headers);
+			const response2 = await mirror("GET");
+			expect(response2.data?.headers["accept-language"]).toEqual("it-IT");
+		}
+		await scopeOne();
+		await scopeTwo();
 	});
 	test("Override global settings on local requests", async () => {
 

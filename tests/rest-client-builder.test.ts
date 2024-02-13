@@ -1,8 +1,9 @@
 import { RestClientBuilder, useRestClientBuilder } from "../src";
-import { TestRestClient } from "./mock/rest-client";
-import { describe, test, expect } from "vitest";
+import { TestRestClient, clearRestClient } from "./mock/rest-client";
+import { describe, test, expect, afterEach } from "vitest";
 
 describe('Rest Client Builder using Functional API', () => {
+	afterEach(() => clearRestClient())
 	test("Create a rest client using builder", async () => {
 
 		const builder1 = useRestClientBuilder({
