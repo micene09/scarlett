@@ -4,12 +4,12 @@
 		"editorconfig.editorconfig",
 		"mhutchie.git-graph",
 		"eamodio.gitlens",
-		"zixuanchen.vitest-explorer",
 		"github.vscode-github-actions",
 		"yoavbls.pretty-ts-errors",
 		"oouo-diogo-perdigao.docthis",
 		"gruntfuggly.todo-tree",
 		"darkriszty.markdown-table-prettify",
-		"yzhang.markdown-all-in-one"
+		"yzhang.markdown-all-in-one",
+		"vitest.explorer"
 	]
 }
