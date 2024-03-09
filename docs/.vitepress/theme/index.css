@@ -12,8 +12,11 @@
 	--vp-c-brand-darker: #A31700;
 	--vp-c-brand-dimm: #751100;
 
-	--vp-c-tip: #059669;
-	--vp-c-info: #0078c3;
+	--vp-c-brand-1: var(--vp-c-brand);
+
+
+	--vp-c-tip-1: var(--vp-c-tip);
+	--vp-c-info-1: var(--vp-c-tip);
 }
 
 .dark {
