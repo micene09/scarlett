@@ -8,6 +8,8 @@ on:
         required: false
         default: 'updates on contents'
   push:
+    branches:
+      - main
     paths:
       - '!*'
       - 'docs/**'
