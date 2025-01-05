@@ -1,7 +1,7 @@
 {
 	"name": "scarlett",
 	"type": "module",
-	"version": "2.0.5",
+	"version": "2.0.6",
 	"description": "A rest client library that actually covers high complexity scenarios...for real!",
 	"browser": "lib/index.umd.js",
 	"module": "lib/index.js",
