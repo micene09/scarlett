@@ -11,7 +11,7 @@
 		"test-watch": "vitest watch",
 		"coverage": "vitest run --coverage",
 		"build": "rollup --config",
-		"build-types": "tsc --project ./tsconfig.json --declaration --emitDeclarationOnly --outDir ./lib",
+		"build-types": "tsc --project ./tsconfig.types.json",
 		"build-es3": "rollup --config --es3",
 		"build-es6": "rollup --config --es6",
 		"docs-build": "vitepress build docs",

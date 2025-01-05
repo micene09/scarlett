@@ -24,5 +24,6 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn build
+      - run: yarn build-types
       - run: yarn build-es3
       - run: yarn build-es6
