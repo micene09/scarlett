@@ -6,7 +6,7 @@ The idea behind Scarlett was based on needs that initially appeared so obvious t
 
 ## 📕 Main principles
 
-Speaking with colleagues of mine and digging deeper on the web, the team found a list of principles that a rest client library, in our opinion, should absolutely respect.
+Speaking with colleagues of mine and digging deeper on the web, we found a list of principles that a rest client library, in our opinion, should absolutely respect.
 
 ### 1. Truly typed
 
