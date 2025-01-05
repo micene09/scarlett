@@ -9,8 +9,6 @@ const output = `${outDir}/index`;
 /** @type {import('rollup').RollupTypescriptOptions} */
 const tsOptions = {
 	tsconfig: "./tsconfig.json",
-	declaration: true,
-	declarationDir: ".",
 	include: [ "src/*.ts", "src/**/*.ts" ],
 };
 
@@ -77,8 +75,7 @@ const es3Options = {
 		typescript({
 			...tsOptions,
 			lib: ["es5", "es6", "dom"],
-			target: "ES3",
-			declaration: false
+			target: "ES3"
 		}),
 		resolve()
 	]
@@ -103,8 +100,7 @@ const es6Options = {
 		typescript({
 			...tsOptions,
 			lib: ["es6", "dom"],
-			target: "ES6",
-			declaration: false
+			target: "ES6"
 		}),
 		resolve()
 	]
