@@ -31,7 +31,7 @@ jobs:
     - run: yarn install
     - run: yarn docs-build
     - name: upload github pages artifact
-      uses: actions/upload-pages-artifact@v2
+      uses: actions/upload-pages-artifact@v3
       with:
         path: './lib-docs'
 
