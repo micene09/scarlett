@@ -1247,7 +1247,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.13.10":
+"@types/node@npm:^22.15.3":
   version: 22.15.3
   resolution: "@types/node@npm:22.15.3"
   dependencies:
@@ -3251,7 +3251,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:^2.7.3":
+"msw@npm:^2.7.5":
   version: 2.7.5
   resolution: "msw@npm:2.7.5"
   dependencies:
@@ -3875,7 +3875,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^4.35.0":
+"rollup@npm:^4.40.1":
   version: 4.40.1
   resolution: "rollup@npm:4.40.1"
   dependencies:
@@ -3971,14 +3971,14 @@ __metadata:
     "@rollup/plugin-node-resolve": "npm:^16.0.1"
     "@rollup/plugin-terser": "npm:^0.4.4"
     "@rollup/plugin-typescript": "npm:^12.1.2"
-    "@types/node": "npm:^22.13.10"
+    "@types/node": "npm:^22.15.3"
     "@vitest/coverage-v8": "npm:^3.1.2"
     bumpp: "npm:^9.11.1"
-    msw: "npm:^2.7.3"
-    rollup: "npm:^4.35.0"
+    msw: "npm:^2.7.5"
+    rollup: "npm:^4.40.1"
     rollup-plugin-typescript2: "npm:^0.36.0"
     tslib: "npm:^2.8.1"
-    typescript: "npm:^5.8.2"
+    typescript: "npm:^5.8.3"
     vitepress: "npm:^1.6.3"
     vitest: "npm:^2.1.9"
   languageName: unknown
@@ -4460,7 +4460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.8.2":
+"typescript@npm:^5.8.3":
   version: 5.8.3
   resolution: "typescript@npm:5.8.3"
   bin:
@@ -4470,7 +4470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.8.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.8.3#optional!builtin<compat/typescript>":
   version: 5.8.3
   resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
   bin:
