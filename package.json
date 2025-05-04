@@ -17,7 +17,8 @@
 		"docs-build": "vitepress build docs",
 		"docs-dev": "vitepress dev docs",
 		"docs-preview": "vitepress preview docs",
-		"bump": "bumpp"
+		"bump": "bumpp",
+		"audit": "yarn npm audit"
 	},
 	"files": [
 		"lib",
