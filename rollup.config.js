@@ -1,7 +1,7 @@
 
 import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 const input = "src/index.ts";
 const outDir = "./lib";
 const output = `${outDir}/index`;
