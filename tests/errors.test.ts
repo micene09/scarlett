@@ -4,10 +4,10 @@ import { fail, ok } from "assert";
 
 describe('Rest Error using Functional API', () => {
 	afterEach(() => clearRestClient())
-	test("Throw error on not successful requests", () => {
+	test("Throw error on not successful requests", async () => {
 
 		const { getStatusCodeEmpty } = useTestRestClient()
-		expect(() => getStatusCodeEmpty(500))
+		await expect(() => getStatusCodeEmpty(500))
 			.rejects
 			.toThrowError();
 	})
@@ -110,10 +110,10 @@ describe('Rest Error using Functional API', () => {
 	});
 });
 describe('Rest Error using Class API', () => {
-	test("Throw error on not successful requests", () => {
+	test("Throw error on not successful requests", async () => {
 
 		const client = new TestRestClient()
-		expect(() => client.getStatusCodeEmpty(500))
+		await expect(() => client.getStatusCodeEmpty(500))
 			.rejects
 			.toThrowError();
 	})

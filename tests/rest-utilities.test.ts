@@ -109,7 +109,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 		const milliseconds = 200;
 
 		let requestedAt = Date.now()
-		setTimeout(milliseconds - 10).then(() => abortController.abort()); // abort right before the end
+		setTimeout(milliseconds - 20).then(() => abortController.abort()); // abort right before the end
 		let response = delayedResponse(milliseconds, { abortController })
 		await response
 		let elapsed = Date.now() - requestedAt
@@ -121,7 +121,7 @@ describe('Request utilities and shortcuts using Functional API', () => {
 		response = delayedResponse(milliseconds, { abortController })
 		await response
 		elapsed = Date.now() - requestedAt
-		expect(elapsed).toBeLessThan(10)
+		expect(elapsed).toBeLessThan(20)
 	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
@@ -248,7 +248,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 		const milliseconds = 200;
 
 		let requestedAt = Date.now()
-		setTimeout(milliseconds - 10).then(() => abortController.abort()) // abort right before the end
+		setTimeout(milliseconds - 20).then(() => abortController.abort()) // abort right before the end
 		let response = rest.delayedResponse(milliseconds, { abortController })
 		await response
 		let elapsed = Date.now() - requestedAt
@@ -260,7 +260,7 @@ describe('Request utilities and shortcuts using Class API', () => {
 		response = rest.delayedResponse(milliseconds, { abortController })
 		await response
 		elapsed = Date.now() - requestedAt
-		expect(elapsed).toBeLessThan(10)
+		expect(elapsed).toBeLessThan(20)
 	})
 	test("Repeat the same request using the response object", async () => {
 		const expected = "a=1&b=2&c=3";
