@@ -67,5 +67,5 @@
 		"library",
 		"zero dependencies"
 	],
-	"packageManager": "yarn@4.7.0"
+	"packageManager": "yarn@4.9.1"
 }
