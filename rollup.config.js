@@ -57,31 +57,6 @@ const options = {
 };
 
 /** @type {import('rollup').RollupOptions} */
-const es3Options = {
-	output: [
-		{
-			file: output + ".es3.common.js",
-			format: 'cjs',
-			sourcemap: true
-		},
-		{
-			file: output + ".es3.common.min.js",
-			format: 'cjs',
-			sourcemap: true,
-			plugins: [terser()]
-		}
-	],
-	plugins: [
-		typescript({
-			...tsOptions,
-			lib: ["es5", "es6", "dom"],
-			target: "ES3"
-		}),
-		resolve()
-	]
-};
-
-/** @type {import('rollup').RollupOptions} */
 const es6Options = {
 	output: [
 		{
@@ -107,10 +82,6 @@ const es6Options = {
 };
 
 export default cliArgs => {
-	if (cliArgs.es3) {
-		delete cliArgs.es3;
-		Object.assign(options, es3Options);
-	}
 	if (cliArgs.es6) {
 		delete cliArgs.es6;
 		Object.assign(options, es6Options);
