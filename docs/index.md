@@ -76,6 +76,14 @@ const members = [
 		links: [
 			{ icon: 'github', link: 'https://github.com/cataniafran' }
 		]
+	},
+	{
+		avatar: 'https://www.github.com/Fil923.png',
+		name: 'Fil923',
+		title: 'Maintainer',
+		links: [
+			{ icon: 'github', link: 'https://github.com/Fil923' }
+		]
 	}
 ]
 </script>
