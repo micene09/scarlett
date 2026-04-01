@@ -1,10 +1,4 @@
 {
-	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"vitest.enable": true,
-	"vitest.commandLine": "yarn test-watch",
-	"vitest.include": [
-		"tests/*.test.ts"
-	],
 	"cSpell.words": [
 		"bumpp",
 		"fastify",
