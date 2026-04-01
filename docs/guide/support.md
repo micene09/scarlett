@@ -47,7 +47,6 @@ Here is the list of modules included:
 | **ES Module** *(default)* | `lib/index.js`            |
 | **UMD**                   | `lib/index.umd.js`        |
 | **CommonJs**              | `lib/index.common.js`     |
-| **CommonJs ES3**          | `lib/index.es3.common.js` |
 | **CommonJs ES6**          | `lib/index.es6.common.js` |
 
 ## Required APIs
