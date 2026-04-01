@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js v22.x
+      - name: Use Node.js v25.x
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x'
+          node-version: '25.x'
           cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn test
