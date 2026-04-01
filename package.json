@@ -12,7 +12,6 @@
 		"coverage": "vitest run --coverage",
 		"build": "rollup --config",
 		"build-types": "tsc --project ./tsconfig.types.json",
-		"build-es3": "rollup --config --es3",
 		"build-es6": "rollup --config --es6",
 		"docs-build": "vitepress build docs",
 		"docs-dev": "vitepress dev docs",
@@ -26,7 +25,7 @@
 		"license"
 	],
 	"engines": {
-		"node": ">= 16.15"
+		"node": ">= 20.15"
 	},
 	"exports": {
 		".": "./lib/index.js"
