@@ -10,6 +10,10 @@ on:
         required: false
         default: ''
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
