@@ -21,8 +21,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '25.x'
-          cache: 'yarn'
-      - run: yarn install --immutable
-      - run: yarn build
-      - run: yarn build-types
-      - run: yarn build-es6
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run build-types
+      - run: npm run build-es6
