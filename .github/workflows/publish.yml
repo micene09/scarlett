@@ -24,12 +24,12 @@ jobs:
         with:
           node-version: '25.x'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
-      - run: yarn install --immutable
-      - run: yarn build
-      - run: yarn build-types
-      - run: yarn build-es6
-      - run: yarn test
+          cache: 'npm'
+      - run: npm ci --prefer-offline --no-audit --no-fund
+      - run: npm run build
+      - run: npm run build-types
+      - run: npm run build-es6
+      - run: npm test
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
