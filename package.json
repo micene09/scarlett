@@ -25,6 +25,7 @@
 		"license"
 	],
 	"engines": {
+		"npm" : ">= 11.0.0",
 		"node": ">= 20.15"
 	},
 	"exports": {
