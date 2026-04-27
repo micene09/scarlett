@@ -28,7 +28,7 @@ jobs:
         cache: 'npm'
     - name: Setup Pages
       uses: actions/configure-pages@v3
-    - run: npm ci
+    - run: npm ci --prefer-offline --no-audit --no-fund
     - run: npm run docs-build
     - name: upload github pages artifact
       uses: actions/upload-pages-artifact@v3

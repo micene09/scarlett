@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '25.x'
           cache: 'npm'
-      - run: npm ci
+      - run: npm ci --prefer-offline --no-audit --no-fund
       - run: npm run build
       - run: npm run build-types
       - run: npm run build-es6
