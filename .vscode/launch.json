@@ -4,8 +4,8 @@
 		{
 			"name": "Launch Docs Dev",
 			"request": "launch",
-			"runtimeExecutable": "yarn",
-			"runtimeArgs": ["docs-dev"],
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run", "docs-dev"],
 			"skipFiles": ["<node_internals>/**"],
 			"type": "node"
 		}
