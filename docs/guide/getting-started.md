@@ -8,18 +8,11 @@ Install Scarlett as a dependency using NPM:
 npm i scarlett
 ```
 
-or if you're using Yarn:
-
-```bash
-yarn add scarlett
-```
-
 then import it:
 
 ```typescript
 import { createRestClient } from "scarlett"
 ```
-
 
 ## Use from CDN
 
